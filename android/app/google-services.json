@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "355604807599",
+    "firebase_url": "https://alen-38d3f-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "alen-38d3f",
+    "storage_bucket": "alen-38d3f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:355604807599:android:9f835484d48e5b84ecb95a",
+        "android_client_info": {
+          "package_name": "com.example.alen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "355604807599-m7pbn2512sq9dsd9nipk3s9daq4b07uc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOgRuZ9axW3SqYf953s0tROg76EobrRzw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "355604807599-m7pbn2512sq9dsd9nipk3s9daq4b07uc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
