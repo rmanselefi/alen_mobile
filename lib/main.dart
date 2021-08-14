@@ -1,3 +1,4 @@
+import 'package:alen/providers/ads.dart';
 import 'package:alen/providers/auth.dart';
 import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/healtharticle.dart';
@@ -47,6 +48,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => DiagnosticProvider()),
         ChangeNotifierProvider(create: (_) => HealthArticleProvider()),
         ChangeNotifierProvider(create: (_) => DrugProvider()),
+        ChangeNotifierProvider(create: (_) => AdsProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -64,7 +66,7 @@ class _MyAppState extends State<MyApp> {
                   if (snapshot.hasError)
                     return Text('Error: ${snapshot.error}');
                   else if (snapshot.data == null)
-                    return SignUp();
+                    return HomePage();
                   else
                     HomePage();
                   return HomePage();

@@ -40,13 +40,15 @@ class HospitalDetail extends StatelessWidget {
       this.info,
       this.location,
       this.phone,
-      this.officeHours,this.newservices});
+      this.officeHours,
+      this.newservices});
   @override
   Widget build(BuildContext context) {
     // final PageController controller = PageController(initialPage: 0);
 
     final names = services.map((e) => e['name']).toSet();
     services.retainWhere((x) => names.remove(x['name']));
+    print("services $services");
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -293,6 +295,7 @@ class HospitalDetail extends StatelessWidget {
   }
 
   _buildHopitalServicesListItem(var hospitalServices, BuildContext ctxt) {
+    print("object ${hospitalServices}");
     return GestureDetector(
         onTap: () {
           Navigator.push(

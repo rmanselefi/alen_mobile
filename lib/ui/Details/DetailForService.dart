@@ -46,7 +46,7 @@ class DetailsForService extends StatelessWidget {
                     SizedBox(
                       height: 200,
                       width: 350,
-                      child: Image.asset(imageUrl,
+                      child: Image.network(imageUrl,
                           width: 200, height: 120, fit: BoxFit.fill),
                     ),
                     Container(

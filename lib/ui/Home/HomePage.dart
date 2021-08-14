@@ -1,3 +1,5 @@
+import 'package:alen/models/ads.dart';
+import 'package:alen/providers/ads.dart';
 import 'package:alen/providers/pharmacy.dart';
 import 'package:alen/ui/Details/PharmacyDetail.dart';
 import 'package:alen/ui/Pages/Pharmacy.dart';
@@ -77,7 +79,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var healthProvider = Provider.of<HealthArticleProvider>(context);
-    var pharmacyProvider = Provider.of<PharmacyProvider>(context,listen: true);
+    var pharmacyProvider = Provider.of<PharmacyProvider>(context, listen: true);
+    var adsProvider = Provider.of<AdsProvider>(context, listen: true);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -177,19 +180,37 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   Container(
                     height: MediaQuery.of(context).size.width * 0.4,
-                    child: Swiper(
-                      autoplayDelay: 6000,
-                      itemCount: mainAds.length,
-                      layout: SwiperLayout.DEFAULT,
-                      scrollDirection: Axis.horizontal,
-                      autoplay: true,
-                      pagination: SwiperPagination(),
-                      itemBuilder: (context, index) {
-                        return _buildMainAdsListItem(mainAds[index], context);
-                      },
-                      itemHeight: MediaQuery.of(context).size.width * 0.38,
-                      itemWidth: MediaQuery.of(context).size.width,
-                    ),
+                    child: FutureBuilder<List<Ads>>(
+                        future: adsProvider.fetchAllAds(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                                  ConnectionState.none &&
+                              snapshot.hasData == null) {
+                            return CircularProgressIndicator();
+                          }
+                          print('ads: ${snapshot.data}');
+                          if (snapshot.data == null) {
+                            return Container(
+                                child:
+                                    Center(child: CircularProgressIndicator()));
+                          } else {
+                            return Swiper(
+                              autoplayDelay: 6000,
+                              itemCount: snapshot.data.length,
+                              layout: SwiperLayout.DEFAULT,
+                              scrollDirection: Axis.horizontal,
+                              autoplay: true,
+                              pagination: SwiperPagination(),
+                              itemBuilder: (context, index) {
+                                return _buildMainAdsListItem(
+                                    snapshot.data[index], context);
+                              },
+                              itemHeight:
+                                  MediaQuery.of(context).size.width * 0.38,
+                              itemWidth: MediaQuery.of(context).size.width,
+                            );
+                          }
+                        }),
                     // child:mainAds.length==0? Center(
                     //   child: Text(
                     //     "No main Ads Available",
@@ -532,17 +553,17 @@ class _HomePageState extends State<HomePage> {
             )));
   }
 
-  _buildMainAdsListItem(MainAd mainAd, BuildContext ctxt) {
+  _buildMainAdsListItem(Ads mainAd, BuildContext ctxt) {
     return GestureDetector(
         onTap: () {
-          Navigator.push(
-              ctxt,
-              MaterialPageRoute(
-                  builder: (context) => DetailsPage(
-                        name: mainAd.name,
-                        description: mainAd.detail,
-                        imageUrl: mainAd.imagePath,
-                      )));
+          // Navigator.push(
+          //     ctxt,
+          //     MaterialPageRoute(
+          //         builder: (context) => DetailsPage(
+          //               name: mainAd.name,
+          //               description: mainAd.detail,
+          //               imageUrl: mainAd.imagePath,
+          //             )));
         },
         child: Card(
           elevation: 15,
@@ -553,7 +574,7 @@ class _HomePageState extends State<HomePage> {
           child: SizedBox(
             height: MediaQuery.of(context).size.width * 0.38,
             width: MediaQuery.of(context).size.width,
-            child: Image.asset(mainAd.imagePath,
+            child: Image.network(mainAd.image,
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.width * 0.38,
                 fit: BoxFit.fill),
