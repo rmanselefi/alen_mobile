@@ -1,5 +1,5 @@
+import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
-import 'file:///D:/Personal/Workspace/flutter_projects/alen/lib/utils/AppColors.dart';
 import 'package:alen/ui/Models/Trending.dart';
 
 import '../../utils/DetailsPage.dart';

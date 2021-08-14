@@ -1,6 +1,6 @@
-import 'file:///D:/Personal/Workspace/flutter_projects/alen/lib/utils/AppColors.dart';
 import 'package:alen/providers/auth.dart';
 import 'package:alen/ui/Forms/NameForm.dart';
+import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:alen/ui/Home/HomePage.dart';
 import 'package:provider/provider.dart';

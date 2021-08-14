@@ -3,10 +3,11 @@ import 'package:alen/ui/Details/PharmacyDetail.dart';
 import 'package:alen/ui/Pages/Pharmacy.dart';
 import 'package:alen/ui/SeeAllPages/Home/SeeAllHealthArticles.dart';
 import 'package:alen/ui/SeeAllPages/Home/SeeAllTrendings.dart';
+import 'package:alen/utils/AppColors.dart';
+import 'package:alen/utils/DetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'file:///D:/Personal/Workspace/flutter_projects/alen/lib/utils/AppColors.dart';
-import 'file:///D:/Personal/Workspace/flutter_projects/alen/lib/utils/DetailsPage.dart';
+
 import 'package:alen/ui/Models/HealthArticles.dart';
 import 'package:alen/ui/Models/MainAd.dart';
 import 'package:alen/ui/Models/Services.dart';

@@ -1,7 +1,8 @@
-import 'file:///D:/Personal/Workspace/flutter_projects/alen/lib/utils/MyImagesList.dart';
 import 'package:alen/ui/Parents/Interfaces.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
 import 'package:alen/ui/Services/PharmacistsServices.dart';
+
+import '../MyImagesList.dart';
 
 class Hospital implements HospitalLabDiagnosis{
 

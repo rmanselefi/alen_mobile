@@ -1,9 +1,9 @@
 import 'package:alen/ui/Cart/ImportCart.dart';
 import 'package:alen/ui/Details/ImporterDetail.dart';
 import 'package:alen/ui/Services/PharmacistsServices.dart';
+import 'package:alen/utils/DetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'file:///D:/Personal/Workspace/flutter_projects/alen/lib/utils/DetailsPage.dart';
 import 'package:alen/ui/Models/Trending.dart';
 import 'package:alen/ui/Pages/Importer.dart';
 import 'package:alen/ui/SearchDelegates/searchImporters.dart';
