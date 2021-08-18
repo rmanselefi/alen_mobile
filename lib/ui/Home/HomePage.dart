@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:alen/providers/pharmacy.dart';
 import 'package:alen/ui/Details/PharmacyDetail.dart';
 import 'package:alen/ui/Pages/Pharmacy.dart';
@@ -25,40 +27,8 @@ import 'package:alen/models/healtharticle.dart';
 import 'package:alen/providers/healtharticle.dart';
 import 'package:alen/models/drugs.dart';
 import '../SearchDelegates/searchTrending.dart';
-
-//https://www.youtube.com/watch?v=CSa6Ocyog4U
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  final imageList = [
-    'https://cdn.pixabay.com/photo/2016/03/05/19/02/hamburger-1238246__480.jpg',
-    'https://cdn.pixabay.com/photo/2016/11/20/09/06/bowl-1842294__480.jpg',
-    'https://cdn.pixabay.com/photo/2017/01/03/11/33/pizza-1949183__480.jpg',
-    'https://cdn.pixabay.com/photo/2017/02/03/03/54/burger-2034433__480.jpg',
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Swiper(
-          layout: SwiperLayout.STACK,
-          itemCount: imageList.length,
-          itemBuilder: (context, index) {
-            return Image.network(
-              imageList[index],
-              fit: BoxFit.cover,
-            );
-          },
-          itemWidth: 300.0,
-          itemHeight: 300.0,
-        ),
-      ),
-    );
-  }
-} //release/flutter deligate
+import 'package:image_picker/image_picker.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -73,6 +43,24 @@ class _HomePageState extends State<HomePage> {
   List<HealthArticle> healthArticles = HealthArticle.healthArticles;
 
   static const myCustomColors = AppColors();
+
+  File _image;
+  final picker = ImagePicker();
+
+  Future getImage(BuildContext ctxt) async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+
+    }
+    );
+    _getPresreption(ctxt);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +78,15 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text("Alen"),
           actions: [
+            Container(
+                child: IconButton(
+                  onPressed: () {
+                    print("hello");
+                    // getImage();
+                    _getPresreption(context);
+                  },
+                  icon: Icon(Icons.attach_file),
+                )),
             Container(
                 child: IconButton(
                     onPressed: () {},
@@ -112,57 +109,91 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         drawer: Drawer(
-          child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              UserAccountsDrawerHeader(
-                accountName: Text("User Name"),
-                accountEmail: Text("abhishekm977@gmail.com"),
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor: Colors.orange,
-                  child: Text(
-                    "U N",
-                    style: TextStyle(fontSize: 40.0),
-                  ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children:<Widget>[
+              Expanded(
+                // width: MediaQuery.of(context).size.width,
+                child:ListView(
+                  // Important: Remove any padding from the ListView.
+                  padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    //new Container(child: new DrawerHeader(child: new CircleAvatar()),color: myCustomColors.loginBackgroud,),
+                    UserAccountsDrawerHeader(
+                      decoration: BoxDecoration(color: myCustomColors.loginBackgroud),
+                      accountName: Text("User Name"),
+                      accountEmail: Text("abhishekm977@gmail.com"),
+                      currentAccountPicture: CircleAvatar(
+                        //backgroundColor: myCustomColors.loginButton,
+                        // child: Text(
+                        //   "A",
+                        //   style: TextStyle(
+                        //       fontSize: 40.0, color: myCustomColors.loginBackgroud),
+                        // ),
+                        backgroundImage: AssetImage('assets/images/alen_no_name.png'),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.contacts),
+                      title: Text("Contact Us"),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.rate_review),
+                      title: Text("Rate Us"),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.lock),
+                      title: Text("Privacy Policy"),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.shield),
+                      title: Text("Terms & Conditions"),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.flag),
+                      title: Text("Transactions"),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    Divider(),
+                  ],
+
                 ),
               ),
-              ListTile(
-                leading: Icon(Icons.contacts),
-                title: Text("Contact Us"),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.rate_review),
-                title: Text("Rate Us"),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.lock),
-                title: Text("Privacy Policy"),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.shield),
-                title: Text("Terms & Conditions"),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.flag),
-                title: Text("Transactions"),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
+              Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: (){},
+                    icon: Icon(MdiIcons.telegram),
+                  ),
+                  IconButton(
+                    onPressed: (){},
+                    icon: Icon(MdiIcons.gmail),
+                  ),
+                  IconButton(
+                    onPressed: (){},
+                    icon: Icon(Icons.facebook_outlined),
+                  ),
+                ],
+              )
             ],
+
+
           ),
         ),
         body: SingleChildScrollView(
@@ -242,15 +273,15 @@ class _HomePageState extends State<HomePage> {
                             child: Container(
                                 margin: EdgeInsets.symmetric(
                                     horizontal:
-                                        MediaQuery.of(context).size.width *
-                                            0.02),
+                                    MediaQuery.of(context).size.width *
+                                        0.02),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Icon(
-                                      Icons.local_hospital_outlined,
+                                      MdiIcons.hospital,
                                       size: 40,
                                       color: myCustomColors.loginBackgroud,
                                     ),
@@ -272,15 +303,15 @@ class _HomePageState extends State<HomePage> {
                             child: Container(
                                 margin: EdgeInsets.symmetric(
                                     horizontal:
-                                        MediaQuery.of(context).size.width *
-                                            0.02),
+                                    MediaQuery.of(context).size.width *
+                                        0.02),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Icon(
-                                      Icons.local_pharmacy_outlined,
+                                      MdiIcons.pharmacy,
                                       size: 40,
                                       color: myCustomColors.loginBackgroud,
                                     ),
@@ -302,15 +333,15 @@ class _HomePageState extends State<HomePage> {
                             child: Container(
                                 margin: EdgeInsets.symmetric(
                                     horizontal:
-                                        MediaQuery.of(context).size.width *
-                                            0.02),
+                                    MediaQuery.of(context).size.width *
+                                        0.02),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Icon(
-                                      Icons.local_hospital_outlined,
+                                      MdiIcons.microscope,
                                       size: 40,
                                       color: myCustomColors.loginBackgroud,
                                     ),
@@ -332,15 +363,15 @@ class _HomePageState extends State<HomePage> {
                             child: Container(
                                 margin: EdgeInsets.symmetric(
                                     horizontal:
-                                        MediaQuery.of(context).size.width *
-                                            0.02),
+                                    MediaQuery.of(context).size.width *
+                                        0.02),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Icon(
-                                      Icons.local_hospital_outlined,
+                                      MdiIcons.diabetes,
                                       size: 40,
                                       color: myCustomColors.loginBackgroud,
                                     ),
@@ -362,15 +393,15 @@ class _HomePageState extends State<HomePage> {
                             child: Container(
                                 margin: EdgeInsets.symmetric(
                                     horizontal:
-                                        MediaQuery.of(context).size.width *
-                                            0.02),
+                                    MediaQuery.of(context).size.width *
+                                        0.02),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Icon(
-                                      Icons.local_hospital_outlined,
+                                      MdiIcons.import,
                                       size: 40,
                                       color: myCustomColors.loginBackgroud,
                                     ),
@@ -530,6 +561,56 @@ class _HomePageState extends State<HomePage> {
                     width: 200, height: 120, fit: BoxFit.fill),
               ),
             )));
+  }
+
+  _getPresreption(BuildContext ctxt) async {
+    return showDialog(
+        context: ctxt,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Search by Prescription?'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Add image of your prescription from your Gallery."),
+                Container(
+                    padding: EdgeInsets.only(top: 30),
+                    child:SizedBox(
+                      height: 250,
+                      width: MediaQuery.of(context).size.width,
+                      child: (_image==null)?Image.asset(
+                        'assets/images/addPrescription.jpg',
+                        fit: BoxFit.fill,
+                      ):Image.file(
+                        (_image),
+                        fit: BoxFit.fill,
+                      ),
+                    ))
+              ],
+            ),
+            actions: <Widget>[
+              new ElevatedButton(
+                  child: new Center(
+                    child: Container(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.attach_file_outlined),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text('Add')
+                            ])),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    getImage(ctxt);
+
+                  })
+            ],
+          );
+        });
   }
 
   _buildMainAdsListItem(MainAd mainAd, BuildContext ctxt) {
