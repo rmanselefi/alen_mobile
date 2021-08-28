@@ -1,6 +1,5 @@
 import 'package:alen/ui/Parents/Interfaces.dart';
 import 'package:alen/ui/Services/PharmacistsServices.dart';
-
 import '../MyImagesList.dart';
 
 class Importer implements ImporterPharmacy{
@@ -47,9 +46,9 @@ class Importer implements ImporterPharmacy{
           " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
           "sint occaecat cupidatat non proident, sunt in culpa qui officia "
           "deserunt mollit anim id est laborum.",
-      MyImagesList.imageList,
+      MyImagesList.importerImages,
       '10:45-9:00',
-      PharmacyServices.pharmacyServices,
+      [],
       "I work on this this",
       "Some location",
       "0900000000"
@@ -65,9 +64,9 @@ class Importer implements ImporterPharmacy{
           " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
           "sint occaecat cupidatat non proident, sunt in culpa qui officia "
           "deserunt mollit anim id est laborum.",
-      MyImagesList.imageList,
+      MyImagesList.importerImages2,
       '10:45-9:00',
-      PharmacyServices.pharmacyServices,
+      [],
       "I work on this this",
       "Some location",
         "0900000001"
@@ -83,9 +82,9 @@ class Importer implements ImporterPharmacy{
           " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
           "sint occaecat cupidatat non proident, sunt in culpa qui officia "
           "deserunt mollit anim id est laborum.",
-      MyImagesList.imageList,
+      MyImagesList.importerImages3,
       '10:45-9:00',
-      PharmacyServices.pharmacyServices,
+      [],
       "I work on this this",
       "Some location",
         "0900000002"
@@ -101,9 +100,9 @@ class Importer implements ImporterPharmacy{
           " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
           "sint occaecat cupidatat non proident, sunt in culpa qui officia "
           "deserunt mollit anim id est laborum.",
-      MyImagesList.imageList,
+      MyImagesList.importerImages4,
       '10:45-9:00',
-      PharmacyServices.pharmacyServices,
+      [],
       "I work on this this",
       "Some location",
         "0900000003"
@@ -119,9 +118,9 @@ class Importer implements ImporterPharmacy{
           " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
           "sint occaecat cupidatat non proident, sunt in culpa qui officia "
           "deserunt mollit anim id est laborum.",
-      MyImagesList.imageList,
+      MyImagesList.importerImages5,
       '10:45-9:00',
-      PharmacyServices.pharmacyServices,
+      [],
       "I work on this this",
       "Some location",
         "0900000004"

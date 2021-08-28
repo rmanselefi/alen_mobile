@@ -1,6 +1,7 @@
 import 'package:alen/ui/Services/HospitalServices.dart';
 
 class Hospitals {
+  String email;
   String Id;
   String name;
   double latitude;
@@ -13,6 +14,7 @@ class Hospitals {
   String officehours;
   bool trending;
   List<dynamic> services;
+  List<dynamic> images;
 
   Hospitals(
       {this.Id,
@@ -24,5 +26,5 @@ class Hospitals {
       this.longitude,
       this.distance,
       this.image,
-      this.services,this.trending,this.officehours});
+      this.services,this.trending,this.officehours, this.email, this.images});
 }

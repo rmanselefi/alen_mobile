@@ -10,14 +10,13 @@ class LaboratoryProvider with ChangeNotifier {
   bool isLoading = false;
   UserLocation currentLocation;
 
-  Future<List<Laboratories>> fetchNearByLaboratories(UserLocation location) async {
-
+  Future<Laboratories> fetchLaboratory(String id) async {
     isLoading = true;
     hospitals.clear();
     nearHospital.clear();
     var curr;
     try {
-      var docs = await FirebaseFirestore.instance.collection('laboratory').get();
+      var docs = await FirebaseFirestore.instance.collection('laboratory').where('id', isEqualTo: id ).get();
       if (docs.docs.isNotEmpty) {
         if (hospitals.length == 0) {
           for (var i = 0; i < docs.docs.length; i++) {
@@ -29,31 +28,15 @@ class LaboratoryProvider with ChangeNotifier {
                 image: data['image'],
                 latitude: data['location'].latitude,
                 longitude: data['location'].longitude,
+                email: data['email'],
+                images: data['images'],
+                officehours: data['officehours'],
                 description: data['description']);
-            hospitals.add(hos);
-          }
-        }
-        if (nearHospital.length == 0) {
+            return hos;
 
-          for (var i = 0; i < hospitals.length; i++) {
-            if (location != null) {
-              var calcDist = Geolocator.distanceBetween(
-                  location.latitude,
-                  location.longitude,
-                  hospitals[i].latitude,
-                  hospitals[i].longitude);
-
-              hospitals[i].distance = calcDist;
-              nearHospital.add(hospitals[i]);
-              isLoading = false;
-            }
           }
-        }
-        if (nearHospital.length != 0) {
-          nearHospital.sort((a, b) => a.distance.compareTo(b.distance));
         }
       }
-      return nearHospital;
     } catch (error) {
       isLoading = false;
       print("mjkhjjhbjhvjhvhjvjhgv $error");

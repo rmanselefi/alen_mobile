@@ -1,3 +1,7 @@
+import 'package:alen/models/hospital.dart';
+import 'package:alen/providers/user_preference.dart';
+import 'package:alen/ui/Pages/Hospital.dart';
+import 'package:alen/ui/Pages/Pharmacy.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +14,9 @@ enum Status {
   Registered,
   Authenticating,
   Registering,
-  LoggedOut
+  LoggedOut,
+  InvalidCredential,
+  NonWithThisAccount
 }
 
 class AuthProvider with ChangeNotifier {
@@ -49,36 +55,139 @@ class AuthProvider with ChangeNotifier {
     return {'success': !hasError, 'message': errorMessage, 'user': userr};
   }
 
-  Future signUp(Map<String, dynamic> user) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user['userid'])
-          .set({
-        'phone': user['phone'],
-        'first_name': user['firstName'],
-        'middle_name': user['middleName'],
-        'last_name': user['lastName'],
-        'sex': user['sex'],
-        'email': user['email'],
-        'age': user['age'],
-        'location': user['location'],
-        'role':'user',
-        'created_at': new DateTime.now()
-      });
-      hasError = false;
-      var prefs = await SharedPreferences.getInstance();
-      prefs.setString('first_name', user['firstName']);
-      prefs.setString('middleName', user['middleName']);
-      prefs.setString('lastName', user['lastName']);
-      prefs.setString('email', user['email']);
-      prefs.setString('age', user['age']);
+  Future<void> signOut() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.signOut();
+    UserPreferences().signOut();
+  }
 
-      notifyListeners();
-    } catch (e) {
-      hasError = true;
-      notifyListeners();
+  Future <Status> signInHospital(String email, String password) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    try {
+      await auth.signInWithEmailAndPassword(email: email.trim(), password: password.trim());
+      String userToken= await auth.currentUser.getIdToken();
+      String userId = auth.currentUser.uid;
+        var docs = await FirebaseFirestore.instance.collection('hospital').get();
+        if (docs.docs.isNotEmpty) {
+          for (var i = 0; i < docs.docs.length; i++) {
+            var data = docs.docs[i].data();
+            String hospitalId= data['id'];
+            if(data['user_id']==userId){
+              UserPreferences().setUser(userToken, hospitalId);
+              return Status.LoggedIn;
+            }
+          }
+        }
+        return Status.NonWithThisAccount;
+    } on FirebaseAuthException catch (e) {
+      print("----------------Nooooooooooooo-------------");
+      print("----------------${e.message}-------------");
+      print("----------------Nooooooooooooo-------------");
+      return Status.InvalidCredential;
     }
-    return {'success': !hasError};
+  }
+  Future <Status> signInLaboratorist(String email, String password) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    try {
+      await auth.signInWithEmailAndPassword(email: email.trim(), password: password.trim());
+      String userToken= await auth.currentUser.getIdToken();
+      String userId = auth.currentUser.uid;
+        var docs = await FirebaseFirestore.instance.collection('laboratory').get();
+        if (docs.docs.isNotEmpty) {
+          for (var i = 0; i < docs.docs.length; i++) {
+            var data = docs.docs[i].data();
+            String hospitalId= data['id'];
+            if(data['user_id']==userId){
+              UserPreferences().setUser(userToken, hospitalId);
+              return Status.LoggedIn;
+            }
+          }
+        }
+        return Status.NonWithThisAccount;
+    } on FirebaseAuthException catch (e) {
+      print("----------------Nooooooooooooo-------------");
+      print("----------------${e.message}-------------");
+      print("----------------Nooooooooooooo-------------");
+      return Status.InvalidCredential;
+    }
+  }
+  Future <Status> signInDiagnostics(String email, String password) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    try {
+      await auth.signInWithEmailAndPassword(email: email.trim(), password: password.trim());
+      String userToken= await auth.currentUser.getIdToken();
+      String userId = auth.currentUser.uid;
+        var docs = await FirebaseFirestore.instance.collection('diagnostics').get();
+        if (docs.docs.isNotEmpty) {
+          for (var i = 0; i < docs.docs.length; i++) {
+            var data = docs.docs[i].data();
+            String hospitalId= data['id'];
+            if(data['user_id']==userId){
+              UserPreferences().setUser(userToken, hospitalId);
+              return Status.LoggedIn;
+            }
+          }
+        }
+        return Status.NonWithThisAccount;
+    } on FirebaseAuthException catch (e) {
+      print("----------------Nooooooooooooo-------------");
+      print("----------------${e.message}-------------");
+      print("----------------Nooooooooooooo-------------");
+      return Status.InvalidCredential;
+    }
+  }
+  Future <Status> signInPharmacy(String email, String password) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    try {
+      await auth.signInWithEmailAndPassword(email: email.trim(), password: password.trim());
+      String userToken= await auth.currentUser.getIdToken();
+      String userId = auth.currentUser.uid;
+      print("object${auth}");
+      var docs = await FirebaseFirestore.instance.collection('user').doc(userId).get();
+      if(docs.exists) {
+        var data = docs.data();
+
+
+          String role= data['role'];
+          // print(hospitalId);
+          // if(data['user_id']==userId){
+          //   UserPreferences().setUser(userToken, hospitalId);
+          //   return Status.LoggedIn;
+          // }
+
+      }
+      return Status.NonWithThisAccount;
+    } on FirebaseAuthException catch (e) {
+      print("----------------Nooooooooooooo-------------");
+      print("----------------${e.message}-------------");
+      print("----------------Nooooooooooooo-------------");
+      return Status.InvalidCredential;
+    }
+  }
+  Future <Status> signInImporter(String email, String password) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    try {
+      await auth.signInWithEmailAndPassword(email: email.trim(), password: password.trim());
+      String userToken= await auth.currentUser.getIdToken();
+      String userId = auth.currentUser.uid;
+      var docs = await FirebaseFirestore.instance.collection('importers').get();
+      if (docs.docs.isNotEmpty) {
+        for (var i = 0; i < docs.docs.length; i++) {
+          var data = docs.docs[i].data();
+          String hospitalId= data['id'];
+          print(hospitalId);
+          if(data['user_id']==userId){
+            UserPreferences().setUser(userToken, hospitalId);
+            return Status.LoggedIn;
+          }
+        }
+      }
+      return Status.NonWithThisAccount;
+    } on FirebaseAuthException catch (e) {
+      print("----------------Nooooooooooooo-------------");
+      print("----------------${e.message}-------------");
+      print("----------------Nooooooooooooo-------------");
+      return Status.InvalidCredential;
+    }
   }
 }

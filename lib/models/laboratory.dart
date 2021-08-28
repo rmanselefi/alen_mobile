@@ -1,4 +1,4 @@
-class Laboratories{
+class Laboratories {
   String Id;
   String name;
   double latitude;
@@ -7,7 +7,10 @@ class Laboratories{
   String description;
   double distance;
   String image;
+  String officehours;
   DateTime createdAt;
+  List<dynamic> images;
+  String email;
 
   Laboratories(
       {this.Id,
@@ -17,5 +20,9 @@ class Laboratories{
         this.latitude,
         this.description,
         this.longitude,
-        this.distance,this.image});
+        this.distance,
+        this.image,
+        this.officehours,
+        this.images,
+        this.email});
 }

@@ -1,24 +1,25 @@
-import 'package:alen/models/pharmacy.dart';
+import 'package:alen/models/diagnostic.dart';
+import 'package:alen/models/importer.dart';
 import 'package:alen/providers/auth.dart';
-import 'package:alen/providers/drug.dart';
-import 'package:alen/providers/pharmacy.dart';
+import 'package:alen/providers/diagnostic.dart';
+import 'package:alen/providers/hospital.dart';
+import 'package:alen/providers/laboratory.dart';
 import 'package:alen/providers/user_preference.dart';
-import 'package:alen/ui/DetailForCategories.dart';
-import 'package:alen/ui/Edit/PharmacyEdit.dart';
 import 'package:alen/ui/Forms/LoginForm.dart';
 import 'package:alen/ui/Parents/Interfaces.dart';
-import 'package:alen/ui/Services/PharmacistsServices.dart';
+import 'package:alen/ui/Edit/DiagnosisEdit.dart';
+import 'package:alen/ui/Parents/Interfaces.dart';
+import 'package:alen/ui/Services/HospitalServices.dart';
 import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../AppColors.dart';
-import '../ListInCategory.dart';
+import '../DetailForService.dart';
 
-class PharamacyDetail extends StatelessWidget {
-  final ImporterPharmacy pharmacy;
+class DiagnosisDetail extends StatelessWidget {
+  HospitalLabDiagnosis diagnosis;
 
   final List<String> imageList = [
     'assets/images/hos1.jpg',
@@ -30,20 +31,20 @@ class PharamacyDetail extends StatelessWidget {
 
   static const myCustomColors = AppColors();
 
-  PharamacyDetail(
+
+  DiagnosisDetail(
       {Key key,
-         this.pharmacy,})
+         this.diagnosis})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // final PageController controller = PageController(initialPage: 0);
-    var pharmacyProvider = Provider.of<PharmacyProvider>(context, listen: false);
-    var drugProvider = Provider.of<DrugProvider>(context, listen: false);
+    var diagnosisProvider = Provider.of<DiagnosticProvider>(context, listen: false);
     var authProvider = Provider.of<AuthProvider>(context, listen: false);
-    String pharmacyId;
-    UserPreferences().getId().then((value) => pharmacyId=value);
-    print(pharmacyId);
+    var hosProvider = Provider.of<HospitalProvider>(context, listen: false);
+    String hospitalId;
+    UserPreferences().getId().then((value) => hospitalId=value);
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -52,8 +53,8 @@ class PharamacyDetail extends StatelessWidget {
             appBarTheme: AppBarTheme(
               color: myCustomColors.loginBackgroud,
             )),
-        home: FutureBuilder<Pharmacies>(
-            future: pharmacyProvider.fetchPharmacy(pharmacyId),
+        home: FutureBuilder<Diagnostics>(
+            future: diagnosisProvider.fetchDiagnostics(hospitalId),
             builder: (context , snapshot) {
               if (snapshot.connectionState ==
                   ConnectionState.none &&
@@ -76,7 +77,7 @@ class PharamacyDetail extends StatelessWidget {
               else {
                 return Scaffold(
                   appBar: AppBar(
-                    title: Text(pharmacy.name),
+                    title: Text(diagnosis.title),
                     actions: [
                       IconButton(
                         padding: EdgeInsets.only(right: 15),
@@ -84,13 +85,14 @@ class PharamacyDetail extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => PharmacyEdit(
-                                    pharmacy: pharmacy,)));
+                                  builder: (context) => DiagnosisEdit(
+                                    diagnosis: diagnosis,)));
                         },
                         icon: Icon(
                             Icons.edit
                         ),
                       ),
+
                     ],
                   ),
                   drawer: Drawer(
@@ -241,42 +243,43 @@ class PharamacyDetail extends StatelessWidget {
                                 //
                                 // ),
                                 Container(
-                                    margin: EdgeInsets.fromLTRB(
-                                        MediaQuery.of(context).size.width * 0.07,
-                                        30,
-                                        MediaQuery.of(context).size.width * 0.07,
-                                        5),
-                                    child:Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Categories',
-                                          textScaleFactor: 1.5,
-                                          textAlign: TextAlign.left,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(fontWeight: FontWeight.bold),
-                                        ),
-                                        // GestureDetector(
-                                        //   onTap: (){
-                                        //     Navigator.push(
-                                        //         context,
-                                        //         MaterialPageRoute(
-                                        //             builder: (context) => SeeAllCategories()
-                                        //         ));
-                                        //   },
-                                        //   child: Text(
-                                        //     'See All',
-                                        //     textScaleFactor: 1.3,
-                                        //     textAlign: TextAlign.left,
-                                        //     overflow: TextOverflow.ellipsis,
-                                        //     style: const TextStyle(fontWeight: FontWeight.bold,
-                                        //         color: Colors.blueAccent),
-                                        //   ),
-                                        // )
-                                      ],
-                                    )),
-                                FutureBuilder<List<Category>>(
-                                    future: drugProvider.getCategoryById(pharmacyId),
+                                  margin: EdgeInsets.fromLTRB(
+                                      MediaQuery.of(context).size.width * 0.03,
+                                      30,
+                                      MediaQuery.of(context).size.width * 0.03,
+                                      5),
+                                  child:Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Services',
+                                        textScaleFactor: 1.5,
+                                        textAlign: TextAlign.left,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                      ),
+                                      // GestureDetector(
+                                      //     onTap: (){
+                                      //       Navigator.push(
+                                      //           context,
+                                      //           MaterialPageRoute(
+                                      //               builder: (context) => SeeAllServices()
+                                      //           ));
+                                      //     },
+                                      //   child: Text(
+                                      //     'See All',
+                                      //     textScaleFactor: 1.3,
+                                      //     textAlign: TextAlign.left,
+                                      //     overflow: TextOverflow.ellipsis,
+                                      //     style: const TextStyle(fontWeight: FontWeight.bold,
+                                      //     color: Colors.blueAccent),
+                                      //   ),
+                                      // )
+                                    ],
+                                  ),
+                                ),
+                                FutureBuilder<List<HospServicesTypes>>(
+                                    future: hosProvider.getAllHospServiceTypes(),
                                     builder: (context , hospServSnapshot) {
                                       if (hospServSnapshot.connectionState ==
                                           ConnectionState.none &&
@@ -309,15 +312,13 @@ class PharamacyDetail extends StatelessWidget {
                                             child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
                                               itemBuilder: (BuildContext ctxt, int index) {
-                                                return _buildPharmacyServicesListItem(
-                                                    hospServSnapshot.data[index], ctxt, pharmacyId.toString());
+                                                return _buildHopitalServicesListItem(
+                                                    hospServSnapshot.data[index], ctxt);
                                               },
                                               itemCount: hospServSnapshot.data.length,
                                             ));
                                       }
                                     }),
-
-
                                 Container(
                                     padding: EdgeInsets.only(top:10,bottom: 30),
                                     width: MediaQuery.of(context).size.width,
@@ -456,16 +457,17 @@ class PharamacyDetail extends StatelessWidget {
                       )),
                 );
               }
-            })
-
-    );
+            }),);
   }
-  _buildPharmacyServicesListItem(var pharmacyServices, BuildContext ctxt, String pharmacyId) {
+  _buildHopitalServicesListItem(var hospitalServices, BuildContext ctxt) {
     return GestureDetector(
         onTap: () {
-          print("On tap");
-          Navigator.push(ctxt,
-              MaterialPageRoute(builder: (context) => ListInCategories(category: pharmacyServices,id:  pharmacyId,)));
+          Navigator.push(
+              ctxt,
+              MaterialPageRoute(
+                // builder: (context) => ListInServices()
+                  builder: (context) => DetailsForService(name: hospitalServices.name, imageUrl: hospitalServices.image, description: hospitalServices.description, services: [],id:hospitalServices.id,)
+              ));
         },
         child: Card(
             elevation: 0,
@@ -481,7 +483,7 @@ class PharamacyDetail extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(150.0),
                     child: Image.network(
-                      pharmacyServices.image,
+                      hospitalServices.image,
                       fit: BoxFit.fitHeight,
                       height: 70.0,
                       width: 70.0,
@@ -489,7 +491,7 @@ class PharamacyDetail extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  pharmacyServices.name,
+                  hospitalServices.name,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],

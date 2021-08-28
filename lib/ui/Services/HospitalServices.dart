@@ -1,4 +1,5 @@
 import 'package:alen/ui/ServiceCategory/Service.dart';
+import '../MyImagesList.dart';
 
 class HospitalServices {
   String name;
@@ -10,8 +11,8 @@ class HospitalServices {
 
   static List<HospitalServices> hospitalServices = [
     HospitalServices(
-        "HS 1",
-        'assets/images/hos1.jpg',
+        "ENT",
+        MyImagesList.HopSer1.elementAt(0),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -20,11 +21,12 @@ class HospitalServices {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        Service.services
+        // Service.services
+      []
     ),
     HospitalServices(
-        "HS 2",
-        'assets/images/hos2.jpg',
+        "Surgery",
+        MyImagesList.HopSer2.elementAt(0),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -33,11 +35,12 @@ class HospitalServices {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        Service.services
+        // Service.services2
+      []
     ),
     HospitalServices(
-        "HS 3",
-        'assets/images/hos3.jpg',
+        "Dental",
+        MyImagesList.HopSer3.elementAt(0),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -46,11 +49,12 @@ class HospitalServices {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        Service.services
+        // Service.services3
+      []
     ),
     HospitalServices(
-        "HS 4",
-        'assets/images/hos1.jpg',
+        "Internal Medicine",
+        MyImagesList.HopSer4.elementAt(0),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -59,11 +63,12 @@ class HospitalServices {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        Service.services
+        // Service.services4
+      []
     ),
     HospitalServices(
-        "HS 5",
-        'assets/images/hos2.jpg',
+        "Psycytry",
+        MyImagesList.HopSer5.elementAt(0),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -72,7 +77,8 @@ class HospitalServices {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        Service.services
+        // Service.services5
+      []
     )
   ];
 }

@@ -1,4 +1,3 @@
-
 import '../MyImagesList.dart';
 
 class Category {
@@ -21,7 +20,7 @@ class Category {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        125.15
+      125.15
     ),
     Category(
         "Moisturizer",
@@ -86,7 +85,7 @@ class Category {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        200.00
+      200.00
     ),
     Category(
         "Toner",
@@ -99,7 +98,7 @@ class Category {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        77.55
+      77.55
     )
   ];
 
@@ -141,7 +140,7 @@ class Category {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        2500.00
+            2500.00
     ),
     Category(
         "Supplement 2",
@@ -154,7 +153,7 @@ class Category {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        1475.50
+            1475.50
     ),
     Category(
         "Tetracycline",
@@ -167,7 +166,7 @@ class Category {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        40.00
+            40.00
     )
   ];
 

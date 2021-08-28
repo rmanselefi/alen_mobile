@@ -1,7 +1,5 @@
 import 'package:alen/ui/Parents/Interfaces.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
-import 'package:alen/ui/Services/PharmacistsServices.dart';
-
 import '../MyImagesList.dart';
 
 class Diagnosis implements HospitalLabDiagnosis{
@@ -48,7 +46,7 @@ class Diagnosis implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.diagnosisImages,
         '10:45-9:00',
         HospitalServices.hospitalServices,
         "I work on this this",
@@ -66,7 +64,7 @@ class Diagnosis implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.diagnosisImages2,
         '10:45-9:00',
         HospitalServices.hospitalServices,
         "I work on this this",
@@ -84,7 +82,7 @@ class Diagnosis implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.diagnosisImages3,
         '10:45-9:00',
         HospitalServices.hospitalServices,
         "I work on this this",
@@ -102,7 +100,7 @@ class Diagnosis implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.diagnosisImages4,
         '10:45-9:00',
         HospitalServices.hospitalServices,
         "I work on this this",
@@ -120,7 +118,7 @@ class Diagnosis implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.diagnosisImages5,
         '10:45-9:00',
         HospitalServices.hospitalServices,
         "I work on this this",

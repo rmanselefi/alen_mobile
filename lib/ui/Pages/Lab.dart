@@ -1,7 +1,5 @@
 import 'package:alen/ui/Parents/Interfaces.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
-import 'package:alen/ui/Services/PharmacistsServices.dart';
-
 import '../MyImagesList.dart';
 
 class Lab implements HospitalLabDiagnosis{
@@ -48,7 +46,7 @@ class Lab implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.labsImages,
         '10:45-9:00',
         HospitalServices.hospitalServices,
         "I work on this this",
@@ -66,7 +64,7 @@ class Lab implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.labsImages2,
         '10:45-9:00',
         HospitalServices.hospitalServices,
         "I work on this this",
@@ -84,7 +82,7 @@ class Lab implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.labsImages3,
         '10:45-9:00',
         HospitalServices.hospitalServices,
         "I work on this this",
@@ -102,7 +100,7 @@ class Lab implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.labsImages4,
         '10:45-9:00',
         HospitalServices.hospitalServices,
         "I work on this this",
@@ -120,7 +118,7 @@ class Lab implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.labsImages5,
         '10:45-9:00',
         HospitalServices.hospitalServices,
         "I work on this this",

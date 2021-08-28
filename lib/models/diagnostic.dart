@@ -4,12 +4,17 @@ class Diagnostics {
   double latitude;
   double longitude;
   String dname;
-  String workingHours;
+  String officehours;
   String price;
   String procedureTime;
   String image;
   double distance;
+  String phone;
   DateTime createdAt;
+  String description;
+  List<dynamic> images;
+  String email;
+
   Diagnostics(
       {this.latitude,
       this.image,
@@ -20,6 +25,10 @@ class Diagnostics {
       this.price,
       this.dname,
       this.procedureTime,
-      this.workingHours,
-      this.createdAt});
+      this.officehours,
+        this.description,
+      this.createdAt,
+        this.images,this.phone,
+        this.email
+      });
 }

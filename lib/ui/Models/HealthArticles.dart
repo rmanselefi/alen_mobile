@@ -1,16 +1,16 @@
+import '../MyImagesList.dart';
+
 class HealthArticle {
-  String Id;
   String name;
   String imagePath;
   String detail;
 
-  HealthArticle(this.Id, this.name, this.imagePath, this.detail);
+  HealthArticle(this.name, this.imagePath, this.detail);
 
   static List<HealthArticle> healthArticles = [
     HealthArticle(
-        "1,",
         "HealthArticle 1",
-        'assets/images/hos1.jpg',
+        MyImagesList.healhtArthiclesImages.elementAt(0),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -20,9 +20,8 @@ class HealthArticle {
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum."),
     HealthArticle(
-        "2",
         "HealthArticle 2",
-        'assets/images/hos2.jpg',
+        MyImagesList.healhtArthiclesImages.elementAt(1),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -32,9 +31,8 @@ class HealthArticle {
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum."),
     HealthArticle(
-        "3",
         "HealthArticle 3",
-        'assets/images/hos3.jpg',
+        MyImagesList.healhtArthiclesImages.elementAt(2),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -44,9 +42,8 @@ class HealthArticle {
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum."),
     HealthArticle(
-        "4",
         "HealthArticle 4",
-        'assets/images/hos1.jpg',
+        MyImagesList.healhtArthiclesImages.elementAt(3),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -56,9 +53,8 @@ class HealthArticle {
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum."),
     HealthArticle(
-        "5",
         "HealthArticle 5",
-        'assets/images/hos2.jpg',
+        MyImagesList.healhtArthiclesImages.elementAt(4),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "

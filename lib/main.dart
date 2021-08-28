@@ -3,16 +3,18 @@ import 'package:alen/providers/auth.dart';
 import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/healtharticle.dart';
 import 'package:alen/providers/diagnostic.dart';
+import 'package:alen/providers/importer.dart';
 import 'package:alen/providers/laboratory.dart';
 import 'package:alen/providers/drug.dart';
 
 import 'package:alen/providers/pharmacy.dart';
-import 'package:alen/ui/Forms/PhoneForm.dart';
+import 'package:alen/ui/Forms/LoginForm.dart';
 import 'package:alen/ui/Home/HomePage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './providers/user_preference.dart';
+import 'ui/Details/HospitalDetail.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +48,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => PharmacyProvider()),
         ChangeNotifierProvider(create: (_) => LaboratoryProvider()),
         ChangeNotifierProvider(create: (_) => DiagnosticProvider()),
+        ChangeNotifierProvider(create: (_) => ImporterProvider()),
         ChangeNotifierProvider(create: (_) => HealthArticleProvider()),
         ChangeNotifierProvider(create: (_) => DrugProvider()),
         ChangeNotifierProvider(create: (_) => AdsProvider()),
@@ -66,10 +69,57 @@ class _MyAppState extends State<MyApp> {
                   if (snapshot.hasError)
                     return Text('Error: ${snapshot.error}');
                   else if (snapshot.data == null)
-                    return HomePage();
+                    return LoginForm();
                   else
-                    HomePage();
-                  return HomePage();
+                    return FutureBuilder(
+                      future: UserPreferences().getRole(),
+                        builder: ( context, snapshot){
+                          if (snapshot.hasError)
+                            return Text('Error: ${snapshot.error}');
+                          else if (snapshot.data == null)
+                            return LoginForm();
+                          else{
+                            switch(snapshot.data){
+                              case 0:
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => HospitalDetail(
+                                          // hospital: Hospital.hospitals.first,
+                                        )));
+                                return Text('Hospital');
+                                break;
+                              // case 1:
+                              //   return HospitalDetail(
+                              //
+                              //   );
+                              //   break;
+                              // case 2:
+                              //   return HospitalDetail(
+                              //
+                              //   );
+                              //   break;
+                              // case 3:
+                              //   return HospitalDetail(
+                              //
+                              //   );
+                              //   break;
+                              // case 4:
+                              //   return LoginForm(
+                              //
+                              //   );
+                              //   break;
+                              default:
+                                return LoginForm(
+                                  // hospital: Hospital.hospitals.first,
+                                );
+                                break;
+
+                            }
+                          }
+                        }
+                    );
+                  return LoginForm();
               }
             }),
       ),

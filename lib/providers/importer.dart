@@ -1,27 +1,27 @@
-import 'package:alen/models/diagnostic.dart';
+import 'package:alen/models/importer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../models/user_location.dart';
 
-class DiagnosticProvider with ChangeNotifier {
-  List<Diagnostics> hospitals = [];
-  List<Diagnostics> nearHospital = [];
+class ImporterProvider with ChangeNotifier {
+  List<Importers> hospitals = [];
+  List<Importers> nearHospital = [];
   bool isLoading = false;
   UserLocation currentLocation;
 
-  Future<Diagnostics> fetchDiagnostics(String id) async {
+  Future<Importers> fetchImporters(String id) async {
     isLoading = true;
     hospitals.clear();
     nearHospital.clear();
     var curr;
     try {
-      var docs = await FirebaseFirestore.instance.collection('diagnostics').where('id', isEqualTo: id ).get();
+      var docs = await FirebaseFirestore.instance.collection('importers').where('id', isEqualTo: id ).get();
       if (docs.docs.isNotEmpty) {
         if (hospitals.length == 0) {
           for (var i = 0; i < docs.docs.length; i++) {
             var data = docs.docs[i].data();
-            final Diagnostics hos = Diagnostics(
+            final Importers hos = Importers(
                 Id: docs.docs[i].id,
                 name: data['name'],
                 phone: data['phone'],
@@ -30,7 +30,7 @@ class DiagnosticProvider with ChangeNotifier {
                 longitude: data['location'].longitude,
                 email: data['email'],
                 images: data['images'],
-                officehours: data['whours'],
+                officehours: data['officehours'],
                 description: data['description']);
             return hos;
 

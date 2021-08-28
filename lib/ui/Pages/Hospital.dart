@@ -1,7 +1,5 @@
 import 'package:alen/ui/Parents/Interfaces.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
-import 'package:alen/ui/Services/PharmacistsServices.dart';
-
 import '../MyImagesList.dart';
 
 class Hospital implements HospitalLabDiagnosis{
@@ -48,9 +46,9 @@ class Hospital implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.hospialsImages,
         '10:45-9:00',
-        HospitalServices.hospitalServices,
+        [],
         "I work on this this",
         "Some location",
         "0900000000"
@@ -66,9 +64,9 @@ class Hospital implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.hospialsImages2,
         '10:45-9:00',
-        HospitalServices.hospitalServices,
+        [],
         "I work on this this",
         "Some location",
         "0900000001"
@@ -84,9 +82,9 @@ class Hospital implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.hospialsImages3,
         '10:45-9:00',
-        HospitalServices.hospitalServices,
+        [],
         "I work on this this",
         "Some location",
         "0900000002"
@@ -102,9 +100,9 @@ class Hospital implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.hospialsImages4,
         '10:45-9:00',
-        HospitalServices.hospitalServices,
+        [],
         "I work on this this",
         "Some location",
         "0900000003"
@@ -120,9 +118,9 @@ class Hospital implements HospitalLabDiagnosis{
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        MyImagesList.imageList,
+        MyImagesList.hospialsImages5,
         '10:45-9:00',
-        HospitalServices.hospitalServices,
+        [],
         "I work on this this",
         "Some location",
         "0900000004"

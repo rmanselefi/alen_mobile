@@ -1,3 +1,5 @@
+import '../MyImagesList.dart';
+
 class SmallAd {
   String name;
   String imagePath;
@@ -8,7 +10,7 @@ class SmallAd {
   static List<SmallAd> smallAds = [
     SmallAd(
         "SmallAd 1",
-        'assets/images/hos1.jpg',
+        MyImagesList.smallAdImages.elementAt(0),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -19,7 +21,7 @@ class SmallAd {
             "deserunt mollit anim id est laborum."),
     SmallAd(
         "SmallAd 2",
-        'assets/images/hos2.jpg',
+        MyImagesList.smallAdImages.elementAt(1),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -30,7 +32,7 @@ class SmallAd {
             "deserunt mollit anim id est laborum."),
     SmallAd(
         "SmallAd 3",
-        'assets/images/hos3.jpg',
+        MyImagesList.smallAdImages.elementAt(2),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -41,7 +43,7 @@ class SmallAd {
             "deserunt mollit anim id est laborum."),
     SmallAd(
         "SmallAd 4",
-        'assets/images/hos1.jpg',
+        MyImagesList.smallAdImages.elementAt(3),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -52,7 +54,7 @@ class SmallAd {
             "deserunt mollit anim id est laborum."),
     SmallAd(
         "SmallAd 5",
-        'assets/images/hos2.jpg',
+        MyImagesList.smallAdImages.elementAt(4),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "

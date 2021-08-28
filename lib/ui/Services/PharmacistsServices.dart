@@ -1,4 +1,5 @@
 import 'package:alen/ui/ServiceCategory/Category.dart';
+import '../MyImagesList.dart';
 
 class PharmacyServices {
   String name;
@@ -11,7 +12,7 @@ class PharmacyServices {
   static List<PharmacyServices> pharmacyServices = [
     PharmacyServices(
         "Beauty",
-        'assets/images/hos1.jpg',
+        MyImagesList.PharCat1.elementAt(0),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -20,11 +21,11 @@ class PharmacyServices {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-    Category.categories
+    []
     ),
     PharmacyServices(
         "AntiBiotic",
-        'assets/images/hos2.jpg',
+        MyImagesList.PharCat2.elementAt(0),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -33,11 +34,11 @@ class PharmacyServices {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        Category.categories
+        []
     ),
     PharmacyServices(
         "AntiFungal",
-        'assets/images/hos3.jpg',
+        MyImagesList.PharCat2.elementAt(4),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -46,11 +47,11 @@ class PharmacyServices {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        Category.categories
+        []
     ),
     PharmacyServices(
         "Supplements",
-        'assets/images/hos1.jpg',
+        MyImagesList.PharCat2.elementAt(3),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -59,11 +60,11 @@ class PharmacyServices {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        Category.categories
+        []
     ),
     PharmacyServices(
         "AntiBacterial",
-        'assets/images/hos2.jpg',
+        MyImagesList.PharCat2.elementAt(1),
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
             "sed do eiusmod tempor incididunt ut labore et dolore"
             "\ magna aliqua. Ut enim ad minim veniam, quis nostrud "
@@ -72,6 +73,7 @@ class PharmacyServices {
             " velit esse cillum dolore eu fugiat nulla pariatur. Excepteur "
             "sint occaecat cupidatat non proident, sunt in culpa qui officia "
             "deserunt mollit anim id est laborum.",
-        Category.categories)
+        []
+    )
   ];
 }

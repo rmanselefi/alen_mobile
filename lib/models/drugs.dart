@@ -12,6 +12,7 @@ class Drugs {
   String category;
   String category_image;
   Pharmacies pharmacies;
+  num price;
 
   Drugs(
       {this.trending,
@@ -24,5 +25,5 @@ class Drugs {
       this.pharmacies,
       this.image,
       this.category,
-      this.category_image});
+      this.category_image, this.price});
 }

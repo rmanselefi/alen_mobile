@@ -1,4 +1,4 @@
-class Pharmacies {
+class Importers {
   String Id;
   String name;
   double latitude;
@@ -12,17 +12,17 @@ class Pharmacies {
   List<dynamic> images;
   String email;
 
-  Pharmacies(
+  Importers(
       {this.Id,
-      this.name,
-      this.phone,
-      this.createdAt,
-      this.latitude,
-      this.description,
-      this.longitude,
-      this.distance,
-      this.image,
-      this.officehours,
+        this.name,
+        this.phone,
+        this.createdAt,
+        this.latitude,
+        this.description,
+        this.longitude,
+        this.distance,
+        this.image,
+        this.officehours,
         this.images,
-      this.email});
+        this.email});
 }
