@@ -211,7 +211,7 @@ class LabDetail extends StatelessWidget {
                                     alignment: Alignment.bottomCenter,
                                   ),
                                   itemBuilder: (context, index) {
-                                    return Image.asset(
+                                    return Image.network(
                                       snapshot.data.images[index],
                                       fit: BoxFit.cover,
                                     );

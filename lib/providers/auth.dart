@@ -1,5 +1,6 @@
 import 'package:alen/models/hospital.dart';
 import 'package:alen/providers/user_preference.dart';
+import 'package:alen/ui/Forms/LoginForm.dart';
 import 'package:alen/ui/Pages/Hospital.dart';
 import 'package:alen/ui/Pages/Pharmacy.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -61,23 +62,84 @@ class AuthProvider with ChangeNotifier {
     UserPreferences().signOut();
   }
 
-  Future <Status> signInHospital(String email, String password) async {
+  Future <Status> signIn(String email, String password) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     try {
       await auth.signInWithEmailAndPassword(email: email.trim(), password: password.trim());
       String userToken= await auth.currentUser.getIdToken();
       String userId = auth.currentUser.uid;
-        var docs = await FirebaseFirestore.instance.collection('hospital').get();
+      var document = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+      String role= document["role"];
+      switch(role){
+        case 'hospital': var docs = await FirebaseFirestore.instance.collection('hospital').get();
         if (docs.docs.isNotEmpty) {
           for (var i = 0; i < docs.docs.length; i++) {
             var data = docs.docs[i].data();
             String hospitalId= data['id'];
             if(data['user_id']==userId){
               UserPreferences().setUser(userToken, hospitalId);
+              UserPreferences().setRole(Roles.Hospital);
               return Status.LoggedIn;
             }
           }
         }
+        break;
+        case 'pharmacy': var docs = await FirebaseFirestore.instance.collection('pharmacy').get();
+        if (docs.docs.isNotEmpty) {
+          for (var i = 0; i < docs.docs.length; i++) {
+            var data = docs.docs[i].data();
+            String hospitalId= data['id'];
+            if(data['user_id']==userId){
+              UserPreferences().setUser(userToken, hospitalId);
+              UserPreferences().setRole(Roles.Pharmacist);
+              return Status.LoggedIn;
+            }
+          }
+        }
+        break;
+        case 'diagnosis': var docs = await FirebaseFirestore.instance.collection('diagnostics').get();
+        if (docs.docs.isNotEmpty) {
+          for (var i = 0; i < docs.docs.length; i++) {
+            var data = docs.docs[i].data();
+            String hospitalId= data['id'];
+            if(data['user_id']==userId){
+              UserPreferences().setUser(userToken, hospitalId);
+              UserPreferences().setRole(Roles.Diagnosis);
+              return Status.LoggedIn;
+            }
+          }
+        }
+        break;
+        case 'importer': var docs = await FirebaseFirestore.instance.collection('importers').get();
+        if (docs.docs.isNotEmpty) {
+          for (var i = 0; i < docs.docs.length; i++) {
+            var data = docs.docs[i].data();
+            String hospitalId= data['id'];
+            if(data['user_id']==userId){
+              UserPreferences().setUser(userToken, hospitalId);
+              UserPreferences().setRole(Roles.Importer);
+              return Status.LoggedIn;
+            }
+          }
+        }
+        break;
+        case 'laboratory': var docs = await FirebaseFirestore.instance.collection('laboratory').get();
+        if (docs.docs.isNotEmpty) {
+          for (var i = 0; i < docs.docs.length; i++) {
+            var data = docs.docs[i].data();
+            String hospitalId= data['id'];
+            if(data['user_id']==userId){
+              UserPreferences().setUser(userToken, hospitalId);
+              UserPreferences().setRole(Roles.Lab);
+              return Status.LoggedIn;
+            }
+          }
+        }
+        break;
+      }
+      //UserPreferences().setUser(userToken, )
+
+      print("This is my role : $role");
         return Status.NonWithThisAccount;
     } on FirebaseAuthException catch (e) {
       print("----------------Nooooooooooooo-------------");

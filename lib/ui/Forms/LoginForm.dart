@@ -38,7 +38,6 @@ class _LoginFormState extends State<LoginForm> {
 
   String _email;
   String _password;
-  String _role;
 
   static const myCustomColors = AppColors();
 
@@ -90,10 +89,9 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     var authProvider = Provider.of<AuthProvider>(context, listen: false);
     void Switcher(String email, String password) async{
-       switch(_role)  {
-        case "Hospital":
+       
           Status message;
-          var hos= await authProvider.signInHospital(email, password);
+          var hos= await authProvider.signIn(email, password);
 
           if(hos==Status.NonWithThisAccount){
             errorMessageAlert(0, "Hospital");
@@ -102,97 +100,44 @@ class _LoginFormState extends State<LoginForm> {
             errorMessageAlert(1, "Hospital");
           }
           else if(hos==Status.LoggedIn){
-            UserPreferences().setRole(Roles.Hospital);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => HospitalDetail(
-                      // hospital: Hospital.hospitals.first,
-                    )));
+            String role= await UserPreferences().getRole();
+            switch(role){
+              case "0":Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HospitalDetail(
+                        // hospital: Hospital.hospitals.first,
+                      )));
+              break;
+              case "1": Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PharamacyDetail(
+                        pharmacy: Pharmacy.pharmacies.first,)));
+              break;
+              case "2":Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ImporterDetail(
+                        importer: Importer.importers.first,)));
+              break;
+              case "3":Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DiagnosisDetail(
+                        diagnosis: Diagnosis.diagnosises.elementAt(2),
+                      )));
+              break;
+              case "4":Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => LabDetail(
+                        lab: Lab.labs.elementAt(1),
+                      )));
+              break;
+            }
+            
           }
-          break;
-        case "Pharmacy":
-          Status message;
-          var hos= await authProvider.signInPharmacy(email, password);
-
-          if(hos==Status.NonWithThisAccount){
-            errorMessageAlert(0,"Pharmacy");
-          }
-          else if(hos==Status.InvalidCredential){
-            errorMessageAlert(1,"Pharmacy");
-          }
-          else if(hos==Status.LoggedIn){
-            UserPreferences().setRole(Roles.Pharmacist);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PharamacyDetail(
-                      pharmacy: Pharmacy.pharmacies.first,)));
-          }
-          break;
-        case "Lab":
-          Status message;
-          var hos= await authProvider.signInLaboratorist(email, password);
-
-          if(hos==Status.NonWithThisAccount){
-            errorMessageAlert(0, "Laboratory");
-          }
-          else if(hos==Status.InvalidCredential){
-            errorMessageAlert(1, "Laboratory");
-          }
-          else if(hos==Status.LoggedIn){
-            UserPreferences().setRole(Roles.Hospital);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => LabDetail(
-                      lab: Lab.labs.elementAt(1),
-                    )));
-          }
-          break;
-        case "Diagnosis":
-          Status message;
-          var hos= await authProvider.signInDiagnostics(email, password);
-
-          if(hos==Status.NonWithThisAccount){
-            errorMessageAlert(0, "Diagnosis");
-          }
-          else if(hos==Status.InvalidCredential){
-            errorMessageAlert(1, "Diagnosis");
-          }
-          else if(hos==Status.LoggedIn){
-            UserPreferences().setRole(Roles.Hospital);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DiagnosisDetail(
-                      diagnosis: Diagnosis.diagnosises.elementAt(2),
-                    )));
-          }
-          break;
-        case "Importer":
-            Status message;
-        var hos= await authProvider.signInImporter(email, password);
-
-        if(hos==Status.NonWithThisAccount){
-          errorMessageAlert(0,"Importer");
-        }
-        else if(hos==Status.InvalidCredential){
-          errorMessageAlert(1,"Importer");
-        }
-        else if(hos==Status.LoggedIn){
-          UserPreferences().setRole(Roles.Pharmacist);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ImporterDetail(
-                    importer: Importer.importers.first,)));
-        }
-        break;
-        default:
-          break;
-
-      }
     }
 
 
@@ -234,98 +179,7 @@ class _LoginFormState extends State<LoginForm> {
                                   Container(
                                       child: Center(
                                           child: Container(
-                                              padding: EdgeInsets.fromLTRB(10,5,10,0),
-                                              width: MediaQuery.of(context).size.width * 0.90,
-                                              child: FormField<String>(
-                                                validator: (value) {
-                                                  if (value == null) {
-                                                    return "Select your Role";
-                                                  }
-                                                },
-                                                onSaved: (value) {
-                                                  _role = value;
-                                                },
-                                                builder: (
-                                                    FormFieldState<String> state,
-                                                    ) {
-                                                  return Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      new InputDecorator(
-
-                                                        decoration: const InputDecoration(
-                                                          counterStyle: TextStyle(color: Colors.white54),
-                                                          enabledBorder: OutlineInputBorder(
-                                                            borderRadius: BorderRadius.all(
-                                                                Radius.circular(40.0)),
-                                                            borderSide: BorderSide(
-                                                                color: Colors.green, width: 2),
-                                                          ),
-                                                          border: OutlineInputBorder(
-                                                            borderRadius: const BorderRadius.all(
-                                                              const Radius.circular(40.0),
-                                                            ),
-                                                            borderSide: BorderSide(
-                                                                color: Colors.green, width: 2),
-                                                          ),
-                                                          focusedBorder: OutlineInputBorder(
-                                                            borderRadius: BorderRadius.all(
-                                                                Radius.circular(40.0)),
-                                                            borderSide: BorderSide(
-                                                                color: Colors.green, width: 2),
-                                                          ),
-                                                          hintStyle: TextStyle(color: const Color(0xFF9516B6)),
-                                                          filled: true,
-                                                          fillColor: Colors.white,
-                                                          contentPadding: EdgeInsets.all(0.0),
-                                                          labelText: 'Role',
-                                                          hintText: 'Role',
-                                                          labelStyle: TextStyle(color: const Color(0xFF9516B6)),
-                                                          prefixIcon: Icon(
-                                                            Icons.wc,
-                                                            color: const Color(0xFF9516B6),
-                                                          ),
-                                                        ),
-                                                        child: DropdownButtonHideUnderline(
-                                                          child: DropdownButton<String>(
-                                                            hint: new Text("Select your Role"),
-                                                            value: _role,
-                                                            onChanged: (String newValue) {
-                                                              state.didChange(newValue);
-                                                              setState(() {
-                                                                _role = newValue;
-                                                              });
-                                                            },
-                                                            items: <String>[
-                                                              "Hospital",
-                                                              "Pharmacy",
-                                                              "Lab",
-                                                              "Diagnosis",
-                                                              "Importer",
-                                                            ].map((String value) {
-                                                              return new DropdownMenuItem<String>(
-                                                                value: value,
-                                                                child: new Text(value),
-                                                              );
-                                                            }).toList(),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 5.0),
-                                                      Text(
-                                                        state.hasError ? state.errorText : '',
-                                                        style:
-                                                        TextStyle(color: Colors.redAccent.shade700, fontSize: 12.0),
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              )
-                                          ))),
-                                  Container(
-                                      child: Center(
-                                          child: Container(
-                                              padding: EdgeInsets.fromLTRB(10,0,10,13),
+                                              padding: EdgeInsets.fromLTRB(10,20,10,13),
                                               width: MediaQuery.of(context).size.width * 0.90,
                                               child: TextFormField(
                                                 autocorrect: true,
@@ -468,7 +322,6 @@ class _LoginFormState extends State<LoginForm> {
                                         onPressed: (){
                                           if (_formKey.currentState.validate()) {
                                             _formKey.currentState.save();
-                                            print(_role);
                                             print(_email);
                                             print(_password);
                                             Switcher(_email, _password);
