@@ -1,12 +1,12 @@
 import 'package:alen/ui/Details/LabDetail.dart';
 import 'package:alen/ui/Parents/Interfaces.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
+import 'package:alen/ui/serviceAdder/LaboratoryServieAdder.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../AppColors.dart';
-import 'AddService.dart';
 import 'DetailServiceEdit.dart';
 import 'MultiImageDemo.dart';
 
@@ -212,6 +212,57 @@ class _LabEditState extends State<LabEdit> {
                           itemHeight: MediaQuery.of(context).size.width * 0.40,
                           itemWidth: MediaQuery.of(context).size.width,
                         ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(
+                              MediaQuery.of(context).size.width * 0.03,
+                              40,
+                              MediaQuery.of(context).size.width * 0.03,
+                              10),
+                          child: ElevatedButton(
+                            onPressed: (){
+                              //addProduct(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AddServices(hospitalLabDiagnosis: widget.lab,index: 0,)
+                                  ));
+                            },
+                            style: ButtonStyle(
+                                backgroundColor:
+                                MaterialStateProperty.all<Color>(
+                                    myCustomColors.loginButton),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(30.0),
+                                        side: BorderSide(
+                                            color:
+                                            myCustomColors.loginButton)))),
+                            child: Container(
+                                height: 50,
+                                child:Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      'Add Service',
+                                      textScaleFactor: 1.5,
+                                      textAlign: TextAlign.left,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Icon(
+                                        Icons.add,
+                                        size: 30,
+                                      ),
+                                    )
+                                  ],)
+                            ),
+                          ),
+                        ),
                         // Container(
                         //     padding: EdgeInsets.only(left:30,top: 30),
                         //     width: MediaQuery.of(context).size.width,
@@ -240,20 +291,20 @@ class _LabEditState extends State<LabEdit> {
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(width: 10,),
-                              IconButton(
-                                  onPressed: (){
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => AddServices(hospitalLabDiagnosis: widget.lab,index: 2,)
-                                        ));
-                                  },
-                                  icon: Icon(
-                                    Icons.add,
-                                    size: 30,
-                                  )
-                              )
+                              // SizedBox(width: 10,),
+                              // IconButton(
+                              //     onPressed: (){
+                              //       Navigator.push(
+                              //           context,
+                              //           MaterialPageRoute(
+                              //               builder: (context) => AddServices(hospitalLabDiagnosis: widget.lab,index: 2,)
+                              //           ));
+                              //     },
+                              //     icon: Icon(
+                              //       Icons.add,
+                              //       size: 30,
+                              //     )
+                              // )
                               // GestureDetector(
                               //     onTap: (){
                               //       Navigator.push(

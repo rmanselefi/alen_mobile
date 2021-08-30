@@ -8,6 +8,7 @@ import 'package:alen/ui/Details/DiagnosisDetail.dart';
 import 'package:alen/ui/Forms/LoginForm.dart';
 import 'package:alen/ui/Parents/Interfaces.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
+import 'package:alen/ui/serviceAdder/DiagnostisServiceAdder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,6 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import '../AppColors.dart';
-import 'AddService.dart';
 import 'DetailServiceEdit.dart';
 import 'MultiImageDemo.dart';
 
@@ -130,16 +130,13 @@ class _DiagnosisEditState extends State<DiagnosisEdit> {
                                 decoration: BoxDecoration(color: myCustomColors.loginBackgroud),
                                 accountName: Text(snapshot.data.name),
                                 accountEmail: Text(snapshot.data.email),
-                                currentAccountPicture: CircleAvatar(
-                                  //backgroundColor: myCustomColors.loginButton,
-                                  // child: Text(
-                                  //   "A",
-                                  //   style: TextStyle(
-                                  //       fontSize: 40.0, color: myCustomColors.loginBackgroud),
-                                  // ),
-                                  backgroundImage: NetworkImage(snapshot.data.image),
-                                ),
-                              ),
+                                  currentAccountPicture: CircleAvatar(
+                                      backgroundImage: (snapshot.data.images==null)?
+                                      AssetImage(
+                                          'assets/images/alen_no_name.png')
+                                          :NetworkImage(
+                                          snapshot.data.images[0])
+                                  )),
                               ListTile(
                                 leading: Icon(Icons.contacts),
                                 title: Text("Contact Us"),
@@ -250,7 +247,7 @@ class _DiagnosisEditState extends State<DiagnosisEdit> {
                                   ),
                                 ):
                                 Swiper(
-                                  itemCount: snapshot.data.images.length,
+                                  itemCount: snapshot.data.images.length?? 0,
                                   layout: SwiperLayout.STACK,
                                   scrollDirection: Axis.horizontal,
                                   autoplay: true,
@@ -265,6 +262,57 @@ class _DiagnosisEditState extends State<DiagnosisEdit> {
                                   },
                                   itemHeight: MediaQuery.of(context).size.width * 0.40,
                                   itemWidth: MediaQuery.of(context).size.width,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(
+                                      MediaQuery.of(context).size.width * 0.03,
+                                      40,
+                                      MediaQuery.of(context).size.width * 0.03,
+                                      10),
+                                  child: ElevatedButton(
+                                    onPressed: (){
+                                      //addProduct(context);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => AddServices(hospitalLabDiagnosis: widget.diagnosis,index: 0,)
+                                          ));
+                                    },
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            myCustomColors.loginButton),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(30.0),
+                                                side: BorderSide(
+                                                    color:
+                                                    myCustomColors.loginButton)))),
+                                    child: Container(
+                                        height: 50,
+                                        child:Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Text(
+                                              'Add Service',
+                                              textScaleFactor: 1.5,
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 10),
+                                              child: Icon(
+                                                Icons.add,
+                                                size: 30,
+                                              ),
+                                            )
+                                          ],)
+                                    ),
+                                  ),
                                 ),
                                 // Container(
                                 //     padding: EdgeInsets.only(left:30,top: 30),
@@ -294,20 +342,20 @@ class _DiagnosisEditState extends State<DiagnosisEdit> {
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(fontWeight: FontWeight.bold),
                                       ),
-                                      SizedBox(width: 10,),
-                                      IconButton(
-                                          onPressed: (){
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => AddServices(hospitalLabDiagnosis: widget.diagnosis,index: 1,)
-                                                ));
-                                          },
-                                          icon: Icon(
-                                            Icons.add,
-                                            size: 30,
-                                          )
-                                      )
+                                      // SizedBox(width: 10,),
+                                      // IconButton(
+                                      //     onPressed: (){
+                                      //       Navigator.push(
+                                      //           context,
+                                      //           MaterialPageRoute(
+                                      //               builder: (context) => AddServices(hospitalLabDiagnosis: widget.diagnosis,index: 1,)
+                                      //           ));
+                                      //     },
+                                      //     icon: Icon(
+                                      //       Icons.add,
+                                      //       size: 30,
+                                      //     )
+                                      // )
                                       // GestureDetector(
                                       //     onTap: (){
                                       //       Navigator.push(

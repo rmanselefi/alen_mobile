@@ -1,5 +1,6 @@
 import 'package:alen/models/hospital.dart';
 import 'package:alen/providers/hospital.dart';
+import 'package:alen/providers/user_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'AppColors.dart';
@@ -12,6 +13,7 @@ class DetailsForService extends StatelessWidget {
   final String description;
   final List<Service> services;
   final String id;
+  final String price;
 
   DetailsForService({
     Key key,
@@ -19,7 +21,8 @@ class DetailsForService extends StatelessWidget {
      this.imageUrl,
      this.description,
      this.services,
-    this.id
+    this.id,
+    this.price
   }) : super(key: key);
 
   static const myCustomColors = AppColors();
@@ -27,6 +30,8 @@ class DetailsForService extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var hosProvider = Provider.of<HospitalProvider>(context, listen: false);
+    String hospitalId;
+    UserPreferences().getId().then((value) => hospitalId=value);
     // final PageController controller = PageController(initialPage: 0);
     return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -76,8 +81,8 @@ class DetailsForService extends StatelessWidget {
                             ],
                           ),
                         ),
-                        FutureBuilder<Hospitals>(
-                            future: hosProvider.fetchHospital('3nPWouBvXSjpDLwbXXER'),
+                        FutureBuilder<List<HospServicesTypes>>(
+                            future: hosProvider.getHospServiceTypesByHospitalId(id, hospitalId),
                             builder: (context , hospServSnapshot) {
                               if (hospServSnapshot.connectionState ==
                                   ConnectionState.none &&
@@ -101,9 +106,9 @@ class DetailsForService extends StatelessWidget {
                               }
                               else {
                                 List<dynamic> list=[];
-                                for(int i=0; i<hospServSnapshot.data.services.length; i++){
-                                  var temp=hospServSnapshot.data.services[i];
-                                  if(temp['service_type_id']==id){
+                                for(int i=0; i<hospServSnapshot.data.length; i++){
+                                  var temp=hospServSnapshot.data[i];
+                                  if(temp.serviceId==id){
                                     list.add(temp);
                                   }
                                 }
@@ -122,7 +127,7 @@ class DetailsForService extends StatelessWidget {
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (BuildContext ctxt, int index) {
                                         return _buildHopitalServicesListItem(
-                                            list[index], ctxt);
+                                            list[index], ctxt, hospitalId,id);
                                       },
                                       itemCount: list.length,
                                     ));
@@ -170,6 +175,10 @@ class DetailsForService extends StatelessWidget {
                             )
                         ),
                         SizedBox(
+                          height: 20,
+                        ),
+
+                        SizedBox(
                           height: 30,
                         )
                       ],
@@ -179,14 +188,14 @@ class DetailsForService extends StatelessWidget {
               )),
         ));
   }
-  _buildHopitalServicesListItem(var service, BuildContext ctxt) {
+  _buildHopitalServicesListItem(HospServicesTypes service, BuildContext ctxt, String hospitalId, String serviceID) {
     return GestureDetector(
         onTap: () {
           Navigator.push(
               ctxt,
               MaterialPageRoute(
                 // builder: (context) => ListInServices()
-                  builder: (context) => DetailsPage(name: service['service_name'], imageUrl: service['service_image'], description: service['service_detail'], )
+                  builder: (context) => DetailsPage(name: service.name, imageUrl: service.image, description: service.description, price: service.price,colName: 'hospital',serviceId: service.id, hospitalId: hospitalId )
               ));
         },
         child: Card(
@@ -203,7 +212,7 @@ class DetailsForService extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(150.0),
                     child: Image.network(
-                      service['service_image'],
+                      service.image,
                       fit: BoxFit.fitHeight,
                       height: 70.0,
                       width: 70.0,
@@ -211,7 +220,7 @@ class DetailsForService extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  service['service_name'],
+                  service.name,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],

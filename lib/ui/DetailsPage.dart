@@ -1,3 +1,4 @@
+import 'package:alen/ui/Edit/EditServiceType.dart';
 import 'package:flutter/material.dart';
 import 'AppColors.dart';
 
@@ -5,12 +6,20 @@ class DetailsPage extends StatelessWidget {
   final String name;
   final String imageUrl;
   final String description;
+  final String price;
+  final String colName;
+  final String serviceId;
+  final String hospitalId;
 
   DetailsPage({
     Key key,
      this.name,
      this.imageUrl,
      this.description,
+    this.price,
+    this.colName,
+    this.serviceId,
+    this.hospitalId
   }) : super(key: key);
 
   static const myCustomColors = AppColors();
@@ -31,7 +40,29 @@ class DetailsPage extends StatelessWidget {
               leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () => Navigator.pop(context, false),
-          )
+          ),
+                  actions: [
+                   IconButton(
+                       onPressed: (){
+                         Navigator.push(
+                             context,
+                             MaterialPageRoute(
+                                 builder: (ctxt) => EditServiceType(
+                                   serviceId: serviceId,
+                                   colName: colName,
+                                   price: price,
+                                   name: name,
+                                   imageUrl: imageUrl,
+                                   description: description,
+                                   hospitalId: hospitalId,
+                                   cont : context
+                                 )));
+
+                       },
+                       icon: Icon(
+                         Icons.edit
+                       ))
+            ],
           ),
           body: SingleChildScrollView(
               child: Stack(
@@ -71,6 +102,33 @@ class DetailsPage extends StatelessWidget {
                             maxLines: 10,
                           ),
                         )
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                            padding: EdgeInsets.symmetric(horizontal: 5,vertical: 20),
+
+                                child:Text(
+                                  "Price : ",
+                                  textAlign: TextAlign.left,
+                                  textScaleFactor: 1.2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                )
+
+                        ),
+
+                        Container(
+                            padding: EdgeInsets.symmetric(horizontal: 5,vertical: 20),
+                              child: Text(
+                                (price!=null)?price.toString():'0',
+                                textDirection: TextDirection.ltr,
+                                maxLines: 1,
+                              ),
+
+                        ),
+                      ],
                     ),
                   ],
                 ),

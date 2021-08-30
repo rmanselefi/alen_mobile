@@ -110,10 +110,12 @@ class HospitalDetail extends StatelessWidget {
                                         accountName: Text(snapshot.data.name),
                                         accountEmail: Text(snapshot.data.email),
                                         currentAccountPicture: CircleAvatar(
-                                          backgroundImage: NetworkImage(
-                                              snapshot.data.image),
-                                        ),
-                                      ),
+                                          backgroundImage: (snapshot.data.images==null)?
+                                          AssetImage(
+                                              'assets/images/alen_no_name.png')
+                                        :NetworkImage(
+                                              snapshot.data.images[0])
+                                      )),
                               ListTile(
                                 leading: Icon(Icons.contacts),
                                 title: Text("Contact Us"),
@@ -249,54 +251,11 @@ class HospitalDetail extends StatelessWidget {
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(fontWeight: FontWeight.bold),
                                       ),
-                                      // GestureDetector(
-                                      //     onTap: (){
-                                      //       Navigator.push(
-                                      //           context,
-                                      //           MaterialPageRoute(
-                                      //               builder: (context) => SeeAllServices()
-                                      //           ));
-                                      //     },
-                                      //   child: Text(
-                                      //     'See All',
-                                      //     textScaleFactor: 1.3,
-                                      //     textAlign: TextAlign.left,
-                                      //     overflow: TextOverflow.ellipsis,
-                                      //     style: const TextStyle(fontWeight: FontWeight.bold,
-                                      //     color: Colors.blueAccent),
-                                      //   ),
-                                      // )
                                     ],
                                   ),
                                 ),
-                                // FutureBuilder<Hospitals>(
-                                //     future: hosProvider.fetchHospital('3nPWouBvXSjpDLwbXXER'),
-                                //     builder: (context , snapshot) {
-                                //       if (snapshot.connectionState ==
-                                //           ConnectionState.none &&
-                                //           snapshot.hasData == null) {
-                                //         return CircularProgressIndicator();
-                                //       }
-                                //       print(
-                                //           'project snapshot data is: ${snapshot.data}');
-                                //       if (snapshot.data == null) {
-                                //         return Container(
-                                //             child: Center(
-                                //                 child: CircularProgressIndicator()));
-                                //       }
-                                //       else {
-                                //         return ListView.builder(
-                                //           scrollDirection: Axis.horizontal,
-                                //           itemBuilder: (BuildContext ctxt, int index) {
-                                //             return _buildHopitalServicesListItem(
-                                //                 snapshot.data.services[index], ctxt);
-                                //           },
-                                //           itemCount: snapshot.data.services.length,
-                                //         );
-                                //       }
-                                //     }),
-                                FutureBuilder<List<HospServicesTypes>>(
-                                    future: hosProvider.getAllHospServiceTypes(),
+                                FutureBuilder<List<HospServices>>(
+                                    future: hosProvider.getHospServicesByHospitalId(hospitalId),
                                     builder: (context , hospServSnapshot) {
                                       if (hospServSnapshot.connectionState ==
                                           ConnectionState.none &&
@@ -488,7 +447,7 @@ class HospitalDetail extends StatelessWidget {
               ctxt,
               MaterialPageRoute(
                   // builder: (context) => ListInServices()
-                builder: (context) => DetailsForService(name: hospitalServices.name, imageUrl: hospitalServices.image, description: hospitalServices.description, services: [],id:hospitalServices.id,)
+                builder: (context) => DetailsForService(name: hospitalServices.name, imageUrl: hospitalServices.image, description: hospitalServices.detail, services: [],id:hospitalServices.id,)
               ));
         },
         child: Card(

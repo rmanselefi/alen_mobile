@@ -131,16 +131,13 @@ class _ImporterEditState extends State<ImporterEdit> {
                                 decoration: BoxDecoration(color: myCustomColors.loginBackgroud),
                                 accountName: Text(snapshot.data.name),
                                 accountEmail: Text(snapshot.data.email),
-                                currentAccountPicture: CircleAvatar(
-                                  //backgroundColor: myCustomColors.loginButton,
-                                  // child: Text(
-                                  //   "A",
-                                  //   style: TextStyle(
-                                  //       fontSize: 40.0, color: myCustomColors.loginBackgroud),
-                                  // ),
-                                  backgroundImage: NetworkImage(snapshot.data.image),
-                                ),
-                              ),
+                                  currentAccountPicture: CircleAvatar(
+                                      backgroundImage: (snapshot.data.images==null)?
+                                      AssetImage(
+                                          'assets/images/alen_no_name.png')
+                                          :NetworkImage(
+                                          snapshot.data.images[0])
+                                  )),
                               ListTile(
                                 leading: Icon(Icons.contacts),
                                 title: Text("Contact Us"),
@@ -241,8 +238,17 @@ class _ImporterEditState extends State<ImporterEdit> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                (snapshot.data.images== null || snapshot.data.images.length==0)
+                                    ? Container(
+                                  height: 80,
+                                  child: Center(
+                                    child: Text(
+                                      "No Images Available",
+                                    ),
+                                  ),
+                                ):
                                 Swiper(
-                                  itemCount: widget.importer.imagesList.length,
+                                  itemCount: snapshot.data.images.length?? 0,
                                   layout: SwiperLayout.STACK,
                                   scrollDirection: Axis.horizontal,
                                   autoplay: true,
@@ -251,13 +257,14 @@ class _ImporterEditState extends State<ImporterEdit> {
                                   ),
                                   itemBuilder: (context, index) {
                                     return Image.network(
-                                      widget.importer.imagesList[index],
+                                      snapshot.data.images[index],
                                       fit: BoxFit.cover,
                                     );
                                   },
                                   itemHeight: MediaQuery.of(context).size.width * 0.40,
                                   itemWidth: MediaQuery.of(context).size.width,
                                 ),
+
                                 // Container(
                                 //     padding: EdgeInsets.only(left:30,top: 30),
                                 //     width: MediaQuery.of(context).size.width,

@@ -4,6 +4,7 @@ import 'package:alen/providers/user_preference.dart';
 import 'package:alen/ui/Details/HospitalDetail.dart';
 import 'package:alen/ui/Parents/Interfaces.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
+import 'package:alen/ui/serviceAdder/HospitalServiceAdder.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../AppColors.dart';
-import 'AddService.dart';
+import '../DetailForService.dart';
+import '../DetailsPage.dart';
 import 'DetailServiceEdit.dart';
 import 'MultiImageDemo.dart';
 
@@ -127,16 +129,13 @@ class _HospitalEditState extends State<HospitalEdit> {
                                 decoration: BoxDecoration(color: myCustomColors.loginBackgroud),
                                 accountName: Text(snapshot.data.name),
                                 accountEmail: Text(snapshot.data.email),
-                                currentAccountPicture: CircleAvatar(
-                                  //backgroundColor: myCustomColors.loginButton,
-                                  // child: Text(
-                                  //   "A",
-                                  //   style: TextStyle(
-                                  //       fontSize: 40.0, color: myCustomColors.loginBackgroud),
-                                  // ),
-                                  backgroundImage: NetworkImage(snapshot.data.image),
-                                ),
-                              ),
+                                  currentAccountPicture: CircleAvatar(
+                                      backgroundImage: (snapshot.data.images==null)?
+                                      AssetImage(
+                                          'assets/images/alen_no_name.png')
+                                          :NetworkImage(
+                                          snapshot.data.images[0])
+                                  )),
                               ListTile(
                                 leading: Icon(Icons.contacts),
                                 title: Text("Contact Us"),
@@ -259,6 +258,57 @@ class _HospitalEditState extends State<HospitalEdit> {
                                 Container(
                                   margin: EdgeInsets.fromLTRB(
                                       MediaQuery.of(context).size.width * 0.03,
+                                      40,
+                                      MediaQuery.of(context).size.width * 0.03,
+                                      10),
+                                  child: ElevatedButton(
+                                    onPressed: (){
+                                      //addProduct(context);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => AddServices(hospitalLabDiagnosis: widget.hospital,index: 0,)
+                                          ));
+                                    },
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            myCustomColors.loginButton),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(30.0),
+                                                side: BorderSide(
+                                                    color:
+                                                    myCustomColors.loginButton)))),
+                                    child: Container(
+                                        height: 50,
+                                        child:Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Text(
+                                              'Add Service',
+                                              textScaleFactor: 1.5,
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 10),
+                                              child: Icon(
+                                                Icons.add,
+                                                size: 30,
+                                              ),
+                                            )
+                                          ],)
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(
+                                      MediaQuery.of(context).size.width * 0.03,
                                       30,
                                       MediaQuery.of(context).size.width * 0.03,
                                       5),
@@ -272,42 +322,25 @@ class _HospitalEditState extends State<HospitalEdit> {
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(fontWeight: FontWeight.bold),
                                       ),
-                                      SizedBox(width: 10,),
-                                      IconButton(
-                                          onPressed: (){
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => AddServices(hospitalLabDiagnosis: widget.hospital,index: 0,)
-                                                ));
-                                          },
-                                          icon: Icon(
-                                            Icons.add,
-                                            size: 30,
-                                          )
-                                      )
-                                      // GestureDetector(
-                                      //     onTap: (){
+                                      // SizedBox(width: 10,),
+                                      // IconButton(
+                                      //     onPressed: (){
                                       //       Navigator.push(
                                       //           context,
                                       //           MaterialPageRoute(
-                                      //               builder: (context) => SeeAllServices()
+                                      //               builder: (context) => AddServices(hospitalLabDiagnosis: widget.hospital,index: 0,)
                                       //           ));
                                       //     },
-                                      //   child: Text(
-                                      //     'See All',
-                                      //     textScaleFactor: 1.3,
-                                      //     textAlign: TextAlign.left,
-                                      //     overflow: TextOverflow.ellipsis,
-                                      //     style: const TextStyle(fontWeight: FontWeight.bold,
-                                      //     color: Colors.blueAccent),
-                                      //   ),
+                                      //     icon: Icon(
+                                      //       Icons.add,
+                                      //       size: 30,
+                                      //     )
                                       // )
                                     ],
                                   ),
                                 ),
                                 FutureBuilder<List<HospServicesTypes>>(
-                                    future: hosProvider.getAllHospServiceTypes(),
+                                    future:hosProvider.getMyServiceTypes(hospitalId),
                                     builder: (context , hospServSnapshot) {
                                       if (hospServSnapshot.connectionState ==
                                           ConnectionState.none &&
@@ -340,8 +373,9 @@ class _HospitalEditState extends State<HospitalEdit> {
                                             child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
                                               itemBuilder: (BuildContext ctxt, int index) {
+                                                print(hospServSnapshot.data[index]);
                                                 return _buildHopitalServicesListItem(
-                                                    hospServSnapshot.data[index], ctxt);
+                                                    hospServSnapshot.data[index], ctxt, hospitalId);
                                               },
                                               itemCount: hospServSnapshot.data.length,
                                             ));
@@ -616,14 +650,14 @@ class _HospitalEditState extends State<HospitalEdit> {
   }
   final _messageControler = TextEditingController();
 
-  _buildHopitalServicesListItem(var hospitalServices, BuildContext ctxt) {
+  _buildHopitalServicesListItem(HospServicesTypes hospitalServices, BuildContext ctxt, String hospitalId) {
     return GestureDetector(
         onTap: () {
           Navigator.push(
               ctxt,
               MaterialPageRoute(
                 // builder: (context) => ListInServices()
-                  builder: (context) => DetailServiceEdit(hospitalServices:hospitalServices, hospitalLabDiagnosis: widget.hospital,)
+                  builder: (context) => DetailsPage(name: hospitalServices.name, imageUrl: hospitalServices.image, description: hospitalServices.description, price: hospitalServices.price,colName: 'hospital',serviceId: hospitalServices.id, hospitalId: hospitalId )
               ));
         },
         child: Card(
