@@ -17,12 +17,7 @@ class _SeeAllImportersState extends State<SeeAllImporters> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground),
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(
                 backgroundColor: myCustomColors.loginBackgroud,
                 leading: IconButton(
@@ -55,8 +50,7 @@ class _SeeAllImportersState extends State<SeeAllImporters> {
                             itemCount: importers.length,
                           )),
                     ]))
-        )
-    );
+        );
   }
   _buildImportersListItem(Importer importers, BuildContext ctxt) {
     return GestureDetector(
@@ -70,8 +64,8 @@ class _SeeAllImportersState extends State<SeeAllImporters> {
                     phone: importers.phone,
                     name: importers.name,
                     description:importers.detail,
-                    location: importers.location,
-                    info: importers.info,
+                    latitude: importers.location,
+                    longtude: importers.info,
                     officeHours: importers.officeHours,
                     services: importers.services,
                   )

@@ -1,41 +1,53 @@
+import 'package:alen/models/hospital.dart';
+import 'package:alen/providers/diagnostic.dart';
+import 'package:alen/providers/hospital.dart';
+import 'package:alen/providers/laboratory.dart';
+import 'package:alen/providers/user_preference.dart';
 import 'package:alen/ui/ServiceCategory/Service.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:alen/utils/DetailsPage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'HospitalDetail.dart';
 
 class DetailsForService extends StatelessWidget {
-  final String id;
   final String name;
   final String imageUrl;
   final String description;
-  final List<dynamic> services;
+  final List<Service> services;
+  final String id;
+  final String price;
+  final Roles role;
+  final String hospitalId;
 
-  DetailsForService(
-      {this.id, this.name, this.imageUrl, this.description, this.services});
+  DetailsForService({
+    Key key,
+    this.name,
+    this.imageUrl,
+    this.description,
+    this.services,
+    this.id,
+    this.price,
+    this.role,
+    this.hospitalId
+  }) : super(key: key);
 
   static const myCustomColors = AppColors();
 
   @override
   Widget build(BuildContext context) {
-    // final PageController controller = PageController(initialPage: 0);
-    print("servicesservicesservices ${services}");
-    var service_type=services.where((element) =>element['service_id']==id).toList();
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground,
-            appBarTheme: AppBarTheme(
-              color: myCustomColors.loginBackgroud,
-            )),
-        home: Scaffold(
-          appBar: AppBar(
-              leading: IconButton(
+    var hosProvider = Provider.of<HospitalProvider>(context, listen: false);
+    var diagnosisProvider = Provider.of<DiagnosticProvider>(context, listen: false);
+    var labProvider = Provider.of<LaboratoryProvider>(context, listen: false);
+    return Scaffold(
+      appBar: AppBar(
+          leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () => Navigator.pop(context, false),
           )),
-          body: SingleChildScrollView(
-              child: Stack(
+      body: SingleChildScrollView(
+          child: Stack(
             children: [
               Container(
                 width: MediaQuery.of(context).size.width,
@@ -46,7 +58,8 @@ class DetailsForService extends StatelessWidget {
                     SizedBox(
                       height: 200,
                       width: 350,
-                      child: Image.asset(imageUrl,
+                      child: (imageUrl==null)?Text("Image not available"):
+                      Image.network(imageUrl,
                           width: 200, height: 120, fit: BoxFit.fill),
                     ),
                     Container(
@@ -55,7 +68,7 @@ class DetailsForService extends StatelessWidget {
                           30,
                           MediaQuery.of(context).size.width * 0.03,
                           5),
-                      child: Row(
+                      child:Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
@@ -65,85 +78,90 @@ class DetailsForService extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          // GestureDetector(
-                          //     onTap: (){
-                          //       Navigator.push(
-                          //           context,
-                          //           MaterialPageRoute(
-                          //               builder: (context) => SeeAllServices()
-                          //           ));
-                          //     },
-                          //   child: Text(
-                          //     'See All',
-                          //     textScaleFactor: 1.3,
-                          //     textAlign: TextAlign.left,
-                          //     overflow: TextOverflow.ellipsis,
-                          //     style: const TextStyle(fontWeight: FontWeight.bold,
-                          //     color: Colors.blueAccent),
-                          //   ),
-                          // )
                         ],
                       ),
                     ),
-                    Container(
-                        height: 110.0,
-                        margin: EdgeInsets.fromLTRB(
-                            MediaQuery.of(context).size.width * 0.07,
-                            5,
-                            MediaQuery.of(context).size.width * 0.07,
-                            30),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (BuildContext ctxt, int index) {
-                            return _buildHopitalServicesListItem(
-                                service_type[index], ctxt);
-                          },
-                          itemCount: service_type.length,
-                        )),
+                    FutureBuilder<List<HLDServiceTypes>>(
+                        future: (role==Roles.Hospital)?
+                        hosProvider.getHospServiceTypesByHospitalId(id, hospitalId)
+                            :(role==Roles.Diagnosis)?
+                        diagnosisProvider.getDiagnosticsServiceTypesByDiagnosticsId(id, hospitalId):
+                        labProvider.getLabServiceTypesByLabId(id, hospitalId)
+                        ,
+                        builder: (context , hospServSnapshot) {
+                          if (hospServSnapshot.connectionState ==
+                              ConnectionState.none &&
+                              hospServSnapshot.hasData == null) {
+                            return Container(
+                              height: 110,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          }
+                          print(
+                              'project snapshot data is: ${hospServSnapshot.data}');
+                          if (hospServSnapshot.data == null) {
+                            return Container(
+                              height: 110,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          }
+                          else {
+                            List<dynamic> list=[];
+                            for(int i=0; i<hospServSnapshot.data.length; i++){
+                              var temp=hospServSnapshot.data[i];
+                              if(temp.serviceId==id){
+                                list.add(temp);
+                              }
+                            }
+                            return Container(
+                                height: 110.0,
+                                margin: EdgeInsets.fromLTRB(
+                                    MediaQuery.of(context).size.width * 0.07,
+                                    5,
+                                    MediaQuery.of(context).size.width * 0.07,
+                                    30),
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (BuildContext ctxt, int index) {
+                                    return _buildHopitalServicesListItem(
+                                        list[index], ctxt, hospitalId,id, role);
+                                  },
+                                  itemCount: list.length,
+                                ));
+                          }
+                        }),
                     Container(
                         padding: EdgeInsets.all(30),
                         width: MediaQuery.of(context).size.width,
                         child: Center(
-                            child: Text(
-                          name,
-                          textAlign: TextAlign.left,
-                          textScaleFactor: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ))),
+                            child:Text(
+                              name??"Name",
+                              textAlign: TextAlign.left,
+                              textScaleFactor: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            )
+                        )
+                    ),
                     Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
                         width: MediaQuery.of(context).size.width,
                         child: Center(
                           child: Text(
-                            "description",
+                            description??"Description",
                             textDirection: TextDirection.ltr,
                             maxLines: 10,
                           ),
-                        )),
-                    Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        width: MediaQuery.of(context).size.width,
-                        child: Center(
-                          child: Text(
-                            "description",
-                            textDirection: TextDirection.ltr,
-                            maxLines: 10,
-                          ),
-                        )),
-                    Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        width: MediaQuery.of(context).size.width,
-                        child: Center(
-                          child: Text(
-                            "description",
-                            textDirection: TextDirection.ltr,
-                            maxLines: 10,
-                          ),
-                        )),
+                        )
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+
                     SizedBox(
                       height: 30,
                     )
@@ -152,21 +170,19 @@ class DetailsForService extends StatelessWidget {
               )
             ],
           )),
-        ));
+    );
   }
-
-  _buildHopitalServicesListItem(var service, BuildContext ctxt) {
+  _buildHopitalServicesListItem(HLDServiceTypes service, BuildContext ctxt, String hospitalId, String serviceID, Roles role) {
     return GestureDetector(
         onTap: () {
           Navigator.push(
               ctxt,
               MaterialPageRoute(
-                  // builder: (context) => ListInServices()
-                  builder: (context) => DetailsPage(
-                        name: service.name,
-                        imageUrl: service.imagePath,
-                        description: service.detail,
-                      )));
+                // builder: (context) => ListInServices()
+                  builder: (context) => DetailsPage(name: service.name, imageUrl: service.image, description: service.description,
+                      price: service.price,colName: 'hospital',serviceId: service.id, hospitalId: hospitalId, role: role
+                  )
+              ));
         },
         child: Card(
             elevation: 0,
@@ -182,7 +198,7 @@ class DetailsForService extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(150.0),
                     child: Image.network(
-                      service['service_type_image'],
+                      service.image,
                       fit: BoxFit.fitHeight,
                       height: 70.0,
                       width: 70.0,
@@ -190,7 +206,7 @@ class DetailsForService extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  service['service_type'],
+                  service.name,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],

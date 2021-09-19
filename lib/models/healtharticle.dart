@@ -1,8 +1,7 @@
 class HealthArticles {
   String Id;
-  String title;
+  String link;
   String image;
-  String description;
 
-  HealthArticles({this.Id, this.title, this.description, this.image});
+  HealthArticles({this.Id, this.link, this.image});
 }

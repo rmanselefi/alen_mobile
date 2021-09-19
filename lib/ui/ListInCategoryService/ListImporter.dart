@@ -19,12 +19,7 @@ class _ListImporterState extends State<ListImporter> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground),
-        home: Scaffold(
+    return  Scaffold(
             appBar: AppBar(
               backgroundColor: myCustomColors.loginBackgroud,
               leading: IconButton(
@@ -41,7 +36,7 @@ class _ListImporterState extends State<ListImporter> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ImportCart()
+                            builder: (context) => ImporterCart()
                         )
                     );
                   },
@@ -77,8 +72,7 @@ class _ListImporterState extends State<ListImporter> {
                             itemCount: categories.length,
                           )),
                     ]))
-        )
-    );
+        );
   }
   _buildCategoriesListItem(Category category, BuildContext ctxt) {
     return GestureDetector(
@@ -87,10 +81,7 @@ class _ListImporterState extends State<ListImporter> {
               ctxt,
               MaterialPageRoute(
                   builder: (context) => DetailForImp(
-                    name: category.name,
-                    description: category.detail,
-                    imageUrl: category.imagePath,
-                    price: category.price,
+
                   )));
         },
         child: Column(

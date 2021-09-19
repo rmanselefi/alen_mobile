@@ -21,19 +21,24 @@ class PharmaciesPage extends StatelessWidget {
   List<Pharmacy> pharmacies = Pharmacy.pharmacies;
   static const myCustomColors = AppColors();
 
+  ScrollController _scrollController = ScrollController();
+
+  _scrollToBottom() {
+    // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    var duration= (7/500.0)*_scrollController.position.maxScrollExtent;
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(seconds: duration.toInt()),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     var pharmacyProvider =
         Provider.of<PharmacyProvider>(context, listen: false);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          fontFamily: 'Ubuntu',
-          scaffoldBackgroundColor: const Color(0xFFEBEBEB),
-          appBarTheme: AppBarTheme(
-            color: myCustomColors.loginBackgroud,
-          )),
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
             elevation: 2,
             leading: IconButton(
@@ -69,9 +74,9 @@ class PharmaciesPage extends StatelessWidget {
                 children: <Widget>[
                   GestureDetector(
                       onTap: () {
-                        showSearch<Pharmacy>(
+                        showSearch<Pharmacies>(
                             context: context,
-                            delegate: PharmacySearch(pharmacies));
+                            delegate: PharmacySearch(pharmacies: PharmacyProvider.nearby));
                       },
                       child: Container(
                           margin: EdgeInsets.fromLTRB(0, 60, 0, 50),
@@ -152,8 +157,12 @@ class PharmaciesPage extends StatelessWidget {
                                       child:
                                       CircularProgressIndicator()));
                             } else {
+                              WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
                               return ListView.builder(
                                 scrollDirection: Axis.horizontal,
+                                controller: _scrollController,
+                                // reverse: true,
+                                shrinkWrap: true,
                                 itemBuilder:
                                     (BuildContext ctxt, int index) {
                                   return _buildPharmaciesListItem(
@@ -186,7 +195,7 @@ class PharmaciesPage extends StatelessWidget {
                         ],
                       )),
                   Container(
-                      height: 190.0,
+                      // height: 190.0,
                       margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
                       child: FutureBuilder<UserLocation>(
                           future: pharmacyProvider.getCurrentLocation(),
@@ -213,8 +222,21 @@ class PharmaciesPage extends StatelessWidget {
                                             child:
                                                 CircularProgressIndicator()));
                                   } else {
-                                    return ListView.builder(
-                                      scrollDirection: Axis.horizontal,
+                                    return GridView.builder(
+                                      gridDelegate:
+                                      SliverGridDelegateWithMaxCrossAxisExtent(
+                                          maxCrossAxisExtent: 160,
+                                          childAspectRatio:
+                                          (MediaQuery.of(context)
+                                              .orientation ==
+                                              Orientation.portrait)
+                                              ? 2 / 3
+                                              : 2 / 2.2,
+                                          crossAxisSpacing: 0,
+                                          mainAxisSpacing: 0),
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      scrollDirection: Axis.vertical,
                                       itemBuilder:
                                           (BuildContext ctxt, int index) {
                                         return _buildPharmaciesListItem(
@@ -230,25 +252,27 @@ class PharmaciesPage extends StatelessWidget {
             )
           ],
         )),
-      ),
-    );
+      );
   }
 
-  _buildPharmaciesListItem(Pharmacies pharmacy, BuildContext ctxt) {
+  _buildPharmaciesListItem(var pharmacy, BuildContext ctxt) {
     return GestureDetector(
         onTap: () {
           Navigator.push(
               ctxt,
               MaterialPageRoute(
                   builder: (context) => PharamacyDetail(
+                    id: pharmacy.Id,
                     title: pharmacy.name,
                     phone: pharmacy.phone,
                     imagesList: pharmacy.image,
                     name: pharmacy.name,
+                    images: pharmacy.images,
                     description:pharmacy.description,
-                    location: pharmacy.latitude.toString(),
-                    info: "info",
+                    latitude: pharmacy.latitude.toStringAsFixed(3),
+                    longtude: pharmacy.longitude.toStringAsFixed(3),
                     officeHours: pharmacy.officehours,
+                    email: pharmacy.email,
                   ),
               ));
         },
@@ -277,8 +301,8 @@ class PharmaciesPage extends StatelessWidget {
                     child: SizedBox(
                       height: 120,
                       width: 120,
-                      child: pharmacy.image != null
-                          ? Image.network(pharmacy.image,
+                      child: pharmacy.images != null
+                          ? Image.network(pharmacy.images.first,
                           width: 120, height: 120, fit: BoxFit.fill)
                           : Container(
                         child: Center(
@@ -290,11 +314,6 @@ class PharmaciesPage extends StatelessWidget {
                 ),
                 Text(
                   pharmacy.name,
-                  maxLines: 2,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  pharmacy.latitude.toString(),
                   maxLines: 2,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),

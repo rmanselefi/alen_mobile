@@ -30,7 +30,7 @@ class _NameFormScreenState extends State<NameFormScreen> {
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
             fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.loginBackgroud),
+            scaffoldBackgroundColor: myCustomColors.loginButton),
         home: Scaffold(
           body: SingleChildScrollView(
               child: Stack(
@@ -105,16 +105,16 @@ class _NameFormScreenState extends State<NameFormScreen> {
                                           hintText: 'First Name',
                                           labelStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginBackgroud),
+                                                  .loginButton),
                                           prefixIcon: Icon(
                                             Icons.perm_identity,
                                             color:
-                                                myCustomColors.loginBackgroud,
+                                                myCustomColors.loginButton,
                                           ),
                                           counterStyle:
                                               TextStyle(color: Colors.white54),
                                           hintStyle:
-                                              TextStyle(color: Colors.blue),
+                                              TextStyle(color: myCustomColors.loginButton),
                                           filled: true,
                                           fillColor: Colors.white,
                                           enabledBorder: OutlineInputBorder(
@@ -167,17 +167,17 @@ class _NameFormScreenState extends State<NameFormScreen> {
                                           hintText: 'Middle Name',
                                           labelStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginBackgroud),
+                                                  .loginButton),
                                           prefixIcon: Icon(
                                             Icons.perm_identity,
                                             color:
-                                                myCustomColors.loginBackgroud,
+                                                myCustomColors.loginButton,
                                           ),
                                           counterStyle:
                                               TextStyle(color: Colors.white54),
                                           hintStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginBackgroud),
+                                                  .loginButton),
                                           filled: true,
                                           fillColor: Colors.white,
                                           enabledBorder: OutlineInputBorder(
@@ -247,17 +247,17 @@ class _NameFormScreenState extends State<NameFormScreen> {
                                           hintText: 'Last Name',
                                           labelStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginBackgroud),
+                                                  .loginButton),
                                           prefixIcon: Icon(
                                             Icons.perm_identity,
                                             color:
-                                                myCustomColors.loginBackgroud,
+                                                myCustomColors.loginButton,
                                           ),
                                           counterStyle:
                                               TextStyle(color: Colors.white54),
                                           hintStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginBackgroud),
+                                                  .loginButton),
                                           filled: true,
                                           fillColor: Colors.white,
                                           enabledBorder: OutlineInputBorder(
@@ -293,7 +293,7 @@ class _NameFormScreenState extends State<NameFormScreen> {
                                 style: ButtonStyle(
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
-                                            myCustomColors.loginButton),
+                                            myCustomColors.loginBackgroud),
                                     shape: MaterialStateProperty.all<
                                             RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
@@ -301,7 +301,7 @@ class _NameFormScreenState extends State<NameFormScreen> {
                                                 BorderRadius.circular(30.0),
                                             side: BorderSide(
                                                 color: myCustomColors
-                                                    .loginButton)))),
+                                                    .loginBackgroud)))),
                                 onPressed: () {
                                   _formKey.currentState.save();
                                   if (_formKey.currentState.validate()) {

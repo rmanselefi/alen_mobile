@@ -17,12 +17,7 @@ class _SeeAllHospitalsState extends State<SeeAllHospitals> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground),
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(
                 backgroundColor: myCustomColors.loginBackgroud,
                 leading: IconButton(
@@ -55,8 +50,7 @@ class _SeeAllHospitalsState extends State<SeeAllHospitals> {
                             itemCount: hospitals.length,
                           )),
                     ]))
-        )
-    );
+        );
   }
   _buildHospitalsListItem(Hospital hospital, BuildContext ctxt) {
     return GestureDetector(

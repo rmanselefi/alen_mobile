@@ -1,11 +1,23 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:alen/models/ads.dart';
+import 'package:alen/providers/ads.dart';
+import 'package:alen/providers/cart.dart';
+import 'package:alen/providers/drug.dart';
 import 'package:alen/providers/pharmacy.dart';
+import 'package:alen/ui/Contact%20Us/ContactUs.dart';
+import 'package:alen/ui/Details/ImporterDetail.dart';
 import 'package:alen/ui/Details/PharmacyDetail.dart';
 import 'package:alen/ui/Pages/Pharmacy.dart';
+import 'package:alen/ui/Privacy%20Policy/PrivacyPolicy.dart';
 import 'package:alen/ui/SeeAllPages/Home/SeeAllHealthArticles.dart';
 import 'package:alen/ui/SeeAllPages/Home/SeeAllTrendings.dart';
+import 'package:alen/ui/Terms%20Of%20Use/Terms%20Of%20Use.dart';
+import 'package:alen/ui/mainPages/CompaniesPage.dart';
+import 'package:alen/ui/mainPages/HomeCaresPage.dart';
 import 'package:alen/utils/AppColors.dart';
+import 'package:alen/utils/Detail.dart';
 import 'package:alen/utils/DetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -42,6 +54,50 @@ class _HomePageState extends State<HomePage> {
   List<Trending> trendings = Trending.trendings;
   List<HealthArticle> healthArticles = HealthArticle.healthArticles;
 
+  ScrollController _scrollController = ScrollController();
+  // //
+  // _scrollToBottom() {
+  //   // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+  //   _scrollController.animateTo(
+  //     _scrollController.position.maxScrollExtent,
+  //     duration: Duration(seconds: 1),
+  //     curve: Curves.fastOutSlowIn,
+  //   );
+  // }
+  _scrollToBottom() {
+    // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    // var extent= _scrollController.position.maxScrollExtent;
+    var duration= (7/50.0)*_scrollController.position.maxScrollExtent/10;
+    _scrollController.animateTo(
+      0,
+      duration: Duration(seconds: duration.toInt()),
+      curve: Curves.easeOutCubic,
+    );
+    String an="-"+duration.toString();
+    print("---------------------");
+    print(an);
+    print("---------------------");
+    double a=double.parse(an);
+    print(a.toString());
+    print("---------------------");
+
+    // _scrollController.jumpTo(_scrollController.position.minScrollExtent);
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(seconds: duration.toInt()),
+      curve: Curves.easeOutCubic,
+    );
+  }
+  _launchURL(String url) async {
+    // const _url = 'https://helenair.com/news/state-and-regional/govt-and-politics/montanans-find-insurance-alternative-pitfalls-with-health-care-sharing-ministries/article_802af5a3-fc97-56da-8d29-c09d3b1a9ea5.html?campaignid=14250156906&adgroupid=127482060924&adid=538696984263&gclid=CjwKCAjwhOyJBhA4EiwAEcJdcVeRfY_e9Osp3IkQ9ch5lLStx6f46yvNaRMqoEMfmrsNknQrcgxJthoCBFgQAvD_BwE';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+
   static const myCustomColors = AppColors();
 
   File _image;
@@ -64,20 +120,30 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // Timer(
+    //   Duration(seconds: 1),
+    //       () =>
+    //     // _scrollController.jumpTo(_scrollController.position.maxScrollExtent),
+    //       _scrollController.animateTo(
+    //         _scrollController.position.maxScrollExtent,
+    //       duration: Duration(seconds: 1),
+    //       curve: Curves.fastOutSlowIn,
+    //     )
+    // );
+    var drugProvider = Provider.of<CartProvider>(context);
     var healthProvider = Provider.of<HealthArticleProvider>(context);
+    var adsProvider = Provider.of<AdsProvider>(context);
     var pharmacyProvider = Provider.of<PharmacyProvider>(context,listen: true);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          fontFamily: 'Ubuntu',
-          scaffoldBackgroundColor: myCustomColors.mainBackground,
-          appBarTheme: AppBarTheme(
-            color: myCustomColors.loginBackgroud,
-          )),
-      home: Scaffold(
+    return  Scaffold(
         appBar: AppBar(
           title: Text("Alen"),
           actions: [
+            // IconButton(
+            //   onPressed: (){
+            //     drugProvider.putOnFire();
+            //   },
+            //   icon: Icon(MdiIcons.plus),
+            // ),
             Container(
                 child: IconButton(
                   onPressed: () {
@@ -99,9 +165,9 @@ class _HomePageState extends State<HomePage> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () {
-                      showSearch<Trending>(
+                      showSearch<Drugs>(
                           context: context,
-                          delegate: TrendingSearch(trendings));
+                          delegate: TrendingSearch(trendings:PharmacyProvider.trendingDRGS));
                     },
                     icon: Icon(
                       Icons.search,
@@ -138,6 +204,10 @@ class _HomePageState extends State<HomePage> {
                       title: Text("Contact Us"),
                       onTap: () {
                         Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ContactUs()));
                       },
                     ),
                     ListTile(
@@ -152,6 +222,10 @@ class _HomePageState extends State<HomePage> {
                       title: Text("Privacy Policy"),
                       onTap: () {
                         Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PrivacyPolicy()));
                       },
                     ),
                     ListTile(
@@ -159,6 +233,10 @@ class _HomePageState extends State<HomePage> {
                       title: Text("Terms & Conditions"),
                       onTap: () {
                         Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TermsOfUse()));
                       },
                     ),
                     ListTile(
@@ -206,50 +284,89 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Container(
-                    height: MediaQuery.of(context).size.width * 0.4,
-                    child: Swiper(
-                      autoplayDelay: 6000,
-                      itemCount: mainAds.length,
-                      layout: SwiperLayout.DEFAULT,
-                      scrollDirection: Axis.horizontal,
-                      autoplay: true,
-                      pagination: SwiperPagination(),
-                      itemBuilder: (context, index) {
-                        return _buildMainAdsListItem(mainAds[index], context);
-                      },
-                      itemHeight: MediaQuery.of(context).size.width * 0.38,
-                      itemWidth: MediaQuery.of(context).size.width,
-                    ),
-                    // child:mainAds.length==0? Center(
-                    //   child: Text(
-                    //     "No main Ads Available",
-                    //   ),)
-                    //     : ListView.builder(
-                    //   scrollDirection: Axis.horizontal,
-                    //   itemBuilder: (BuildContext ctxt, int index) {
-                    //     return _buildMainAdsListItem(mainAds[index], ctxt);
-                    //   },
-                    //   itemCount: mainAds.length-2,
-                    // )
-                  ),
-                  Container(
-                      margin: EdgeInsets.symmetric(vertical: 7.0),
-                      height: 90.0,
-                      child: smallAds.length == 0
-                          ? Center(
+                  FutureBuilder<List<Ads>>(
+                      future: adsProvider.fetchMainAds(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.none &&
+                            snapshot.hasData == null) {
+                          return Container(
+                              height: 90,
+                              child:
+                              Center(child: CircularProgressIndicator()));
+                        }
+                        print('project snapshot data is: ${snapshot.data}');
+                        if (snapshot.data == null) {
+                          return Container(
+                              height: 90,
+                              child:
+                              Center(child: CircularProgressIndicator()));
+                        } else {
+                          return Container(
+                            height: MediaQuery.of(context).size.width * 0.4,
+                            child: snapshot.data.length == 0
+                                ? Center(
                               child: Text(
-                                "No small Ads Available",
+                                "No Main Ads Available",
                               ),
                             )
-                          : ListView.builder(
+                                : Swiper(
+                              autoplayDelay: 6000,
+                              itemCount: snapshot.data.length,
+                              layout: SwiperLayout.DEFAULT,
                               scrollDirection: Axis.horizontal,
-                              itemBuilder: (BuildContext ctxt, int index) {
-                                return _buildSmallAdsListItem(
-                                    smallAds[index], ctxt);
+                              autoplay: true,
+                              pagination: SwiperPagination(),
+                              itemBuilder: (context, index) {
+                                return _buildMainAdsListItem(snapshot.data[index], context);
                               },
-                              itemCount: smallAds.length - 1,
-                            )),
+                              itemHeight: MediaQuery.of(context).size.width * 0.38,
+                              itemWidth: MediaQuery.of(context).size.width,
+                            ),
+                          );
+                        }
+                      }),
+
+                  FutureBuilder<List<Ads>>(
+                      future: adsProvider.fetchSmallAds(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.none &&
+                            snapshot.hasData == null) {
+                          return Container(
+                              height: 90,
+                              child:
+                              Center(child: CircularProgressIndicator()));
+                        }
+                        print('project snapshot data is: ${snapshot.data}');
+                        if (snapshot.data == null) {
+                          return Container(
+                            height: 90,
+                              child:
+                              Center(child: CircularProgressIndicator()));
+                        } else {
+                          WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+                          return Container(
+                              margin: EdgeInsets.symmetric(vertical: 7.0),
+                              height: 90.0,
+                              child: snapshot.data.length == 0
+                                  ? Center(
+                                child: Text(
+                                  "No small Ads Available",
+                                ),
+                              )
+                                  : ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                controller: _scrollController,
+                                // reverse: true,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext ctxt, int index) {
+                                  return _buildSmallAdsListItem(
+                                      snapshot.data[index], ctxt);
+                                },
+                                itemCount: snapshot.data.length,
+                              ));
+                        }
+                      }),
+
                   Text(
                     "  Services",
                     textAlign: TextAlign.left,
@@ -259,9 +376,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Container(
                       margin: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width * 0.07),
+                          horizontal: MediaQuery.of(context).size.width * 0.04),
                       height: 100.0,
-                      child: ListView(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           GestureDetector(
                             onTap: () {
@@ -287,36 +405,6 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Text(
                                       'Hospitals',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                )),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => PharmaciesPage()));
-                            },
-                            child: Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal:
-                                    MediaQuery.of(context).size.width *
-                                        0.02),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    Icon(
-                                      MdiIcons.pharmacy,
-                                      size: 40,
-                                      color: myCustomColors.loginBackgroud,
-                                    ),
-                                    Text(
-                                      "Pharmacies",
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     )
@@ -358,6 +446,76 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
+                                      builder: (context) => ImportersPage()));
+                            },
+                            child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal:
+                                    MediaQuery.of(context).size.width *
+                                        0.02),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Icon(
+                                      MdiIcons.import,
+                                      size: 40,
+                                      color: myCustomColors.loginBackgroud,
+                                    ),
+                                    Text(
+                                      "Importers",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                )),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PharmaciesPage()));
+                            },
+                            child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal:
+                                    MediaQuery.of(context).size.width *
+                                        0.02),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Icon(
+                                      MdiIcons.pharmacy,
+                                      size: 40,
+                                      color: myCustomColors.loginBackgroud,
+                                    ),
+                                    Text(
+                                      "Pharmacies",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                )),
+                          ),
+                        ],
+                        // scrollDirection: Axis.horizontal,
+                      )),
+                  Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width * 0.1),
+                      height: 100.0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
                                       builder: (context) => DiagnosisesPage()));
                             },
                             child: Container(
@@ -388,7 +546,7 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ImportersPage()));
+                                      builder: (context) => HomeCaresPage()));
                             },
                             child: Container(
                                 margin: EdgeInsets.symmetric(
@@ -401,20 +559,51 @@ class _HomePageState extends State<HomePage> {
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Icon(
-                                      MdiIcons.import,
+                                      MdiIcons.officeBuilding,
                                       size: 40,
                                       color: myCustomColors.loginBackgroud,
                                     ),
                                     Text(
-                                      "Importers",
+                                      "Home care services",
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     )
                                   ],
                                 )),
                           ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CompaniesPage()));
+                            },
+                            child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal:
+                                    MediaQuery.of(context).size.width *
+                                        0.02),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Icon(
+                                      MdiIcons.home,
+                                      size: 40,
+                                      color: myCustomColors.loginBackgroud,
+                                    ),
+                                    Text(
+                                      "Companies",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                )),
+                          ),
+
                         ],
-                        scrollDirection: Axis.horizontal,
+                        // scrollDirection: Axis.horizontal,
                       )),
                   Container(
                       margin: EdgeInsets.fromLTRB(
@@ -436,13 +625,7 @@ class _HomePageState extends State<HomePage> {
                       )),
                   Container(
                       // height: 180.0,
-                      child: trendings.length == 0
-                          ? Center(
-                              child: Text(
-                                "No Trendings Available",
-                              ),
-                            )
-                          : FutureBuilder<List<Drugs>>(
+                      child: FutureBuilder<List<Drugs>>(
                               future: pharmacyProvider.fetchTrendingDrugs(),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
@@ -499,7 +682,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       )),
                   FutureBuilder<List<HealthArticles>>(
-                      future: healthProvider.fetchNearByHospitals(),
+                      future: healthProvider.fetchHealthArticles(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.none &&
                             snapshot.hasData == null) {
@@ -512,7 +695,7 @@ class _HomePageState extends State<HomePage> {
                                   Center(child: CircularProgressIndicator()));
                         } else {
                           return Container(
-                            height: 185.0,
+                            height: 158.5,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (BuildContext ctxt, int index) {
@@ -529,20 +712,19 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         )),
-      ),
-    );
+      );
   }
 
-  _buildSmallAdsListItem(SmallAd smallAd, BuildContext ctxt) {
+  _buildSmallAdsListItem(var smallAd, BuildContext ctxt) {
     return GestureDetector(
         onTap: () {
           Navigator.push(
               ctxt,
               MaterialPageRoute(
-                  builder: (context) => DetailsPage(
-                        name: smallAd.name,
-                        description: smallAd.detail,
-                        imageUrl: smallAd.imagePath,
+                  builder: (context) => Detail(
+                        name: smallAd.title,
+                        description: smallAd.description,
+                        imageUrl: smallAd.image,
                       )));
         },
         child: Card(
@@ -557,7 +739,7 @@ class _HomePageState extends State<HomePage> {
               child: SizedBox(
                 height: 90,
                 width: 160,
-                child: Image.asset(smallAd.imagePath,
+                child: Image.network(smallAd.image,
                     width: 200, height: 120, fit: BoxFit.fill),
               ),
             )));
@@ -613,16 +795,16 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  _buildMainAdsListItem(MainAd mainAd, BuildContext ctxt) {
+  _buildMainAdsListItem(var mainAd, BuildContext ctxt) {
     return GestureDetector(
         onTap: () {
           Navigator.push(
               ctxt,
               MaterialPageRoute(
-                  builder: (context) => DetailsPage(
-                        name: mainAd.name,
-                        description: mainAd.detail,
-                        imageUrl: mainAd.imagePath,
+                  builder: (context) => Detail(
+                        name: mainAd.title,
+                        description: mainAd.description,
+                        imageUrl: mainAd.image,
                       )));
         },
         child: Card(
@@ -634,7 +816,7 @@ class _HomePageState extends State<HomePage> {
           child: SizedBox(
             height: MediaQuery.of(context).size.width * 0.38,
             width: MediaQuery.of(context).size.width,
-            child: Image.asset(mainAd.imagePath,
+            child: Image.network(mainAd.image,
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.width * 0.38,
                 fit: BoxFit.fill),
@@ -649,76 +831,115 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
               ctxt,
               MaterialPageRoute(
-                  builder: (context) => PharamacyDetail(
-                        title: drugs.pharmacies.name,
-                        phone: drugs.pharmacies.phone,
-                        imagesList: drugs.pharmacies.image,
-                        name: drugs.pharmacies.name,
-                        description: drugs.pharmacies.description,
-                        location: drugs.pharmacies.latitude.toString(),
-                        officeHours: drugs.pharmacies.officehours,
-                      )));
+                  builder: (context) => (drugs.pharmacies.isPharma)
+                      ?
+                  PharamacyDetail(
+                    title: drugs.pharmacies.name,
+                    phone: drugs.pharmacies.phone,
+                    imagesList: drugs.pharmacies.image,
+                    name: drugs.pharmacies.name,
+                    images: drugs.pharmacies.images,
+                    email: drugs.pharmacies.email,
+                    id: drugs.pharmacies.Id,
+                    description: drugs.pharmacies.description,
+                    latitude: drugs.pharmacies.latitude.toStringAsFixed(3),
+                    longtude: drugs.pharmacies.longitude.toStringAsFixed(3),
+                    officeHours: drugs.pharmacies.officehours,
+                  )
+                      :
+                  ImporterDetail(
+                    title: drugs.pharmacies.name,
+                    phone: drugs.pharmacies.phone,
+                    imagesList: drugs.pharmacies.image,
+                    name: drugs.pharmacies.name,
+                    images: drugs.pharmacies.images,
+                    email: drugs.pharmacies.email,
+                    id: drugs.pharmacies.Id,
+                    description: drugs.pharmacies.description,
+                    latitude: drugs.pharmacies.latitude.toStringAsFixed(3),
+                    longtude: drugs.pharmacies.longitude.toStringAsFixed(3),
+                    officeHours: drugs.pharmacies.officehours,
+                  )
+              ));
         },
         child: Card(
+
             // margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             color: myCustomColors.cardBackgroud,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18.0),
             ),
             clipBehavior: Clip.hardEdge,
-            elevation: 0,
+            elevation: 4,
             // elevation: 14,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Card(
-                  elevation: 8,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                  child: Container(
-                    width: 90,
-                    height: 110,
-                    child: SizedBox(
+            child: Container(
+              width: 160,
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Card(
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    clipBehavior: Clip.hardEdge,
+                    child: Container(
+                      width: 160,
                       height: 110,
-                      width: 90,
-                      child: drugs.image != ''
-                          ? Image.network(drugs.image,
-                              width: 90, height: 110, fit: BoxFit.fill)
-                          : Text('No image'),
+                      child: SizedBox(
+                        height: 110,
+                        width: 160,
+                        child: drugs.image != ''
+                            ? Image.network(drugs.image,
+                            width: 160, height: 120, fit: BoxFit.fill)
+                            : Text('No image'),
+                      ),
                     ),
                   ),
-                ),
-                Text(
-                  drugs.name,
-                  maxLines: 2,
-                  textScaleFactor: 1.1,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  drugs.pharmacies.name,
-                  maxLines: 2,
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
-            )));
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 2.5, horizontal: 5),
+                    child: Text(
+                      drugs.name,
+                      maxLines: 2,
+                      textScaleFactor: 1.1,
+                      softWrap: false,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    child: Text(
+                      drugs.pharmacies.name,
+                      maxLines: 2,
+                      softWrap: false,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      // style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            )
+        ));
   }
 
   _buildHealthArticlesListItem(
       HealthArticles healthArticle, BuildContext ctxt) {
     return GestureDetector(
         onTap: () {
-          Navigator.push(
-              ctxt,
-              MaterialPageRoute(
-                  builder: (context) => DetailsPage(
-                        name: healthArticle.title,
-                        description: healthArticle.description,
-                        imageUrl: healthArticle.image,
-                      )));
+          _launchURL(healthArticle.link);
+          // Navigator.push(
+          //     ctxt,
+          //     MaterialPageRoute(
+          //         builder: (context) => Detail(
+          //               name: healthArticle.title,
+          //               description: healthArticle.description,
+          //               imageUrl: healthArticle.image,
+          //             )));
         },
         child: Card(
             elevation: 14,

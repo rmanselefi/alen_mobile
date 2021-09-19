@@ -1,15 +1,17 @@
+import 'package:alen/models/hospital.dart';
+import 'package:alen/ui/Details/HospitalDetail.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:alen/ui/Pages/Hospital.dart';
 
 import '../../utils/DetailsPage.dart';
 
-class HospitalSearch extends SearchDelegate<Hospital> {
+class HospitalSearch extends SearchDelegate<Hospitals> {
   static const myCustomColors = AppColors();
-  Hospital result = Hospital.hospitals.first;
-  final List<Hospital> hospitals;
+  Hospitals result;
+  List<Hospitals> hospitals;
 
-  HospitalSearch(this.hospitals);
+  HospitalSearch({this.hospitals});
 
   @override
   String get searchFieldLabel => 'Search Hospitals...';
@@ -81,20 +83,32 @@ class HospitalSearch extends SearchDelegate<Hospital> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DetailsPage(
-                                name: result.name,
-                                description: result.detail,
-                                imageUrl: result.imagesList.first,
-                              )));
+                          builder: (context) =>HospitalDetail(
+                            title: result.name,
+                            info: result.createdAt.toString(),
+                            phone: result.phone,
+                            image: result.image,
+                            images: result.images,
+                            latitude: result.latitude.toStringAsFixed(3),
+                            longtude: result.longitude.toStringAsFixed(3),
+                            email: result.email,
+                            name: result.name,
+                            description: result.description,
+                            location: result.latitude.toString(),
+                            services: result.services,
+                            newservices:result.services,
+                            officeHours: result.officehours.toString(),
+                            hospitalId: result.Id,
+                          )));
                 },
                 title: Text(suggestions.elementAt(index).name),
                 subtitle: Text(
-                  suggestions.elementAt(index).detail,
+                  suggestions.elementAt(index).description,
                   maxLines: 1,
                 ),
                 leading: CircleAvatar(
-                  backgroundImage: AssetImage(
-                    suggestions.elementAt(index).imagesList.first,
+                  backgroundImage: NetworkImage(
+                    suggestions.elementAt(index).images.first,
                   ),
                 )),
             Divider(color: Colors.black38)
@@ -115,12 +129,12 @@ class HospitalSearch extends SearchDelegate<Hospital> {
               tileColor: myCustomColors.mainBackground,
               title: Text(suggestions.elementAt(index).name),
               subtitle: Text(
-                suggestions.elementAt(index).detail,
+                suggestions.elementAt(index).description,
                 maxLines: 1,
               ),
               leading: CircleAvatar(
-                  backgroundImage: AssetImage(
-                suggestions.elementAt(index).imagesList.first,
+                  backgroundImage: NetworkImage(
+                suggestions.elementAt(index).images.first,
               )),
               onTap: () {
                 query = suggestions.elementAt(index).name;

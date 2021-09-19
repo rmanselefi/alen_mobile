@@ -1,9 +1,10 @@
-import 'package:alen/ui/Details/DetailForPha.dart';
+import 'package:alen/models/cart.dart';
+import 'package:alen/providers/cart.dart';
+import 'package:alen/ui/Details/DetailForCartDrug.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-
-import 'CategoryWithAmount.dart';
 
 class PharmacyCart extends StatefulWidget {
 
@@ -14,101 +15,107 @@ class PharmacyCart extends StatefulWidget {
 class _PharmacyCartState extends State<PharmacyCart> {
 
   static const myCustomColors = AppColors();
-  static List<CategoryWithAmount> importerCart = CategoryWithAmount.pharmacyCart;
-  double totalPrice=0;
-
+  var cartProvider;
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground),
-        home: Scaffold(
-            appBar: AppBar(
-              backgroundColor: myCustomColors.loginBackgroud,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context, false),
-              ),
-              title: Text(
-                  "Pharmacy Cart"
-              ),
-            ),
-            body: SingleChildScrollView(
-                child: Stack(
-                    children: <Widget>[
-                      Container(
-                          child: importerCart.length == 0
-                              ? Container(
-                            padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height*0.4),
-                              child:Center(
-                            child: Text(
-                              "No Items Available in your Pharmacy cart.",
+  Widget build(BuildContext coontext) {
+    cartProvider = Provider.of<CartProvider>(coontext);
+    return Scaffold(
+        appBar: AppBar(
+            backgroundColor: myCustomColors.loginBackgroud,
+            title: Text("Pharmacy Cart"),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(coontext, false),
+            )),
+        body: SingleChildScrollView(
+            child: Stack(children: <Widget>[
+              Container(
+                  child: FutureBuilder<List<Cart>>(
+                      future: cartProvider.getMyPharmaCartDrugs(""),//TODO add the user id after login
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.none &&
+                            snapshot.hasData == null) {
+                          return Container(
+                              height: MediaQuery.of(context).size.height,
+                              child:
+                              Center(child: CircularProgressIndicator()));
+                        }
+                        if (snapshot.data == null) {
+                          return Container(
+                            height: MediaQuery.of(context).size.height,
+                              child:
+                              Center(child: CircularProgressIndicator()));
+                        } else {
+                          return snapshot.data.length==0?Container(
+                            height: MediaQuery.of(context).size.height,
+                            child: Center(
+                              child: Text(
+                                "No items available."
+                              ),
                             ),
-                          ))
-                              : Column(
-                              children: [
-                                Container(
-
-                                    margin: EdgeInsets.symmetric(vertical: 20),
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 50,
-                                    child:
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Total Price : ",
-                                            textScaleFactor: 2,
-                                            style: TextStyle(
-                                              color: myCustomColors.loginButton,
-                                              fontWeight: FontWeight.bold
-                                            ),
-                                          ),
-                                          Text(
-                                            _calculateTotalAmount().toStringAsFixed(2),
-                                            textScaleFactor: 2,
-                                            style: TextStyle(
-                                              color: myCustomColors.loginButton,
-                                              fontWeight: FontWeight.bold
-                                            ),
-                                        ),
-                                        ],
-                                        )
-                                ),
-                                GridView.builder(
-                            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 230,
-                                childAspectRatio: (MediaQuery.of(context).orientation == Orientation.portrait) ? 2/3.5 : 2/3.2,
-                                crossAxisSpacing: 0,
-                                mainAxisSpacing: 0),
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (BuildContext ctxt, int index) {
-                              return _buildCategoriesListItem(
-                                  importerCart[index], ctxt, index);
-                            },
-                            itemCount: importerCart.length,
                           )
-                              ])
-                      ),
-                    ]))
-        )
-    );
+                              :
+                          Column(
+                            children: [
+                              Container(
+                                child: Center(
+                                  child:StatefulBuilder(  // You need this, notice the parameters below:
+                                      builder: (BuildContext context, StateSetter setState) {
+                                        return Text(
+                                          // "Total price : "+totalPrice.toStringAsFixed(2),
+                                          "Total price : "+CartProvider.totalPrice.toStringAsFixed(2),
+                                          textScaleFactor: 2.5,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: myCustomColors.loginBackgroud
+                                          ),
+                                          maxLines: 3,
+                                        );
+                                      }),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 30,
+                                    horizontal: 15
+                                ),
+                              ),
+                              GridView.builder(
+                                gridDelegate:
+                                SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent: 200,
+                                    childAspectRatio: 2 / 3.7,
+                                    crossAxisSpacing: 0,
+                                    mainAxisSpacing: 0),
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                itemBuilder: (BuildContext ctxt, int index) {
+                                  add(
+                                      snapshot.data[index].amount,
+                                      num.parse(snapshot.data[index].drug.price)
+                                  );
+                                  return _buildCategoriesListItem(
+                                      snapshot.data[index], ctxt, "",coontext);
+                                },
+                                itemCount: snapshot.data.length,
+                              )
+                            ],
+                          );
+                        }
+                      })),
+            ])));
   }
-  _buildCategoriesListItem(CategoryWithAmount category, BuildContext ctxt, int index) {
+  _buildCategoriesListItem(var category, BuildContext ctxt, String id, BuildContext coontext) {
     return GestureDetector(
         onTap: () {
           Navigator.push(
               ctxt,
               MaterialPageRoute(
-                  builder: (context) => DetailForPha(
-                    name: category.category.name,
-                    description: category.category.detail,
-                    imageUrl: category.category.imagePath,
-                    price: category.category.price,
+                  builder: (context) => DetailForCartDrug(
+                      cart: category,
+                      id: id,
+                      isPharma: true,
+                    coontext: coontext,
                   )));
         },
         child: Column(
@@ -123,247 +130,62 @@ class _PharmacyCartState extends State<PharmacyCart> {
               clipBehavior: Clip.hardEdge,
               child: Container(
                 width: 150,
-                height: 180,
+                height: 150,
                 child: SizedBox(
-                  height: 180,
+                  height: 150,
                   width: 150,
-                  child: Image.asset(category.category.imagePath,
-                      width: 150, height: 180, fit: BoxFit.fill),
+                  child: Image.network(category.drug.image,
+                      width: 150, height: 150, fit: BoxFit.fill),
                 ),
               ),
             ),
             Text(
-              category.category.name,
+              category.drug.name,
               maxLines: 2,
               textScaleFactor: 1.1,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                    child:Text(
-                      "Amount : ",
-                      maxLines: 2,
-                      textScaleFactor: 1.1,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    )
-                ),
-                Container(
-                    child:Text(
-                      category.amount.toString(),
-                      maxLines: 2,
-                      textScaleFactor: 1.1,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    )
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Container(
-                    child:Text(
-                      "Price : ",
-                      maxLines: 2,
-                      overflow: TextOverflow.clip,
-                      textScaleFactor: 1.1,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    )
-                ),
-                Container(
-                    child:Text(
-                      category.getTotalPrice(),
-                      maxLines: 2,
-                      textScaleFactor: 1.1,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    )
-                ),
-              ],
+            Text(
+              "price : "+category.getTotalPrice().toString(),
+              maxLines: 2,
+              // style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             Container(
-                width: 120,
-                child:ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            myCustomColors.loginButton),
-                        textStyle: MaterialStateProperty.all<TextStyle>(
-                            TextStyle(
-                                color: Colors.white
-                            ))),
-                    onPressed: (){
-                      removeFromCart(context,category,index);
-                      // Navigator.pop(context);
-                      // print("Poped");
-                      //   CategoryWithAmount.pharmacyCart.removeAt(index);
-                      // print("Removed");
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       // builder: (context) => ListInServices()
-                      //         builder: (context) => ImportCart()
-                      //     ));
-                      // print("Rendered");
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                            Icons.remove_shopping_cart_rounded
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                            "Remove"
+              width: 120,
+              height: 25,
+              child: ElevatedButton(
+                  onPressed: (){
+                    Provider.of<CartProvider>(context, listen: false).deleteDrugFromCart(category);
+                    Navigator.pop(coontext);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PharmacyCart()
                         )
-                      ],
-                    )
-                ))
-          ],
-        )
-    );
-  }
-
-  CalculatePrice(BuildContext context, double amount) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-      return StatefulBuilder(  // You need this, notice the parameters below:
-          builder: (BuildContext context, StateSetter setState) {
-        // _setState = setState;
-        return AlertDialog(
-            title: Text('Your total price'),
-          content: SingleChildScrollView(
-            child:Stack(
-              children: <Widget>[
-                ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext ctxt, int index) {
-                    return _buildImporterCartListItem(
-                        importerCart[index], ctxt, index);
+                    );
                   },
-                  itemCount: importerCart.length,
-                ),
-                Row(
-                  children: [
-                    Text("Total Price : "),
-                    Text(
-                      ""
-                     // amount.toStringAsFixed(2)
-                      )
-                  ],
-                )
-              ],
-            )
-          ),
-            );
-          });
-        });
-  }
-  double _calculateTotalAmount(){
-    totalPrice=0;
-    importerCart.forEach((element) {
-      totalPrice+=element.getTotalPriceInDouble();
-    });
-    return totalPrice;
-  }
-  removeFromCart(BuildContext ctxt,CategoryWithAmount categoryWithAmount, int index) async {
-    return showDialog(
-        context: ctxt,
-        builder: (context) {
-          return StatefulBuilder(  // You need this, notice the parameters below:
-              builder: (BuildContext context, StateSetter setState) {
-                // _setState = setState;
-                return AlertDialog(
-                  title: Text('Are you sure you want to remove ${categoryWithAmount.category.name} from your cart?'),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Container(
-                          padding: EdgeInsets.only(top: 30,bottom: 10),
-                          child:SizedBox(
-                              height: 200,
-                              width: MediaQuery.of(context).size.width*0.8,
-                              child: Image.asset(
-                                categoryWithAmount.category.imagePath,
-                                fit: BoxFit.fill,
-                              )
-                          )),
-                      Row(
-                        children: [
-                          Text("Amount : "),
-                          Text(categoryWithAmount.amount.toString())
-                        ],
+                      Text(
+                        "Remove "
                       ),
-                      Row(
-                        children: [
-                          Text("Price : "),
-                          Text(
-                              categoryWithAmount.getTotalPrice()
-                          )
-                        ],
+                      Icon(
+                          Icons.remove_shopping_cart
                       )
                     ],
-                  ),
-                  actions: <Widget>[
-                    new ElevatedButton(
-                        child: new Center(
-                          child: Container(
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.remove_shopping_cart_rounded),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text('Remove')
-                                  ])),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            CategoryWithAmount.pharmacyCart.remove(categoryWithAmount);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PharmacyCart()
-                                ));
-                            // }
-                          }
-                          );
-                        })
-                  ],
-                );
-              });
-        });
+                  )
+              ),
+            )
+          ],
+        ));
   }
-  }
-_buildImporterCartListItem(CategoryWithAmount categoryWithAmount, BuildContext ctxt, int index) {
-  return Container(
-    width: MediaQuery.of(ctxt).size.width,
-      child:ListTile(
-    leading: Text(
-      (index++).toString()
-    ),
-    title: Text(
-      categoryWithAmount.category.name
-    ),
-    subtitle: Row(
-      children: [
-        Text("Sub price : "),
-        Text(
-          categoryWithAmount.getTotalPrice()
-        )
-      ],
-    ),
-  ));
 
+  num totalPrice=0;
+  void add(num price, num amount){
+    num product=price*amount;
+    totalPrice+=product;
+    print("Total price: $totalPrice");
+  }
 }
 

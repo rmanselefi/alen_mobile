@@ -30,7 +30,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
             fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.loginBackgroud),
+            scaffoldBackgroundColor: myCustomColors.loginButton),
         home: Scaffold(
           body: SingleChildScrollView(
               child: Stack(
@@ -107,15 +107,15 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                               TextStyle(color: Colors.white54),
                                           labelStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginBackgroud),
+                                                  .loginButton),
                                           prefixIcon: Icon(
                                             Icons.email_outlined,
                                             color:
-                                                myCustomColors.loginBackgroud,
+                                                myCustomColors.loginButton,
                                           ),
                                           hintStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginBackgroud),
+                                                  .loginButton),
                                           filled: true,
                                           fillColor: Colors.white,
                                           enabledBorder: OutlineInputBorder(
@@ -183,15 +183,15 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                               TextStyle(color: Colors.white54),
                                           labelStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginBackgroud),
+                                                  .loginButton),
                                           prefixIcon: Icon(
                                             Icons.assignment_ind,
                                             color:
-                                                myCustomColors.loginBackgroud,
+                                                myCustomColors.loginButton,
                                           ),
                                           hintStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginBackgroud),
+                                                  .loginButton),
                                           filled: true,
                                           fillColor: Colors.white,
                                           enabledBorder: OutlineInputBorder(
@@ -228,6 +228,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                           if (value == null) {
                                             return "Select your Sex";
                                           }
+                                          return null;
                                         },
                                         onSaved: (value) {
                                           _sex = value;
@@ -378,15 +379,15 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                           hintText: 'Location',
                                           labelStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginBackgroud),
+                                                  .loginButton),
                                           prefixIcon: Icon(
                                             Icons.location_on_outlined,
                                             color:
-                                                myCustomColors.loginBackgroud,
+                                                myCustomColors.loginButton,
                                           ),
                                           hintStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginBackgroud),
+                                                  .loginButton),
                                           filled: true,
                                           fillColor: Colors.white,
                                           enabledBorder: OutlineInputBorder(
@@ -422,7 +423,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                 style: ButtonStyle(
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
-                                            myCustomColors.loginButton),
+                                            myCustomColors.loginBackgroud),
                                     shape: MaterialStateProperty.all<
                                             RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
@@ -430,7 +431,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                                 BorderRadius.circular(30.0),
                                             side: BorderSide(
                                                 color: myCustomColors
-                                                    .loginButton)))),
+                                                    .loginBackgroud)))),
                                 onPressed: () async {
                                   _formKey.currentState.save();
                                   print("object $user");

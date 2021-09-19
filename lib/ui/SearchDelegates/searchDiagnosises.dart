@@ -1,15 +1,16 @@
+import 'package:alen/models/diagnostic.dart';
+import 'package:alen/ui/Details/DiagnosticDetail.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
-import 'package:alen/ui/Pages/Diagnosis.dart';
 
 import '../../utils/DetailsPage.dart';
 
-class DiagnosisSearch extends SearchDelegate<Diagnosis> {
+class DiagnosisSearch extends SearchDelegate<Diagnostics> {
   static const myCustomColors = AppColors();
-  Diagnosis result = Diagnosis.diagnosises.first;
-  final List<Diagnosis> diagnosises;
+  Diagnostics result;
+  final List<Diagnostics> diagnosises;
 
-  DiagnosisSearch(this.diagnosises);
+  DiagnosisSearch({this.diagnosises});
 
   @override
   String get searchFieldLabel => 'Search Diagnosises...';
@@ -81,20 +82,32 @@ class DiagnosisSearch extends SearchDelegate<Diagnosis> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DetailsPage(
-                                name: result.name,
-                                description: result.detail,
-                                imageUrl: result.imagesList.first,
-                              )));
+                          builder: (context) => DiagnosticDetail(
+                            title: result.name,
+                            info: result.createdAt.toString(),
+                            phone: result.phone,
+                            latitude: result.latitude.toStringAsFixed(3),
+                            longtude: result.longitude.toStringAsFixed(3),
+                            email: result.email,
+                            images: result.images,
+                            image: result.image,
+                            name: result.name,
+                            description: result.description,
+                            location: result.latitude.toString(),
+                            services: result.services,
+                            newservices:result.services,
+                            officeHours: result.officehours.toString(),
+                            hospitalId: result.Id,
+                          )));
                 },
                 title: Text(suggestions.elementAt(index).name),
                 subtitle: Text(
-                  suggestions.elementAt(index).detail,
+                  suggestions.elementAt(index).description,
                   maxLines: 1,
                 ),
                 leading: CircleAvatar(
-                  backgroundImage: AssetImage(
-                    suggestions.elementAt(index).imagesList.first,
+                  backgroundImage: NetworkImage(
+                    suggestions.elementAt(index).images.first,
                   ),
                 )),
             Divider(color: Colors.black38)
@@ -115,12 +128,12 @@ class DiagnosisSearch extends SearchDelegate<Diagnosis> {
               tileColor: myCustomColors.mainBackground,
               title: Text(suggestions.elementAt(index).name),
               subtitle: Text(
-                suggestions.elementAt(index).detail,
+                suggestions.elementAt(index).description,
                 maxLines: 1,
               ),
               leading: CircleAvatar(
-                  backgroundImage: AssetImage(
-                suggestions.elementAt(index).imagesList.first,
+                  backgroundImage: NetworkImage(
+                suggestions.elementAt(index).images.first,
               )),
               onTap: () {
                 query = suggestions.elementAt(index).name;

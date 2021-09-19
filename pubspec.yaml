@@ -104,6 +104,14 @@ flutter:
         - asset: assets/fonts/ubuntu/Ubuntu-MediumItalic.ttf
         - asset: assets/fonts/ubuntu/Ubuntu-Regular.ttf
           style: italic
+
+    - family: Hind
+      fonts:
+        - asset: assets/fonts/hind/Hind-Bold.ttf
+        - asset: assets/fonts/hind/Hind-Light.ttf
+        - asset: assets/fonts/hind/Hind-Medium.ttf
+        - asset: assets/fonts/hind/Hind-SemiBold.ttf
+          style: normal
   # fonts:
   #   - family: Schyler
   #     fonts:

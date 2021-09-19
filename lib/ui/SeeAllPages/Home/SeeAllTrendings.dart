@@ -18,12 +18,7 @@ class _SeeAllTrendingsState extends State<SeeAllTrendings> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-        fontFamily: 'Ubuntu',
-        scaffoldBackgroundColor: myCustomColors.mainBackground),
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(
                 backgroundColor: myCustomColors.loginBackgroud,
                 leading: IconButton(
@@ -57,8 +52,7 @@ class _SeeAllTrendingsState extends State<SeeAllTrendings> {
                   itemCount: trendings.length,
                 )),
         ]))
-        )
-    );
+        );
   }
   _buildTrendingsListItem(Trending trending, BuildContext ctxt) {
     return GestureDetector(
@@ -72,8 +66,8 @@ class _SeeAllTrendingsState extends State<SeeAllTrendings> {
                     phone: trending.importerPharmacy.phone,
                     name: trending.importerPharmacy.name,
                     description:trending.importerPharmacy.detail,
-                    location: trending.importerPharmacy.location,
-                    info: trending.importerPharmacy.info,
+                    latitude: trending.importerPharmacy.location,
+                    longtude: trending.importerPharmacy.info,
                     officeHours: trending.importerPharmacy.officeHours,
                     services: trending.importerPharmacy.services,
                   )
@@ -83,8 +77,8 @@ class _SeeAllTrendingsState extends State<SeeAllTrendings> {
                     phone: trending.importerPharmacy.phone,
                     name: trending.importerPharmacy.name,
                     description:trending.importerPharmacy.detail,
-                    location: trending.importerPharmacy.location,
-                    info: trending.importerPharmacy.info,
+                    latitude: trending.importerPharmacy.location,
+                    longtude: trending.importerPharmacy.info,
                     officeHours: trending.importerPharmacy.officeHours,
                     services: trending.importerPharmacy.services,
                   )

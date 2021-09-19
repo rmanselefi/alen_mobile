@@ -17,12 +17,7 @@ class _SeeAllSmallAdsState extends State<SeeAllSmallAds> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground),
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(
                 backgroundColor: myCustomColors.loginBackgroud,
                 leading: IconButton(
@@ -55,8 +50,7 @@ class _SeeAllSmallAdsState extends State<SeeAllSmallAds> {
                             itemCount: smallAds.length,
                           )),
                     ]))
-        )
-    );
+        );
   }
   _buildSmallAdsListItem(SmallAd smallAd, BuildContext ctxt) {
     return GestureDetector(

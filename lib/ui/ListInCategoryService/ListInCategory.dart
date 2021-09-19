@@ -1,49 +1,59 @@
-import 'package:alen/ui/ServiceCategory/Category.dart';
+import 'package:alen/models/drugs.dart';
+import 'package:alen/providers/drug.dart';
+import 'package:alen/ui/Details/DetailForDrug.dart';
+import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
-
-import '../../utils/AppColors.dart';
-import '../../utils/DetailsPage.dart';
+import 'package:provider/provider.dart';
 
 
 class ListInCategories extends StatefulWidget {
+  final Category category;
+  final String id;
+  final bool isPharma;
 
+  const ListInCategories({Key key, this.category, this.id, this.isPharma})
+      : super(key: key);
   @override
   _ListInCategoriesState createState() => _ListInCategoriesState();
 }
 
 class _ListInCategoriesState extends State<ListInCategories> {
-
   static const myCustomColors = AppColors();
-  List<Category> categories = Category.categories;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground),
-        home: Scaffold(
-            appBar: AppBar(
-              backgroundColor: myCustomColors.loginBackgroud,
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () => Navigator.pop(context, false),
-                )),
-            body: SingleChildScrollView(
-                child: Stack(
-                    children: <Widget>[
-                      Container(
-                          child: categories.length == 0
-                              ? Center(
-                            child: Text(
-                              "No Health Articles Available",
-                            ),
-                          )
-                              : GridView.builder(
-                            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+    var drugProvider = Provider.of<DrugProvider>(context);
+    return Scaffold(
+        appBar: AppBar(
+            backgroundColor: myCustomColors.loginBackgroud,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(context, false),
+            )),
+        body: SingleChildScrollView(
+            child: Stack(children: <Widget>[
+              Container(
+                  child: FutureBuilder<List<Drugs>>(
+                      future: widget.isPharma
+                          ? drugProvider.getDrugByCategoryAndPharmacyId(
+                          widget.id, widget.category)
+                          : drugProvider.getDrugByCategoryAndImporterId(
+                          widget.id, widget.category),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.none &&
+                            snapshot.hasData == null) {
+                          return CircularProgressIndicator();
+                        }
+                        if (snapshot.data == null) {
+                          return Container(
+                              child:
+                              Center(child: CircularProgressIndicator()));
+                        } else {
+                          return GridView.builder(
+                            gridDelegate:
+                            SliverGridDelegateWithMaxCrossAxisExtent(
                                 maxCrossAxisExtent: 200,
-                                childAspectRatio: 2 / 2.6,
+                                childAspectRatio: 2 / 3.4,
                                 crossAxisSpacing: 0,
                                 mainAxisSpacing: 0),
                             shrinkWrap: true,
@@ -51,24 +61,25 @@ class _ListInCategoriesState extends State<ListInCategories> {
                             scrollDirection: Axis.vertical,
                             itemBuilder: (BuildContext ctxt, int index) {
                               return _buildCategoriesListItem(
-                                  categories[index], ctxt);
+                                  snapshot.data[index], ctxt, widget.id);
                             },
-                            itemCount: categories.length,
-                          )),
-                    ]))
-        )
-    );
+                            itemCount: snapshot.data.length,
+                          );
+                        }
+                      })),
+            ])));
   }
-  _buildCategoriesListItem(Category category, BuildContext ctxt) {
+
+  _buildCategoriesListItem(Drugs category, BuildContext ctxt, String id) {
     return GestureDetector(
         onTap: () {
           Navigator.push(
               ctxt,
               MaterialPageRoute(
-                  builder: (context) => DetailsPage(
-                    name: category.name,
-                    description: category.detail,
-                    imageUrl: category.imagePath,
+                  builder: (context) => DetailForDrug(
+                      drug: category,
+                      id: id,
+                      isPharma: widget.isPharma
                   )));
         },
         child: Column(
@@ -87,7 +98,7 @@ class _ListInCategoriesState extends State<ListInCategories> {
                 child: SizedBox(
                   height: 180,
                   width: 150,
-                  child: Image.asset(category.imagePath,
+                  child: Image.network(category.image,
                       width: 150, height: 180, fit: BoxFit.fill),
                 ),
               ),
@@ -99,7 +110,6 @@ class _ListInCategoriesState extends State<ListInCategories> {
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],
-        )
-    );
+        ));
   }
 }

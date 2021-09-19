@@ -8,7 +8,7 @@ class HealthArticleProvider with ChangeNotifier {
   bool isLoading = false;
   UserLocation currentLocation;
 
-  Future<List<HealthArticles>> fetchNearByHospitals() async {
+  Future<List<HealthArticles>> fetchHealthArticles() async {
     isLoading = true;
     healtharticles.clear();
     var curr;
@@ -21,9 +21,8 @@ class HealthArticleProvider with ChangeNotifier {
             var data = docs.docs[i].data();
             final HealthArticles hos = HealthArticles(
                 Id: docs.docs[i].id,
-                title: data['title'],
-                image: data['image'],
-                description: data['description']);
+                link: data['link'],
+                image: data['image'],);
             healtharticles.add(hos);
           }
         }

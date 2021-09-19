@@ -1,4 +1,5 @@
 import 'package:alen/models/drugs.dart';
+import 'package:alen/providers/pharmacy.dart';
 import 'package:alen/ui/Cart/PharmacyCart.dart';
 import 'package:alen/providers/drug.dart';
 import 'package:alen/ui/ListInCategoryService/ListInCategory.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/AppColors.dart';
+import 'DetailForDrug.dart';
 
 class PharamacyDetail extends StatelessWidget {
   String id;
@@ -19,18 +21,13 @@ class PharamacyDetail extends StatelessWidget {
   String imagesList;
   String officeHours;
   List<PharmacyServices> services;
-  String info;
-  String location;
+  String longtude;
+  String latitude;
+  String email;
   String description;
-  String phone;
 
-  final List<String> imageList = [
-    'assets/images/hos1.jpg',
-    'assets/images/hos2.jpg',
-    'assets/images/hos3.jpg',
-    'assets/images/hos1.jpg',
-    'assets/images/hos2.jpg',
-  ];
+  String phone;
+  List<dynamic> images;
 
   static const myCustomColors = AppColors();
 
@@ -41,32 +38,43 @@ class PharamacyDetail extends StatelessWidget {
       this.description,
       this.imagesList,
       this.services,
-      this.info,
-      this.location,
+      this.longtude,
+      this.latitude,
       this.phone,
+        this.email,
+        this.images,
       this.officeHours});
+
+  double screenWidth;
 
   @override
   Widget build(BuildContext context) {
     // final PageController controller = PageController(initialPage: 0);
+    screenWidth = MediaQuery.of(context).size.width;
     var drugProvider = Provider.of<DrugProvider>(context);
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground,
-            appBarTheme: AppBarTheme(
-              color: myCustomColors.loginBackgroud,
-            )),
-        home: Scaffold(
+    var pharmaProvider = Provider.of<PharmacyProvider>(context);
+    return Scaffold(
           appBar: AppBar(
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () => Navigator.pop(context, false),
             ),
-            title: Text("title"),
+            title: Text(name),
             actions: [
-
+              IconButton(
+                padding: EdgeInsets.only(right: 15),
+                onPressed: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PharmacyCart()
+                      )
+                  );
+                },
+                icon: Icon(
+                    Icons.shopping_cart
+                ),
+              )
             ],
           ),
           body: SingleChildScrollView(
@@ -78,35 +86,50 @@ class PharamacyDetail extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Swiper(
-                      itemCount: imageList.length,
-                      layout: SwiperLayout.STACK,
-                      scrollDirection: Axis.horizontal,
-                      autoplay: true,
-                      pagination: SwiperPagination(
-                        alignment: Alignment.bottomCenter,
-                      ),
-                      itemBuilder: (context, index) {
-                        return Image.asset(
-                          imageList[index],
-                          fit: BoxFit.cover,
-                        );
-                      },
-                      itemHeight: MediaQuery.of(context).size.width * 0.40,
-                      itemWidth: MediaQuery.of(context).size.width,
-                    ),
-                    // Container(
-                    //     padding: EdgeInsets.only(left:30,top: 30),
-                    //     width: MediaQuery.of(context).size.width,
-                    //     child:Text(
-                    //       'Services',
-                    //       textScaleFactor: 1.5,
-                    //       textAlign: TextAlign.left,
-                    //       overflow: TextOverflow.ellipsis,
-                    //       style: const TextStyle(fontWeight: FontWeight.bold),
-                    //     )
-                    //
-                    // ),
+                    FutureBuilder<List<dynamic>>(
+                        future: pharmaProvider
+                            .fetchImages(id),
+                        builder: (context, imageSnapshot) {
+                          if (imageSnapshot.connectionState ==
+                              ConnectionState.none &&
+                              imageSnapshot.hasData == null) {
+                            return Container(
+                              height: 110,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          }
+                          print(
+                              'project snapshot data is: ${imageSnapshot.data}');
+                          if (imageSnapshot.data == null) {
+                            return Container(
+                              height: 110,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          } else {
+                            return Swiper(
+                              itemCount: imageSnapshot.data.length ?? 0,
+                              layout: SwiperLayout.STACK,
+                              scrollDirection: Axis.horizontal,
+                              autoplay: true,
+                              pagination: SwiperPagination(
+                                alignment: Alignment.bottomCenter,
+                              ),
+                              itemBuilder: (context, index) {
+                                return Image.network(
+                                  imageSnapshot.data[index],
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                              itemHeight:
+                              MediaQuery.of(context).size.width * 0.40,
+                              itemWidth: MediaQuery.of(context).size.width,
+                            );
+                          }
+                        }),
                     Container(
                         margin: EdgeInsets.fromLTRB(
                             MediaQuery.of(context).size.width * 0.07,
@@ -133,8 +156,8 @@ class PharamacyDetail extends StatelessWidget {
                             5,
                             MediaQuery.of(context).size.width * 0.03,
                             30),
-                        child: FutureBuilder<List<Drugs>>(
-                            future: drugProvider.getPharmacyById(id),
+                        child: FutureBuilder<List<Category>>(
+                            future: drugProvider.getCategoryById(id),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                       ConnectionState.none &&
@@ -152,7 +175,10 @@ class PharamacyDetail extends StatelessWidget {
                                   scrollDirection: Axis.horizontal,
                                   itemBuilder: (BuildContext ctxt, int index) {
                                     return _buildPharmacyServicesListItem(
-                                        snapshot.data[index], ctxt);
+                                        snapshot.data[index],
+                                        ctxt,
+                                        id
+                                    );
                                   },
                                   itemCount: snapshot.data.length,
                                 );
@@ -163,92 +189,45 @@ class PharamacyDetail extends StatelessWidget {
                         width: MediaQuery.of(context).size.width,
                         child: Center(
                             child: Text(
-                          name,
-                          textAlign: TextAlign.left,
-                          textScaleFactor: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ))),
+                              name??"Name",
+                              textAlign: TextAlign.left,
+                              textScaleFactor: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold),
+                            ))),
                     Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 20),
                         width: MediaQuery.of(context).size.width,
                         child: Center(
                           child: Text(
-                            description,
+                            description??"Description",
                             textDirection: TextDirection.ltr,
                             maxLines: 10,
                           ),
                         )),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(children: [
                           Container(
-                            padding: EdgeInsets.only(left: 30, top: 10),
+                            padding: EdgeInsets.only(left: screenWidth*0.05, top: 10),
+                            width: screenWidth*0.4,
                             child: Text(
                               'Office Hours',
                               textScaleFactor: 1.5,
                               textAlign: TextAlign.left,
                               overflow: TextOverflow.ellipsis,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                           Container(
-                            padding: EdgeInsets.only(left: 30, top: 10),
+                            padding: EdgeInsets.only(left: screenWidth*0.05, top: 10),
+                            width: screenWidth*0.4,
                             child: Text(
-                              officeHours,
-                              textAlign: TextAlign.left,
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ]),
-                        Column(children: [
-                          Container(
-                            padding: EdgeInsets.only(right: 30, top: 10),
-                            child: Text(
-                              'Additional Info.',
-                              textScaleFactor: 1.5,
-                              textAlign: TextAlign.left,
-                              overflow: TextOverflow.ellipsis,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(right: 30, top: 10),
-                            child: Text(
-                              "info",
-                              maxLines: 3,
-                              textAlign: TextAlign.left,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ])
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 30, top: 10),
-                            child: Text(
-                              'Location',
-                              textScaleFactor: 1.5,
-                              textAlign: TextAlign.left,
-                              overflow: TextOverflow.ellipsis,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(left: 30, top: 10),
-                            child: Text(
-                              location,
+                              officeHours??"Office Hours",
                               textAlign: TextAlign.left,
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
@@ -256,10 +235,12 @@ class PharamacyDetail extends StatelessWidget {
                           ),
                         ]),
                         GestureDetector(
-                            onTap: () => launch("tel://$phone"),
+                            onTap: () =>
+                                launch("tel://$phone"),
                             child: Column(children: [
                               Container(
-                                padding: EdgeInsets.only(right: 30, top: 10),
+                                padding: EdgeInsets.only(right: screenWidth*0.05, top: 10),
+                                width: screenWidth*0.4,
                                 child: Text(
                                   'Phone Number',
                                   textScaleFactor: 1.5,
@@ -270,15 +251,90 @@ class PharamacyDetail extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                padding: EdgeInsets.only(right: 30, top: 10),
+                                padding: EdgeInsets.only(right: screenWidth*0.05, top: 10),
+                                width: screenWidth*0.4,
                                 child: Text(
-                                  phone,
+                                  phone??"0900000000",
                                   maxLines: 3,
                                   textAlign: TextAlign.left,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ]))
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(children: [
+                          Container(
+                            padding: EdgeInsets.only(left: screenWidth*0.05, top: 10),
+                            width: screenWidth*0.4,
+                            child: Text(
+                              'Email',
+                              textScaleFactor: 1.5,
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: screenWidth*0.05, top: 10),
+                            width: screenWidth*0.4,
+                            child: Text(
+                              email??"Email",
+                              textAlign: TextAlign.left,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ]),
+                        Column(children: [
+                          Container(
+                            padding: EdgeInsets.only(right: screenWidth*0.05, top: 10),
+                            width: screenWidth*0.4,
+                            child: Text(
+                              'Our Location',
+                              textScaleFactor: 1.5,
+                              textAlign: TextAlign.left,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            // width: 150,
+                            padding: EdgeInsets.only(right: screenWidth*0.05, top: 10),
+                            width: screenWidth*0.4,
+                            child: Row(
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: IconButton(
+                                    onPressed: (){},
+                                    icon: Icon(
+                                      Icons.location_pin,
+                                      color: myCustomColors.loginBackgroud,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "$longtude - $latitude"??"-",
+                                  maxLines: 3,
+                                  textAlign: TextAlign.left,
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              ],
+                            ),
+                            // child: Text(
+                            //   "${snapshot.data.longitude.toStringAsFixed(2)} - ${snapshot.data.latitude.toStringAsFixed(2)}"??"-",
+                            //   maxLines: 3,
+                            //   textAlign: TextAlign.left,
+                            //   overflow: TextOverflow.ellipsis,
+                            // ),
+                          ),
+                        ])
                       ],
                     ),
                     SizedBox(
@@ -289,14 +345,22 @@ class PharamacyDetail extends StatelessWidget {
               )
             ],
           )),
-        ));
+        );
   }
 
-  _buildPharmacyServicesListItem(Drugs pharmacyServices, BuildContext ctxt) {
+  _buildPharmacyServicesListItem(
+      var pharmacyServices, BuildContext ctxt, String pharmacyId) {
     return GestureDetector(
         onTap: () {
-          Navigator.push(ctxt,
-              MaterialPageRoute(builder: (context) => ListInCategories()));
+          print("On tap");
+          Navigator.push(
+              ctxt,
+              MaterialPageRoute(
+                  builder: (context) => ListInCategories(
+                    category: pharmacyServices,
+                    id: pharmacyId,
+                    isPharma: true,
+                  )));
         },
         child: Card(
             elevation: 0,
@@ -312,7 +376,7 @@ class PharamacyDetail extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(150.0),
                     child: Image.network(
-                      pharmacyServices.category_image,
+                      pharmacyServices.image,
                       fit: BoxFit.fitHeight,
                       height: 70.0,
                       width: 70.0,
@@ -320,7 +384,7 @@ class PharamacyDetail extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  pharmacyServices.category,
+                  pharmacyServices.name,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],

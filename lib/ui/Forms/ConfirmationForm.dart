@@ -28,7 +28,7 @@ class _ConfirmationFormState extends State<ConfirmationForm> {
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
             fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.loginBackgroud),
+            scaffoldBackgroundColor: myCustomColors.loginButton),
         home: Scaffold(
           body: SingleChildScrollView(
               child: Stack(
@@ -89,17 +89,17 @@ class _ConfirmationFormState extends State<ConfirmationForm> {
                                             labelText: 'Confirmation Code',
                                             labelStyle: TextStyle(
                                                 color: myCustomColors
-                                                    .loginBackgroud),
+                                                    .loginButton),
                                             counterStyle: TextStyle(
                                                 color: Colors.white54),
                                             prefixIcon: Icon(
                                               Icons.message,
                                               color:
-                                                  myCustomColors.loginBackgroud,
+                                                  myCustomColors.loginButton,
                                             ),
                                             hintStyle: TextStyle(
                                                 color: myCustomColors
-                                                    .loginBackgroud),
+                                                    .loginButton),
                                             filled: true,
                                             fillColor: Colors.white,
                                             enabledBorder: OutlineInputBorder(
@@ -137,7 +137,7 @@ class _ConfirmationFormState extends State<ConfirmationForm> {
                                     style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
-                                                myCustomColors.loginButton),
+                                                myCustomColors.loginBackgroud),
                                         shape: MaterialStateProperty.all<
                                                 RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
@@ -145,7 +145,7 @@ class _ConfirmationFormState extends State<ConfirmationForm> {
                                                     BorderRadius.circular(30.0),
                                                 side: BorderSide(
                                                     color: myCustomColors
-                                                        .loginButton)))),
+                                                        .loginBackgroud)))),
                                     onPressed: () async {
                                       _formKey.currentState.save();
                                       if (_formKey.currentState.validate()) {

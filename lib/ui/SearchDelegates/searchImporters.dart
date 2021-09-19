@@ -1,15 +1,16 @@
+import 'package:alen/models/importer.dart';
+import 'package:alen/ui/Details/ImporterDetail.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
-import 'package:alen/ui/Pages/Importer.dart';
 
 import '../../utils/DetailsPage.dart';
 
-class ImporterSearch extends SearchDelegate<Importer> {
+class ImporterSearch extends SearchDelegate<Importers> {
   static const myCustomColors = AppColors();
-  Importer result = Importer.importers.first;
-  final List<Importer> importers;
+  Importers result;
+  final List<Importers> importers;
 
-  ImporterSearch(this.importers);
+  ImporterSearch({this.importers});
 
   @override
   String get searchFieldLabel => 'Search Importers...';
@@ -81,20 +82,28 @@ class ImporterSearch extends SearchDelegate<Importer> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DetailsPage(
-                                name: result.name,
-                                description: result.detail,
-                                imageUrl: result.imagesList.first,
-                              )));
+                          builder: (context) => ImporterDetail(
+                            id: result.Id,
+                            title: result.name,
+                            phone: result.phone,
+                            imagesList: result.image,
+                            name: result.name,
+                            images: result.images,
+                            description:result.description,
+                            latitude: result.latitude.toStringAsFixed(3),
+                            longtude: result.longitude.toStringAsFixed(3),
+                            email: result.email,
+                            officeHours: result.officehours,
+                          )));
                 },
                 title: Text(suggestions.elementAt(index).name),
                 subtitle: Text(
-                  suggestions.elementAt(index).detail,
+                  suggestions.elementAt(index).description,
                   maxLines: 1,
                 ),
                 leading: CircleAvatar(
-                  backgroundImage: AssetImage(
-                    suggestions.elementAt(index).imagesList.first,
+                  backgroundImage: NetworkImage(
+                    suggestions.elementAt(index).images.first,
                   ),
                 )),
             Divider(color: Colors.black38)
@@ -115,12 +124,12 @@ class ImporterSearch extends SearchDelegate<Importer> {
               tileColor: myCustomColors.mainBackground,
               title: Text(suggestions.elementAt(index).name),
               subtitle: Text(
-                suggestions.elementAt(index).detail,
+                suggestions.elementAt(index).description,
                 maxLines: 1,
               ),
               leading: CircleAvatar(
-                  backgroundImage: AssetImage(
-                suggestions.elementAt(index).imagesList.first,
+                  backgroundImage: NetworkImage(
+                suggestions.elementAt(index).images.first,
               )),
               onTap: () {
                 query = suggestions.elementAt(index).name;

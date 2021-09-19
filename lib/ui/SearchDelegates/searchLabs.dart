@@ -1,15 +1,16 @@
+import 'package:alen/models/laboratory.dart';
+import 'package:alen/ui/Details/LabDetail.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
-import 'package:alen/ui/Pages/Lab.dart';
 
 import '../../utils/DetailsPage.dart';
 
-class LabSearch extends SearchDelegate<Lab> {
+class LabSearch extends SearchDelegate<Laboratories> {
   static const myCustomColors = AppColors();
-  Lab result = Lab.labs.first;
-  final List<Lab> labs;
+  Laboratories result;
+  final List<Laboratories> labs;
 
-  LabSearch(this.labs);
+  LabSearch({this.labs});
 
   @override
   String get searchFieldLabel => 'Search Labs...';
@@ -81,20 +82,32 @@ class LabSearch extends SearchDelegate<Lab> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DetailsPage(
-                                name: result.name,
-                                description: result.detail,
-                                imageUrl: result.imagesList.first,
-                              )));
+                          builder: (context) => LabDetail(
+                            title: result.name,
+                            info: result.createdAt.toString(),
+                            phone: result.phone,
+                            image: result.image,
+                            images: result.images,
+                            name: result.name,
+                            latitude: result.latitude.toStringAsFixed(3),
+                            longtude: result.longitude.toStringAsFixed(3),
+                            email: result.email,
+                            description: result.description,
+                            location: result.latitude.toString(),
+                            services: result.services,
+                            newservices:result.services,
+                            officeHours: result.officehours.toString(),
+                            hospitalId: result.Id,
+                          )));
                 },
                 title: Text(suggestions.elementAt(index).name),
                 subtitle: Text(
-                  suggestions.elementAt(index).detail,
+                  suggestions.elementAt(index).description,
                   maxLines: 1,
                 ),
                 leading: CircleAvatar(
-                  backgroundImage: AssetImage(
-                    suggestions.elementAt(index).imagesList.first,
+                  backgroundImage: NetworkImage(
+                    suggestions.elementAt(index).images.first,
                   ),
                 )),
             Divider(color: Colors.black38)
@@ -115,12 +128,12 @@ class LabSearch extends SearchDelegate<Lab> {
               tileColor: myCustomColors.mainBackground,
               title: Text(suggestions.elementAt(index).name),
               subtitle: Text(
-                suggestions.elementAt(index).detail,
+                suggestions.elementAt(index).description,
                 maxLines: 1,
               ),
               leading: CircleAvatar(
-                  backgroundImage: AssetImage(
-                suggestions.elementAt(index).imagesList.first,
+                  backgroundImage: NetworkImage(
+                suggestions.elementAt(index).images.first,
               )),
               onTap: () {
                 query = suggestions.elementAt(index).name;

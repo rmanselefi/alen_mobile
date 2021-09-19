@@ -19,12 +19,7 @@ class _ListInServicesState extends State<ListInServices> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground),
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(
                 backgroundColor: myCustomColors.loginBackgroud,
                 leading: IconButton(
@@ -57,8 +52,7 @@ class _ListInServicesState extends State<ListInServices> {
                             itemCount: services.length,
                           )),
                     ]))
-        )
-    );
+        );
   }
   _buildServicesListItem(Service service, BuildContext ctxt) {
     return GestureDetector(

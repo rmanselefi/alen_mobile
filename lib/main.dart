@@ -1,13 +1,19 @@
+import 'package:alen/providers/HomeCare.dart';
+import 'package:alen/providers/ads.dart';
 import 'package:alen/providers/auth.dart';
+import 'package:alen/providers/cart.dart';
+import 'package:alen/providers/company.dart';
 import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/healtharticle.dart';
 import 'package:alen/providers/diagnostic.dart';
+import 'package:alen/providers/importer.dart';
 import 'package:alen/providers/laboratory.dart';
 import 'package:alen/providers/drug.dart';
 
 import 'package:alen/providers/pharmacy.dart';
 import 'package:alen/ui/Forms/PhoneForm.dart';
 import 'package:alen/ui/Home/HomePage.dart';
+import 'package:alen/utils/AppColors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,19 +46,28 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AdsProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => HospitalProvider()),
         ChangeNotifierProvider(create: (_) => PharmacyProvider()),
+        ChangeNotifierProvider(create: (_) => ImporterProvider()),
         ChangeNotifierProvider(create: (_) => LaboratoryProvider()),
         ChangeNotifierProvider(create: (_) => DiagnosticProvider()),
         ChangeNotifierProvider(create: (_) => HealthArticleProvider()),
         ChangeNotifierProvider(create: (_) => DrugProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => HomeCareProvider()),
+        ChangeNotifierProvider(create: (_) => CompanyProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: const Color(0xFF2929C7)),
+            fontFamily: 'hind',
+            appBarTheme: AppBarTheme(
+              color: AppColors().loginBackgroud
+            ),
+            // scaffoldBackgroundColor: const Color(0xFF2929C7)),
+          scaffoldBackgroundColor: AppColors().mainBackground),
         home: FutureBuilder(
             future: UserPreferences().getUser(),
             builder: (context, snapshot) {

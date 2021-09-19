@@ -17,12 +17,7 @@ class _SeeAllLabsState extends State<SeeAllLabs> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground),
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(
                 backgroundColor: myCustomColors.loginBackgroud,
                 leading: IconButton(
@@ -55,8 +50,7 @@ class _SeeAllLabsState extends State<SeeAllLabs> {
                             itemCount: labs.length,
                           )),
                     ]))
-        )
-    );
+        );
   }
   _buildLabsListItem(Lab labs, BuildContext ctxt) {
     return GestureDetector(

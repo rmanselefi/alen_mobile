@@ -32,15 +32,7 @@ class _DetailForPhaState extends State<DetailForPha> {
   @override
   Widget build(BuildContext context) {
     // final PageController controller = PageController(initialPage: 0);
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground,
-            appBarTheme: AppBarTheme(
-              color: myCustomColors.loginBackgroud,
-            )),
-        home: Scaffold(
+    return Scaffold(
           appBar: AppBar(
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
@@ -170,7 +162,7 @@ class _DetailForPhaState extends State<DetailForPha> {
                   )
                 ],
               )),
-        ));
+        );
   }
   getPresreption(BuildContext ctxt,String image, String name) async {
     int amount=1;

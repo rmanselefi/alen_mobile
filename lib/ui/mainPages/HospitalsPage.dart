@@ -26,6 +26,12 @@ class HospitalsPage extends StatefulWidget {
 class _HospitalPageState extends State<HospitalsPage> {
   List<HospitalServices> hospitalServices = HospitalServices.hospitalServices;
   List<Hospital> hospitals = Hospital.hospitals;
+  //
+  // ScrollController _scrollController = ScrollController();
+  //
+  // _scrollToBottom() {
+  //   _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+  // }
 
   static const myCustomColors = AppColors();
   @override
@@ -35,20 +41,32 @@ class _HospitalPageState extends State<HospitalsPage> {
     HospitalProvider().getCurrentLocation();
   }
 
+  ScrollController _scrollController = ScrollController();
+
+  // _scrollToBottom() {
+  //   _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+  // }
+  _scrollToBottom() {
+    // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    // _scrollController.animateTo(
+    //   0,
+    //   duration: Duration(seconds: 10),
+    //   curve: Curves.easeIn,
+    // );
+    var duration= (7/500.0)*_scrollController.position.maxScrollExtent;
+    _scrollController.animateTo(
+      // 676.5714285714286,
+        _scrollController.position.maxScrollExtent,
+      duration: Duration(seconds: duration.toInt()),
+      curve: Curves.easeIn,
+    );
+    print("This is the position : {${_scrollController.position.maxScrollExtent}}");
+  }
   @override
   Widget build(BuildContext context) {
     // final PageController controller = PageController(initialPage: 0);
     var hosProvider = Provider.of<HospitalProvider>(context, listen: false);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          fontFamily: 'Ubuntu',
-          // scaffoldBackgroundColor: const Color(0xFFF5F5F5),
-          scaffoldBackgroundColor: const Color(0xFFEBEBEB),
-          appBarTheme: AppBarTheme(
-            color: myCustomColors.loginBackgroud,
-          )),
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
             elevation: 2,
             leading: IconButton(
@@ -67,9 +85,9 @@ class _HospitalPageState extends State<HospitalsPage> {
                 children: <Widget>[
                   GestureDetector(
                       onTap: () {
-                        showSearch<Hospital>(
+                        showSearch<Hospitals>(
                             context: context,
-                            delegate: HospitalSearch(hospitals));
+                            delegate: HospitalSearch(hospitals: HospitalProvider.nearby));
                       },
                       child: Container(
                           margin: EdgeInsets.fromLTRB(0, 60, 0, 50),
@@ -109,6 +127,9 @@ class _HospitalPageState extends State<HospitalsPage> {
                                               ),
                                             ),
                                           ))))))),
+                  Divider(
+                    color: Colors.black38,
+                  ),
                   Container(
                       margin: EdgeInsets.fromLTRB(
                           MediaQuery.of(context).size.width * 0.05,
@@ -146,8 +167,12 @@ class _HospitalPageState extends State<HospitalsPage> {
                                   child: Center(child: CircularProgressIndicator())
                               );
                             } else {
+                              WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
                               return ListView.builder(
                                 scrollDirection: Axis.horizontal,
+                                controller: _scrollController,
+                                // reverse: true,
+                                shrinkWrap: true,
                                 itemBuilder:
                                     (BuildContext ctxt, int index) {
                                   return _buildHospitalsListItem(
@@ -157,6 +182,9 @@ class _HospitalPageState extends State<HospitalsPage> {
                               );
                             }
                           })),
+                  Divider(
+                    color: Colors.black38,
+                  ),
                   Container(
                       margin: EdgeInsets.fromLTRB(
                           MediaQuery.of(context).size.width * 0.05,
@@ -176,7 +204,7 @@ class _HospitalPageState extends State<HospitalsPage> {
                         ],
                       )),
                   Container(
-                      height: 190.0,
+                      // height: 190.0,
                       margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
                       child: FutureBuilder<UserLocation>(
                           future: hosProvider.getCurrentLocation(),
@@ -202,8 +230,21 @@ class _HospitalPageState extends State<HospitalsPage> {
                                       child: Center(child: CircularProgressIndicator())
                                     );
                                   } else {
-                                    return ListView.builder(
-                                      scrollDirection: Axis.horizontal,
+                                    return GridView.builder(
+                                      gridDelegate:
+                                      SliverGridDelegateWithMaxCrossAxisExtent(
+                                          maxCrossAxisExtent: 160,
+                                          childAspectRatio:
+                                          (MediaQuery.of(context)
+                                              .orientation ==
+                                              Orientation.portrait)
+                                              ? 2 / 3
+                                              : 2 / 2.2,
+                                          crossAxisSpacing: 0,
+                                          mainAxisSpacing: 0),
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      scrollDirection: Axis.vertical,
                                       itemBuilder:
                                           (BuildContext ctxt, int index) {
                                         return _buildHospitalsListItem(
@@ -219,8 +260,7 @@ class _HospitalPageState extends State<HospitalsPage> {
             )
           ],
         )),
-      ),
-    );
+      );
   }
 
   _buildHospitalsListItem(Hospitals hospital, BuildContext ctxt) {
@@ -230,14 +270,22 @@ class _HospitalPageState extends State<HospitalsPage> {
               ctxt,
               MaterialPageRoute(
                   builder: (context) => HospitalDetail(
+                    title: hospital.name,
+                        info: hospital.createdAt.toString(),
                         phone: hospital.phone,
                         image: hospital.image,
+                    images: hospital.images,
+                    latitude: hospital.latitude.toStringAsFixed(3),
+                    longtude: hospital.longitude.toStringAsFixed(3),
+                    email: hospital.email,
                         name: hospital.name,
                         description: hospital.description,
                         location: hospital.latitude.toString(),
                         services: hospital.services,
                         newservices:hospital.services,
-                    officeHours: hospital.officehours,
+                    officeHours: hospital.officehours.toString(),
+                    hospitalId: hospital.Id,
+
                       )));
         },
         child: Card(
@@ -265,8 +313,8 @@ class _HospitalPageState extends State<HospitalsPage> {
                     child: SizedBox(
                       height: 120,
                       width: 120,
-                      child: hospital.image != null
-                          ? Image.network(hospital.image,
+                      child: hospital.images != null
+                          ? Image.network(hospital.images.first,
                               width: 120, height: 120, fit: BoxFit.fill)
                           : Container(
                               child: Center(
@@ -278,11 +326,6 @@ class _HospitalPageState extends State<HospitalsPage> {
                 ),
                 Text(
                   hospital.name,
-                  maxLines: 2,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  hospital.latitude.toString(),
                   maxLines: 2,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),

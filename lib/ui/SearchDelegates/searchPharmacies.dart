@@ -1,15 +1,16 @@
+import 'package:alen/models/pharmacy.dart';
+import 'package:alen/ui/Details/PharmacyDetail.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
-import 'package:alen/ui/Pages/Pharmacy.dart';
 
 import '../../utils/DetailsPage.dart';
 
-class PharmacySearch extends SearchDelegate<Pharmacy> {
+class PharmacySearch extends SearchDelegate<Pharmacies> {
   static const myCustomColors = AppColors();
-  Pharmacy result = Pharmacy.pharmacies.first;
-  final List<Pharmacy> pharmacies;
+  Pharmacies result;
+  final List<Pharmacies> pharmacies;
 
-  PharmacySearch(this.pharmacies);
+  PharmacySearch({this.pharmacies});
 
   @override
   String get searchFieldLabel => 'Search Pharmacies...';
@@ -81,20 +82,29 @@ class PharmacySearch extends SearchDelegate<Pharmacy> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DetailsPage(
-                                name: result.name,
-                                description: result.detail,
-                                imageUrl: result.imagesList.first,
-                              )));
+                          builder: (context) => PharamacyDetail(
+                            id: result.Id,
+                            title: result.name,
+                            phone: result.phone,
+                            imagesList: result.image,
+                            name: result.name,
+                            images: result.images,
+                            description:result.description,
+                            latitude: result.latitude.toStringAsFixed(3),
+                            longtude: result.longitude.toStringAsFixed(3),
+                            officeHours: result.officehours,
+                            email: result.email,
+                          )
+                      ));
                 },
                 title: Text(suggestions.elementAt(index).name),
                 subtitle: Text(
-                  suggestions.elementAt(index).detail,
+                  suggestions.elementAt(index).description,
                   maxLines: 1,
                 ),
                 leading: CircleAvatar(
-                  backgroundImage: AssetImage(
-                    suggestions.elementAt(index).imagesList.first,
+                  backgroundImage: NetworkImage(
+                    suggestions.elementAt(index).images.first,
                   ),
                 )),
             Divider(color: Colors.black38)
@@ -115,12 +125,12 @@ class PharmacySearch extends SearchDelegate<Pharmacy> {
               tileColor: myCustomColors.mainBackground,
               title: Text(suggestions.elementAt(index).name),
               subtitle: Text(
-                suggestions.elementAt(index).detail,
+                suggestions.elementAt(index).description,
                 maxLines: 1,
               ),
               leading: CircleAvatar(
-                  backgroundImage: AssetImage(
-                suggestions.elementAt(index).imagesList.first,
+                  backgroundImage: NetworkImage(
+                suggestions.elementAt(index).images.first,
               )),
               onTap: () {
                 query = suggestions.elementAt(index).name;

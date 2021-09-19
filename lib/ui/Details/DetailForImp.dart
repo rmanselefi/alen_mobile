@@ -32,15 +32,7 @@ class _DetailForImpState extends State<DetailForImp> {
   @override
   Widget build(BuildContext context) {
     // final PageController controller = PageController(initialPage: 0);
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground,
-            appBarTheme: AppBarTheme(
-              color: myCustomColors.loginBackgroud,
-            )),
-        home: Scaffold(
+    return  Scaffold(
           appBar: AppBar(
             leading: IconButton(
                 icon: Icon(Icons.arrow_back),
@@ -55,7 +47,7 @@ class _DetailForImpState extends State<DetailForImp> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ImportCart()
+                          builder: (context) => ImporterCart()
                       )
                   );
                 },
@@ -170,7 +162,7 @@ class _DetailForImpState extends State<DetailForImp> {
                   )
                 ],
               )),
-        ));
+        );
   }
   getPresreption(BuildContext ctxt,String image, String name) async {
     int amount=100;

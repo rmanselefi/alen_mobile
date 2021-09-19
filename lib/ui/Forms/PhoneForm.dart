@@ -63,7 +63,7 @@ class _SignUpState extends State<SignUp> {
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
             fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: const Color(0xFF9516B6)),
+            scaffoldBackgroundColor: AppColors().loginButton),
         home: Scaffold(
           body: SingleChildScrollView(
               child: Stack(
@@ -175,7 +175,7 @@ class _SignUpState extends State<SignUp> {
                                             labelText: 'Phone Number',
                                             labelStyle: TextStyle(
                                                 color: myCustomColors
-                                                    .loginBackgroud),
+                                                    .loginButton),
                                             counterStyle: TextStyle(
                                                 color: Colors.white54),
                                             prefixIcon: CountryCodePicker(
@@ -197,7 +197,7 @@ class _SignUpState extends State<SignUp> {
                                             ),
                                             hintStyle: TextStyle(
                                                 color: myCustomColors
-                                                    .loginBackgroud),
+                                                    .loginButton),
                                             filled: true,
                                             fillColor: Colors.white,
                                             enabledBorder: OutlineInputBorder(
@@ -235,7 +235,7 @@ class _SignUpState extends State<SignUp> {
                                     style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
-                                                myCustomColors.loginButton),
+                                                myCustomColors.loginBackgroud),
                                         shape: MaterialStateProperty.all<
                                                 RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
@@ -243,7 +243,7 @@ class _SignUpState extends State<SignUp> {
                                                     BorderRadius.circular(30.0),
                                                 side: BorderSide(
                                                     color: myCustomColors
-                                                        .loginButton)))),
+                                                        .loginBackgroud)))),
                                     onPressed: () {
                                       _formKey.currentState.validate();
                                       _formKey.currentState.save();

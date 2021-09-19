@@ -1,6 +1,71 @@
 import 'package:alen/ui/Services/HospitalServices.dart';
 
-class Hospitals {
+class Hospitals implements HospitalsLabsDiagnostics{
+
+
+  Hospitals(
+      {this.Id,
+        this.name,
+        this.phone,
+        this.createdAt,
+        this.latitude,
+        this.description,
+        this.longitude,
+        this.distance,
+        this.image,
+        this.services,this.trending,this.officehours, this.email, this.images,this.creditedDate,this.shopCredit});
+
+  @override
+  String Id;
+
+  @override
+  DateTime createdAt;
+
+  @override
+  DateTime creditedDate;
+
+  @override
+  String description;
+
+  @override
+  double distance;
+
+  @override
+  String email;
+
+  @override
+  String image;
+
+  @override
+  List images;
+
+  @override
+  double latitude;
+
+  @override
+  double longitude;
+
+  @override
+  String name;
+
+  @override
+  String officehours;
+
+  @override
+  String phone;
+
+  @override
+  List services;
+
+  @override
+  String shopCredit;
+
+  @override
+  bool trending;
+}
+
+abstract class HospitalsLabsDiagnostics{
+  String email;
   String Id;
   String name;
   double latitude;
@@ -13,16 +78,25 @@ class Hospitals {
   String officehours;
   bool trending;
   List<dynamic> services;
+  List<dynamic> images;
+  DateTime creditedDate;
+  String shopCredit;
 
-  Hospitals(
-      {this.Id,
+  HospitalsLabsDiagnostics(
+      this.email,
+      this.Id,
       this.name,
-      this.phone,
-      this.createdAt,
       this.latitude,
-      this.description,
       this.longitude,
+      this.phone,
+      this.description,
       this.distance,
       this.image,
-      this.services,this.trending,this.officehours});
+      this.createdAt,
+      this.officehours,
+      this.trending,
+      this.services,
+      this.images,
+      this.creditedDate,
+      this.shopCredit);
 }

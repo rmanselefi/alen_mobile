@@ -2,6 +2,7 @@ import 'package:alen/models/pharmacy.dart';
 
 class Drugs {
   String id;
+  String itemId;
   String name;
   String dosage;
   String madein;
@@ -11,18 +12,20 @@ class Drugs {
   String image;
   String category;
   String category_image;
-  Pharmacies pharmacies;
+  ImportersPharmacies pharmacies;
+  String price;
 
   Drugs(
       {this.trending,
-      this.id,
-      this.name,
-      this.quantity,
-      this.dosage,
-      this.madein,
-      this.root,
-      this.pharmacies,
-      this.image,
-      this.category,
-      this.category_image});
+        this.id,
+        this.itemId,
+        this.name,
+        this.quantity,
+        this.dosage,
+        this.madein,
+        this.root,
+        this.pharmacies,
+        this.image,
+        this.category,
+        this.category_image, this.price});
 }

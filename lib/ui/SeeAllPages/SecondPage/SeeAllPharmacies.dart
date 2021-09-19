@@ -17,12 +17,7 @@ class _SeeAllPharmaciesState extends State<SeeAllPharmacies> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground),
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(
                 backgroundColor: myCustomColors.loginBackgroud,
                 leading: IconButton(
@@ -55,8 +50,7 @@ class _SeeAllPharmaciesState extends State<SeeAllPharmacies> {
                             itemCount: pharmacies.length,
                           )),
                     ]))
-        )
-    );
+        );
   }
   _buildPharmaciesListItem(Pharmacy pharmacy, BuildContext ctxt) {
     return GestureDetector(
@@ -69,8 +63,8 @@ class _SeeAllPharmaciesState extends State<SeeAllPharmacies> {
                     phone: pharmacy.phone,
                     name: pharmacy.name,
                     description:pharmacy.detail,
-                    location: pharmacy.location,
-                    info: pharmacy.info,
+                    latitude: pharmacy.location,
+                    longtude: pharmacy.info,
                     officeHours: pharmacy.officeHours,
                     services: pharmacy.services,
                   )

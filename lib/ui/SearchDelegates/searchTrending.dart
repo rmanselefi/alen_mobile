@@ -1,15 +1,17 @@
+import 'package:alen/models/drugs.dart';
+import 'package:alen/ui/Details/ImporterDetail.dart';
+import 'package:alen/ui/Details/PharmacyDetail.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
-import 'package:alen/ui/Models/Trending.dart';
 
 import '../../utils/DetailsPage.dart';
 
-class TrendingSearch extends SearchDelegate<Trending> {
+class TrendingSearch extends SearchDelegate<Drugs> {
   static const myCustomColors = AppColors();
-  Trending result = Trending.trendings.first;
-  final List<Trending> trendings;
+  Drugs result;
+  final List<Drugs> trendings;
 
-  TrendingSearch(this.trendings);
+  TrendingSearch({this.trendings});
 
   @override
   String get searchFieldLabel => 'Search Trendings...';
@@ -81,20 +83,45 @@ class TrendingSearch extends SearchDelegate<Trending> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DetailsPage(
-                                name: result.name,
-                                description: result.detail,
-                                imageUrl: result.imagePath,
-                              )));
+                          builder: (context) => (result.pharmacies.isPharma)
+                              ?
+                          PharamacyDetail(
+                            title: result.pharmacies.name,
+                            phone: result.pharmacies.phone,
+                            imagesList: result.pharmacies.image,
+                            name: result.pharmacies.name,
+                            images: result.pharmacies.images,
+                            email: result.pharmacies.email,
+                            id: result.pharmacies.Id,
+                            description: result.pharmacies.description,
+                            latitude: result.pharmacies.latitude.toStringAsFixed(3),
+                            longtude: result.pharmacies.longitude.toStringAsFixed(3),
+                            officeHours: result.pharmacies.officehours,
+                          )
+                              :
+                          ImporterDetail(
+                            title: result.pharmacies.name,
+                            phone: result.pharmacies.phone,
+                            imagesList: result.pharmacies.image,
+                            name: result.pharmacies.name,
+                            images: result.pharmacies.images,
+                            email: result.pharmacies.email,
+                            id: result.pharmacies.Id,
+                            description: result.pharmacies.description,
+                            latitude: result.pharmacies.latitude.toStringAsFixed(3),
+                            longtude: result.pharmacies.longitude.toStringAsFixed(3),
+                            officeHours: result.pharmacies.officehours,
+                          )
+                      ));
                 },
                 title: Text(suggestions.elementAt(index).name),
                 subtitle: Text(
-                  suggestions.elementAt(index).detail,
+                  suggestions.elementAt(index).category,
                   maxLines: 1,
                 ),
                 leading: CircleAvatar(
-                  backgroundImage: AssetImage(
-                    suggestions.elementAt(index).imagePath,
+                  backgroundImage: NetworkImage(
+                    suggestions.elementAt(index).image,
                   ),
                 )),
             Divider(color: Colors.black38)
@@ -115,12 +142,12 @@ class TrendingSearch extends SearchDelegate<Trending> {
               tileColor: myCustomColors.mainBackground,
               title: Text(suggestions.elementAt(index).name),
               subtitle: Text(
-                suggestions.elementAt(index).detail,
+                suggestions.elementAt(index).category,
                 maxLines: 1,
               ),
               leading: CircleAvatar(
-                  backgroundImage: AssetImage(
-                suggestions.elementAt(index).imagePath,
+                  backgroundImage: NetworkImage(
+                suggestions.elementAt(index).image,
               )),
               onTap: () {
                 query = suggestions.elementAt(index).name;

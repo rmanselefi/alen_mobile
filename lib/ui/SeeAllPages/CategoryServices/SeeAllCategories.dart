@@ -18,12 +18,7 @@ class _SeeAllCategoriesState extends State<SeeAllCategories> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground),
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(
               backgroundColor: myCustomColors.loginBackgroud,
                 leading: IconButton(
@@ -56,8 +51,7 @@ class _SeeAllCategoriesState extends State<SeeAllCategories> {
                             itemCount: pharmacyServices.length,
                           )),
                     ]))
-        )
-    );
+        );
   }
   _buildPharmacyServiesListItem(PharmacyServices pharmacyServices, BuildContext ctxt) {
     return GestureDetector(

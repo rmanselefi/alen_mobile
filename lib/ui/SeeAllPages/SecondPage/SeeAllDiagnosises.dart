@@ -17,12 +17,7 @@ class _SeeAllDiagnosisesState extends State<SeeAllDiagnosises> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-            fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.mainBackground),
-        home: Scaffold(
+    return Scaffold(
             appBar: AppBar(
                 backgroundColor: myCustomColors.loginBackgroud,
                 leading: IconButton(
@@ -55,8 +50,7 @@ class _SeeAllDiagnosisesState extends State<SeeAllDiagnosises> {
                             itemCount: diagnosises.length,
                           )),
                     ]))
-        )
-    );
+        );
   }
   _buildDiagnosisListItem(Diagnosis diagnosis, BuildContext ctxt) {
     return GestureDetector(
