@@ -34,7 +34,20 @@ class DrugProvider with ChangeNotifier {
               category_image:
                   data.containsKey('category') ? data['category']['image'] : '',
               trending: data['trending']);
-          drugs.add(drug);
+          int temp2 = 0;
+          if(drugs.length==0){
+            drugs.add(drug);
+          }else{
+            drugs.forEach((element) {
+              if(drug.id==element.id)
+              {
+                temp2++;
+              }
+            });
+            if(temp2==0){
+              drugs.add(drug);
+            }
+          }
         }
       }
       // drugs.toSet();
@@ -83,9 +96,6 @@ class DrugProvider with ChangeNotifier {
               print('--------------temp : ($temp)--------------');
             }
           });
-          if(temp==0 && categoriesList.length>1){
-            categoriesList.add(category);
-          }
           print("Also here$i");
         }
         print("none here either");
@@ -177,7 +187,20 @@ class DrugProvider with ChangeNotifier {
               data.containsKey('category') ? data['category']['image'] : '',
               trending: data['trending']);
           if(drug.category==category.name) {
-            drugs.add(drug);
+            int temp2 = 0;
+            if(drugs.length==0){
+              drugs.add(drug);
+            }else{
+              drugs.forEach((element) {
+                if(drug.id==element.id)
+                {
+                  temp2++;
+                }
+              });
+              if(temp2==0){
+                drugs.add(drug);
+              }
+            }
           }
         }
       }
@@ -239,7 +262,20 @@ class DrugProvider with ChangeNotifier {
                     : '',
                 price: price ?? "0",
                 trending: trending);
-            drugs.add(drug);
+            int temp2 = 0;
+            if(drugs.length==0){
+              drugs.add(drug);
+            }else{
+              drugs.forEach((element) {
+                if(drug.id==element.id)
+                {
+                  temp2++;
+                }
+              });
+              if(temp2==0){
+                drugs.add(drug);
+              }
+            }
           }
           // return categoriesList;
           print("Also here$i");
@@ -304,7 +340,20 @@ class DrugProvider with ChangeNotifier {
                     : '',
                 price: price ?? "0",
                 trending: trending);
-            drugs.add(drug);
+            int temp2 = 0;
+            if(drugs.length==0){
+              drugs.add(drug);
+            }else{
+              drugs.forEach((element) {
+                if(drug.id==element.id)
+                {
+                  temp2++;
+                }
+              });
+              if(temp2==0){
+                drugs.add(drug);
+              }
+            }
           }
           // return categoriesList;
           print("Also here$i");

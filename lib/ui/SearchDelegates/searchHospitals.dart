@@ -96,6 +96,7 @@ class HospitalSearch extends SearchDelegate<Hospitals> {
                             description: result.description,
                             location: result.latitude.toString(),
                             services: result.services,
+                            locationName: result.locationName,
                             newservices:result.services,
                             officeHours: result.officehours.toString(),
                             hospitalId: result.Id,

@@ -2,11 +2,20 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:alen/models/ads.dart';
+import 'package:alen/models/hospital.dart';
+import 'package:alen/models/user_location.dart';
+import 'package:alen/providers/HomeCare.dart';
 import 'package:alen/providers/ads.dart';
 import 'package:alen/providers/cart.dart';
+import 'package:alen/providers/company.dart';
+import 'package:alen/providers/diagnostic.dart';
 import 'package:alen/providers/drug.dart';
+import 'package:alen/providers/hospital.dart';
+import 'package:alen/providers/importer.dart';
+import 'package:alen/providers/laboratory.dart';
 import 'package:alen/providers/pharmacy.dart';
 import 'package:alen/ui/Contact%20Us/ContactUs.dart';
+import 'package:alen/ui/Details/HospitalDetail.dart';
 import 'package:alen/ui/Details/ImporterDetail.dart';
 import 'package:alen/ui/Details/PharmacyDetail.dart';
 import 'package:alen/ui/Pages/Pharmacy.dart';
@@ -67,7 +76,7 @@ class _HomePageState extends State<HomePage> {
   _scrollToBottom() {
     // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     // var extent= _scrollController.position.maxScrollExtent;
-    var duration= (7/50.0)*_scrollController.position.maxScrollExtent/10;
+    var duration= (20/7.0)*_scrollController.position.maxScrollExtent/10;
     _scrollController.animateTo(
       0,
       duration: Duration(seconds: duration.toInt()),
@@ -130,9 +139,9 @@ class _HomePageState extends State<HomePage> {
     //       curve: Curves.fastOutSlowIn,
     //     )
     // );
-    var drugProvider = Provider.of<CartProvider>(context);
-    var healthProvider = Provider.of<HealthArticleProvider>(context);
-    var adsProvider = Provider.of<AdsProvider>(context);
+    var drugProvider = Provider.of<CartProvider>(context,listen: true);
+    var healthProvider = Provider.of<HealthArticleProvider>(context,listen: true);
+    var adsProvider = Provider.of<AdsProvider>(context,listen: true);
     var pharmacyProvider = Provider.of<PharmacyProvider>(context,listen: true);
     return  Scaffold(
         appBar: AppBar(
@@ -164,10 +173,29 @@ class _HomePageState extends State<HomePage> {
             Container(
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
-                    onPressed: () {
-                      showSearch<Drugs>(
+                    onPressed: () async {
+                      UserLocation location = await Provider.of<PharmacyProvider>(context,listen: false).getCurrentLocation();
+                      await Provider.of<PharmacyProvider>(context,listen: false).fetchNearByHospitals(location);
+                      await Provider.of<HospitalProvider>(context,listen: false).fetchNearByHospitals(location);
+                      await Provider.of<DiagnosticProvider>(context,listen: false).fetchNearByDiagnostic(location);
+                      await Provider.of<ImporterProvider>(context,listen: false).fetchNearByImporters(location);
+                      await Provider.of<LaboratoryProvider>(context,listen: false).fetchNearByLaboratories(location);
+                      await Provider.of<CompanyProvider>(context,listen: false).fetchNearByCompanies(location);
+                      await Provider.of<HomeCareProvider>(context,listen: false).fetchNearByHomeCare(location);
+                      List<HospitalsLabsDiagnostics> hld= [];
+                      hld += PharmacyProvider.nearby;
+                      hld += ImporterProvider.nearby;
+                      hld += PharmacyProvider.trendingDRGS;
+                      hld += HospitalProvider.nearby;
+                      hld += LaboratoryProvider.nearby;
+                      hld += DiagnosticProvider.nearby;
+                      hld += HomeCareProvider.nearby;
+                      hld += CompanyProvider.nearby;
+
+
+                      showSearch<HospitalsLabsDiagnostics>(
                           context: context,
-                          delegate: TrendingSearch(trendings:PharmacyProvider.trendingDRGS));
+                          delegate: TrendingSearch(trendings:hld));
                     },
                     icon: Icon(
                       Icons.search,
@@ -196,7 +224,10 @@ class _HomePageState extends State<HomePage> {
                         //   style: TextStyle(
                         //       fontSize: 40.0, color: myCustomColors.loginBackgroud),
                         // ),
-                        backgroundImage: AssetImage('assets/images/alen_no_name.png'),
+                        backgroundColor: Colors.white,
+                        backgroundImage: AssetImage(
+                            'assets/images/alen_no_name.png',
+                        ),
                       ),
                     ),
                     ListTile(
@@ -398,9 +429,10 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment:
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    Icon(
-                                      MdiIcons.hospital,
-                                      size: 40,
+                                    Image.asset(
+                                      "assets/images/hospital.png",
+                                      width: 60,
+                                      height: 60,
                                       color: myCustomColors.loginBackgroud,
                                     ),
                                     Text(
@@ -428,9 +460,10 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment:
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    Icon(
-                                      MdiIcons.microscope,
-                                      size: 40,
+                                    Image.asset(
+                                      "assets/images/lab.png",
+                                      width: 60,
+                                      height: 60,
                                       color: myCustomColors.loginBackgroud,
                                     ),
                                     Text(
@@ -458,9 +491,10 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment:
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    Icon(
-                                      MdiIcons.import,
-                                      size: 40,
+                                    Image.asset(
+                                      "assets/images/importer.png",
+                                      width: 60,
+                                      height: 60,
                                       color: myCustomColors.loginBackgroud,
                                     ),
                                     Text(
@@ -488,9 +522,10 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment:
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    Icon(
-                                      MdiIcons.pharmacy,
-                                      size: 40,
+                                    Image.asset(
+                                      "assets/images/pharmacy.png",
+                                      width: 60,
+                                      height: 60,
                                       color: myCustomColors.loginBackgroud,
                                     ),
                                     Text(
@@ -528,13 +563,14 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment:
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    Icon(
-                                      MdiIcons.diabetes,
-                                      size: 40,
+                                    Image.asset(
+                                      "assets/images/diagnostic.png",
+                                      width: 60,
+                                      height: 60,
                                       color: myCustomColors.loginBackgroud,
                                     ),
                                     Text(
-                                      "Diagnosises",
+                                      "Diagnostics",
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     )
@@ -558,9 +594,10 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment:
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    Icon(
-                                      MdiIcons.officeBuilding,
-                                      size: 40,
+                                    Image.asset(
+                                      "assets/images/homecare.png",
+                                      width: 60,
+                                      height: 60,
                                       color: myCustomColors.loginBackgroud,
                                     ),
                                     Text(
@@ -588,9 +625,10 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment:
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
-                                    Icon(
-                                      MdiIcons.home,
-                                      size: 40,
+                                    Image.asset(
+                                      "assets/images/company.png",
+                                      width: 60,
+                                      height: 60,
                                       color: myCustomColors.loginBackgroud,
                                     ),
                                     Text(
@@ -838,6 +876,7 @@ class _HomePageState extends State<HomePage> {
                     phone: drugs.pharmacies.phone,
                     imagesList: drugs.pharmacies.image,
                     name: drugs.pharmacies.name,
+                    locationName: drugs.pharmacies.locationName,
                     images: drugs.pharmacies.images,
                     email: drugs.pharmacies.email,
                     id: drugs.pharmacies.Id,
@@ -852,6 +891,7 @@ class _HomePageState extends State<HomePage> {
                     phone: drugs.pharmacies.phone,
                     imagesList: drugs.pharmacies.image,
                     name: drugs.pharmacies.name,
+                    locationName: drugs.pharmacies.locationName,
                     images: drugs.pharmacies.images,
                     email: drugs.pharmacies.email,
                     id: drugs.pharmacies.Id,

@@ -1,4 +1,5 @@
 import 'package:alen/models/laboratory.dart';
+import 'package:alen/providers/pharmacy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -45,7 +46,20 @@ class LaboratoryProvider with ChangeNotifier {
               await servicesList[i]['price'],
               serviceType['service_id']);
           if (category.serviceId == Id) {
-            labServiceTypes.add(category);
+            int temp = 0;
+            if(labServiceTypes.length==0){
+              labServiceTypes.add(category);
+            }else{
+              labServiceTypes.forEach((element) {
+                if(category.id==element.id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                labServiceTypes.add(category);
+              }
+            }
           }
           labServiceTypes.forEach((element) {
             print("Name : " +
@@ -79,14 +93,32 @@ class LaboratoryProvider with ChangeNotifier {
           for (var i = 0; i < docs.docs.length; i++) {
             var data = docs.docs[i].data();
             final Laboratories hos = Laboratories(
-                Id: docs.docs[i].id,
+              type: Type.Lab,
                 name: data['name'],
-                phone: data['phone'],
                 image: data['image'],
+                images: data['images'],
                 latitude: data['location'].latitude,
                 longitude: data['location'].longitude,
-                description: data['description']);
-            laboratories.add(hos);
+                officehours: data['officehours'],
+                phone: data['phone'],
+              locationName: data['location_name'],
+                email: data['email'],
+                description: data['description'],
+                Id: docs.docs[i].id,);
+            int temp = 0;
+            if(laboratories.length==0){
+              laboratories.add(hos);
+            }else{
+              laboratories.forEach((element) {
+                if(hos.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                laboratories.add(hos);
+              }
+            }
           }
         }
         if (nearHospital.length == 0) {
@@ -131,14 +163,32 @@ class LaboratoryProvider with ChangeNotifier {
           for (var i = 0; i < docs.docs.length; i++) {
             var data = docs.docs[i].data();
             final Laboratories lab = Laboratories(
-                Id: docs.docs[i].id,
-                name: data['name'],
-                phone: data['phone'],
-                image: data['image'],
-                latitude: data['location'].latitude,
-                longitude: data['location'].longitude,
-                description: data['description']);
-            laboratories.add(lab);
+              type: Type.Lab,
+              name: data['name'],
+              image: data['image'],
+              images: data['images'],
+              latitude: data['location'].latitude,
+              longitude: data['location'].longitude,
+              officehours: data['officehours'],
+              phone: data['phone'],
+              locationName: data['location_name'],
+              email: data['email'],
+              description: data['description'],
+              Id: docs.docs[i].id,);
+            int temp = 0;
+            if(laboratories.length==0){
+              laboratories.add(lab);
+            }else{
+              laboratories.forEach((element) {
+                if(lab.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                laboratories.add(lab);
+              }
+            }
           }
         }
       }
@@ -193,7 +243,20 @@ class LaboratoryProvider with ChangeNotifier {
               list[i]['image'],
             );
             if (hos.id == id) {
-              labServices.add(hos);
+              int temp = 0;
+              if(labServices.length==0){
+                labServices.add(hos);
+              }else{
+                labServices.forEach((element) {
+                  if(hos.id==element.id)
+                  {
+                    temp++;
+                  }
+                });
+                if(temp==0){
+                  labServices.add(hos);
+                }
+              }
             }
           }
         }

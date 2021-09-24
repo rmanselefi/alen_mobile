@@ -89,6 +89,7 @@ class PharmacySearch extends SearchDelegate<Pharmacies> {
                             imagesList: result.image,
                             name: result.name,
                             images: result.images,
+                            locationName: result.locationName,
                             description:result.description,
                             latitude: result.latitude.toStringAsFixed(3),
                             longtude: result.longitude.toStringAsFixed(3),

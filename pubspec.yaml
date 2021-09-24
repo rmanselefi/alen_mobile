@@ -29,6 +29,7 @@ dependencies:
   font_awesome_flutter: ^9.1.0
   image_picker: ^0.8.2
   material_design_icons_flutter: ^4.0.5955
+  map_launcher: ^2.1.1
   url_launcher:
   firebase_auth:
   firebase_core:

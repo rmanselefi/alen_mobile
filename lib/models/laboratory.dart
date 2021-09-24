@@ -1,4 +1,5 @@
 import 'hospital.dart';
+import 'package:alen/providers/pharmacy.dart';
 
 class Laboratories implements HospitalsLabsDiagnostics{
 
@@ -7,6 +8,8 @@ class Laboratories implements HospitalsLabsDiagnostics{
       {this.Id,
         this.name,
         this.phone,
+        this.type,
+        this.locationName,
         this.createdAt,
         this.latitude,
         this.description,
@@ -64,4 +67,10 @@ class Laboratories implements HospitalsLabsDiagnostics{
 
   @override
   bool trending;
+
+  @override
+  Type type;
+
+  @override
+  String locationName;
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:alen/models/drugs.dart';
 import 'package:alen/models/importer.dart';
 import 'package:alen/providers/drug.dart';
+import 'package:alen/providers/pharmacy.dart';
 import 'package:alen/providers/user_preference.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ class ImporterProvider with ChangeNotifier {
             phone: data['phone'],
             image: data['image'],
             isPharma: false,
+            locationName: data['location_name'],
             latitude: data['location'].latitude,
             longitude: data['location'].longitude,
             officehours: data['officehours'],
@@ -66,6 +68,7 @@ class ImporterProvider with ChangeNotifier {
           for (var i = 0; i < docs.docs.length; i++) {
             var data = docs.docs[i].data();
             final Importers hos = Importers(
+              type: Type.Importer,
                 Id: docs.docs[i].id,
                 name: data['name'],
                 phone: data['phone'],
@@ -74,6 +77,7 @@ class ImporterProvider with ChangeNotifier {
                 longitude: data['location'].longitude,
                 email: data['email'],
                 isPharma: false,
+                locationName: data['location_name'],
                 images: data['images'],
                 officehours: data['officehours'],
                 description: data['description']);
@@ -116,7 +120,20 @@ class ImporterProvider with ChangeNotifier {
             serviceType['image'],
             serviceType['id'],
           );
-          categoriesList.add(category);
+          int temp = 0;
+          if(categoriesList.length==0){
+            categoriesList.add(category);
+          }else{
+            categoriesList.forEach((element) {
+              if(category.id==element.id)
+              {
+                temp++;
+              }
+            });
+            if(temp==0){
+              categoriesList.add(category);
+            }
+          }
           // return categoriesList;
           print("Also here$i");
         }
@@ -178,10 +195,12 @@ class ImporterProvider with ChangeNotifier {
           for (var i = 0; i < docs.docs.length; i++) {
             var data = docs.docs[i].data();
             final Importers hos = Importers(
+                type: Type.Importer,
                 Id: docs.docs[i].id,
                 name: data['name'],
                 phone: data['phone'],
                 image: data['image'],
+                locationName: data['location_name'],
                 latitude: data['location'].latitude,
                 longitude: data['location'].longitude,
                 email: data['email'],
@@ -189,7 +208,20 @@ class ImporterProvider with ChangeNotifier {
                 isPharma: false,
                 officehours: data['officehours'],
                 description: data['description']);
-            hospitals.add(hos);
+            int temp = 0;
+            if(hospitals.length==0){
+              hospitals.add(hos);
+            }else{
+              hospitals.forEach((element) {
+                if(hos.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                hospitals.add(hos);
+              }
+            }
           }
         }
         if (nearHospital.length == 0) {
@@ -238,6 +270,7 @@ class ImporterProvider with ChangeNotifier {
                 name: data['name'],
                 phone: data['phone'],
                 image: data['image'],
+                locationName: data['location_name'],
                 latitude: data['location'].latitude,
                 longitude: data['location'].longitude,
                 email: data['email'],
@@ -245,7 +278,20 @@ class ImporterProvider with ChangeNotifier {
                 isPharma: false,
                 officehours: data['officehours'],
                 description: data['description']);
-            trendingPharmacies.add(hos);
+            int temp = 0;
+            if(trendingPharmacies.length==0){
+              trendingPharmacies.add(hos);
+            }else{
+              trendingPharmacies.forEach((element) {
+                if(hos.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                trendingPharmacies.add(hos);
+              }
+            }
           }
         }
       }
@@ -271,6 +317,7 @@ class ImporterProvider with ChangeNotifier {
             name: data['name'],
             phone: data['phone'],
             image: data['image'],
+            locationName: data['location_name'],
             latitude: data['location'].latitude,
             longitude: data['location'].longitude,
             email: data['email'],

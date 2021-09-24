@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:map_launcher/map_launcher.dart';
 import '../../utils/AppColors.dart';
 
 class HospitalDetail extends StatelessWidget {
@@ -25,6 +25,7 @@ class HospitalDetail extends StatelessWidget {
   String longtude;
   String latitude;
   String email;
+  String locationName;
   List<dynamic> newservices;
   String hospitalId;
 
@@ -33,6 +34,7 @@ class HospitalDetail extends StatelessWidget {
   HospitalDetail(
       {this.name,
       this.title,
+        this.locationName,
       this.description,
       this.image,
       this.services,
@@ -304,7 +306,20 @@ class HospitalDetail extends StatelessWidget {
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   child: IconButton(
-                                    onPressed: (){},
+                                    onPressed: ()async{
+                                      final coords = Coords(
+                                        double.parse(latitude),
+                                        double.parse(longtude),
+                                      );
+                                      final availableMaps = await MapLauncher.installedMaps;
+                                      print(availableMaps); // [AvailableMap { mapName: Google Maps, mapType: google }, ...]
+
+                                      await availableMaps.first.showMarker(
+                                        coords: coords,
+                                        title: name,
+                                        description: description,
+                                      );
+                                    },
                                     icon: Icon(
                                       Icons.location_pin,
                                       color: myCustomColors.loginBackgroud,
@@ -312,7 +327,8 @@ class HospitalDetail extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  "$longtude - $latitude"??"-",
+                                  locationName,
+                                  // "${double.parse(latitude).toStringAsFixed(3)} - ${double.parse(longtude).toStringAsFixed(3)}"??"-",
                                   maxLines: 3,
                                   textAlign: TextAlign.left,
                                   overflow: TextOverflow.ellipsis,

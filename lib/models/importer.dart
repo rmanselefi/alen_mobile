@@ -1,9 +1,13 @@
+import 'package:alen/models/hospital.dart';
 import 'package:alen/models/pharmacy.dart';
+import 'package:alen/providers/pharmacy.dart';
 
-class Importers implements ImportersPharmacies{
+class Importers implements HospitalsLabsDiagnostics , ImportersPharmacies{
 
   Importers(
-      {this.Id,
+      {this.type,
+        this.Id,
+        this.locationName,
         this.name,
         this.phone,
         this.createdAt,
@@ -57,4 +61,22 @@ class Importers implements ImportersPharmacies{
 
   @override
   String phone;
+
+  @override
+  Type type;
+
+  @override
+  DateTime creditedDate;
+
+  @override
+  List services;
+
+  @override
+  String shopCredit;
+
+  @override
+  bool trending;
+
+  @override
+  String locationName;
 }

@@ -98,6 +98,7 @@ class LabSearch extends SearchDelegate<Laboratories> {
                             newservices:result.services,
                             officeHours: result.officehours.toString(),
                             hospitalId: result.Id,
+                            locationName: result.locationName,
                           )));
                 },
                 title: Text(suggestions.elementAt(index).name),

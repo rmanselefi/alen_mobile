@@ -1,4 +1,5 @@
 import 'package:alen/models/company.dart';
+import 'package:alen/providers/pharmacy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -45,7 +46,20 @@ class CompanyProvider with ChangeNotifier {
               await servicesList[i]['price'],
               serviceType['service_id']);
           if (category.serviceId == Id) {
-            labServiceTypes.add(category);
+            int temp = 0;
+            if(labServiceTypes.length==0){
+              labServiceTypes.add(category);
+            }else{
+              labServiceTypes.forEach((element) {
+                if(category.id==element.id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                labServiceTypes.add(category);
+              }
+            }
           }
           labServiceTypes.forEach((element) {
             print("Name : " +
@@ -79,6 +93,7 @@ class CompanyProvider with ChangeNotifier {
           for (var i = 0; i < docs.docs.length; i++) {
             var data = docs.docs[i].data();
             final Company hos = Company(
+              type: Type.Company,
               Id: docs.docs[i].id,
               name: data['name'],
               price: data['price'],
@@ -87,8 +102,9 @@ class CompanyProvider with ChangeNotifier {
               latitude: data['location'].latitude,
               longitude: data['location'].longitude,
               procedureTime: data['procedure_time'],
-              officehours: data['whours'],
+              officehours: data['officehours'],
               phone: data['phone'],
+              locationName: data['location_name'],
               email: data['email'],
               description: data['description'],
               dname: data['dname'],
@@ -125,6 +141,233 @@ class CompanyProvider with ChangeNotifier {
     }
   }
 
+  List<Catalogue> cataloguesList = [];
+
+  Future<List<Catalogue>> getAllCompanyCatalogues() async {
+    FirebaseFirestore fire = FirebaseFirestore.instance;
+    isLoading = true;
+    cataloguesList.clear();
+    var curr;
+    try {
+      var docs = await fire.collection('catalogues').get();
+      if (docs.docs.isNotEmpty) {
+        for (var i = 0; i < docs.docs.length; i++) {
+          var data = docs.docs[i].data();
+          // print("This is my id: ${servicesData}");
+          final Catalogue catalogue = new Catalogue(
+              id:data['id'],
+              description: data['description'],
+              name: data['name'],
+              image: data['image'],
+              typeId: data['type']['id'],
+              typeImage: data['type']['image'],
+              typeName: data['type']['name'],
+              typeDescription: data['type']['description']??"");
+          int temp = 0;
+          int kit = 0;
+          int diag = 0;
+          // if(cataloguesList.length==0){
+          //   cataloguesList.add(catalogue);
+          // }else{
+          cataloguesList.forEach((element) {
+            if(catalogue.id==element.id)
+            {
+              temp++;
+            }
+            if(element.typeId=="4")
+            {
+              kit++;
+            }
+            if(element.typeId=="5")
+            {
+              diag++;
+            }
+          });
+          if(temp==0){
+            if(((catalogue.typeId != "4" || kit==0) && catalogue.typeId == "4")
+                ||((catalogue.typeId != "5" || diag==0) && catalogue.typeId == "5") ||
+                (catalogue.typeId != "1" && catalogue.typeId != "2" && catalogue.typeId != "3")){
+              cataloguesList.add(catalogue);
+            }
+          }
+        }
+      }
+      cataloguesList.forEach((element) {
+        print("Element name:${element.name}");
+      });
+      cataloguesList.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      return cataloguesList;
+    } catch (error) {
+      isLoading = false;
+      print("Problem . . . . . . :$error");
+      return null;
+    }
+  }
+
+  Future<List<Catalogue>> getMyServiceTypes(String hospitalId) async {
+    isLoading = true;
+    cataloguesList.clear();
+    var curr;
+    try {
+      var docs = await FirebaseFirestore.instance
+          .collection('company')
+          .where('id', isEqualTo: hospitalId)
+          .get();
+      if (docs.docs.isNotEmpty) {
+        var data = docs.docs[0].data();
+        var servicesList = data.containsKey('catalogues') ? data['catalogues'] : [];
+        for (var i = 0; i < servicesList.length; i++) {
+          String servicesData = await servicesList[i]['id'];
+          String servicesDescription = await servicesList[i]['description'];
+          print("ServiceTypeId:$servicesData");
+          var document = await FirebaseFirestore.instance
+              .collection('catalogues')
+              .where('id', isEqualTo: servicesData)
+              .get();
+          var serviceType = document.docs.first.data();
+          print("ServiceType:$serviceType");
+          final Catalogue catalogue = new Catalogue(
+            id: serviceType['id'],
+            description: servicesDescription,
+            name : serviceType['name'],
+            image : serviceType['image'],
+            typeDescription: serviceType['type']['description'],
+            typeImage: serviceType['type']['image'],
+            typeId: serviceType['type']['id'],
+            typeName: serviceType['type']['name'],
+          );
+          int temp = 0;
+          int kit = 0;
+          int diag = 0;
+          // if(cataloguesList.length==0){
+          //   cataloguesList.add(catalogue);
+          // }else{
+          cataloguesList.forEach((element) {
+            if(catalogue.id==element.id)
+            {
+              temp++;
+            }
+            if(element.typeId=="4")
+            {
+              kit++;
+            }
+            if(element.typeId=="5")
+            {
+              diag++;
+            }
+          });
+          if(temp==0){
+            if(((catalogue.typeId != "4" || kit==0) && catalogue.typeId == "4")
+                ||((catalogue.typeId != "5" || diag==0) && catalogue.typeId == "5") ||
+                (catalogue.typeId == "1" || catalogue.typeId == "2" || catalogue.typeId == "3")){
+              cataloguesList.add(catalogue);
+            }
+          }
+          // }
+
+        }
+      }
+      cataloguesList.forEach((element) {
+        print("Name : " +
+            element.name +
+            '\nImage : ' +
+            element.image +
+            "\nId : " +
+            element.id);
+      });
+      cataloguesList.toSet();
+      return cataloguesList;
+    } catch (error) {
+      isLoading = false;
+      print("Category . . . . . . :$error");
+      return null;
+    }
+  }
+
+  Future<List<Catalogue>> getMySubServiceTypes(String hospitalId, String SubTypeId) async {
+    isLoading = true;
+    cataloguesList.clear();
+    var curr;
+    try {
+      var docs = await FirebaseFirestore.instance
+          .collection('company')
+          .where('id', isEqualTo: hospitalId)
+          .get();
+      if (docs.docs.isNotEmpty) {
+        var data = docs.docs[0].data();
+        var servicesList = data.containsKey('catalogues') ? data['catalogues'] : [];
+        for (var i = 0; i < servicesList.length; i++) {
+          String servicesData = await servicesList[i]['id'];
+          String servicesDescription = await servicesList[i]['description'];
+          print("ServiceTypeId:$servicesData");
+          var document = await FirebaseFirestore.instance
+              .collection('catalogues')
+              .where('id', isEqualTo: servicesData)
+              .get();
+          var serviceType = document.docs.first.data();
+          print("ServiceType:$serviceType");
+          if(serviceType['type']['id'] == SubTypeId){
+            final Catalogue catalogue = new Catalogue(
+              id: serviceType['id'],
+              description: servicesDescription,
+              name : serviceType['name'],
+              image : serviceType['image'],
+              typeDescription: serviceType['type']['description'],
+              typeImage: serviceType['type']['image'],
+              typeId: serviceType['type']['id'],
+              typeName: serviceType['type']['name'],
+            );
+
+            int temp = 0;
+            int kit = 0;
+            int diag = 0;
+            // if(cataloguesList.length==0){
+            //   cataloguesList.add(catalogue);
+            // }else{
+            cataloguesList.forEach((element) {
+              if(catalogue.id==element.id)
+              {
+                temp++;
+              }
+              if(element.typeId=="4")
+              {
+                kit++;
+              }
+              if(element.typeId=="5")
+              {
+                diag++;
+              }
+            });
+            if(temp==0){
+              if(((catalogue.typeId != "4" || kit==0) && catalogue.typeId == "4")
+                  ||((catalogue.typeId != "5" || diag==0) && catalogue.typeId == "5") ||
+                  (catalogue.typeId != "1" && catalogue.typeId != "2" && catalogue.typeId != "3")){
+                cataloguesList.add(catalogue);
+              }
+            }
+          }
+          // }
+
+        }
+      }
+      cataloguesList.forEach((element) {
+        print("Name : " +
+            element.name +
+            '\nImage : ' +
+            element.image +
+            "\nId : " +
+            element.id);
+      });
+      cataloguesList.toSet();
+      return cataloguesList;
+    } catch (error) {
+      isLoading = false;
+      print("Category . . . . . . :$error");
+      return null;
+    }
+  }
+
+
   Future<List<Company>> fetchTrendingCompanies() async {
     isLoading = true;
     diagnosises.clear();
@@ -143,16 +386,30 @@ class CompanyProvider with ChangeNotifier {
               price: data['price'],
               image: data['image'],
               images: data['images'],
+              locationName: data['location_name'],
               latitude: data['location'].latitude,
               longitude: data['location'].longitude,
               procedureTime: data['procedure_time'],
-              officehours: data['whours'],
+              officehours: data['officehours'],
               phone: data['phone'],
               email: data['email'],
               description: data['description'],
               dname: data['dname'],
             );
-            diagnosises.add(diagnosis);
+            int temp = 0;
+            if(diagnosises.length==0){
+              diagnosises.add(diagnosis);
+            }else{
+              diagnosises.forEach((element) {
+                if(diagnosis.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                diagnosises.add(diagnosis);
+              }
+            }
           }
         }
       }
@@ -207,7 +464,20 @@ class CompanyProvider with ChangeNotifier {
               list[i]['image'],
             );
             if (hos.id == id) {
-              diagnosisServices.add(hos);
+              int temp = 0;
+              if(diagnosisServices.length==0){
+                diagnosisServices.add(hos);
+              }else{
+                diagnosisServices.forEach((element) {
+                  if(hos.id==element.id)
+                  {
+                    temp++;
+                  }
+                });
+                if(temp==0){
+                  diagnosisServices.add(hos);
+                }
+              }
             }
           }
         }
@@ -283,6 +553,64 @@ class CompanyProvider with ChangeNotifier {
       isLoading = false;
       print("Problem . . . . . . :$error");
       return diagnosisServices;
+    }
+  }
+  List<HLDServiceTypes> hospServicestypes = [];
+  Future<List<HLDServiceTypes>> getMyCataloguesTypes(String id) async {
+    isLoading = true;
+    hospServicestypes.clear();
+    var curr;
+    try {
+      var docs = await FirebaseFirestore.instance
+          .collection('company_services')
+          .where('company_id', isEqualTo: id)
+          .get();
+      if (docs.docs.isNotEmpty) {
+        for (var i = 0; i < docs.docs.length; i++) {
+          var data = docs.docs[i].data();
+          HLDServiceTypes hldServiceTypes =  new HLDServiceTypes(
+            docs.docs[i].id,
+            data['description'],
+            data['catalogue'],
+            data['image'],
+            data['catalogue'],
+            data['company_id'],
+          );
+          int temp = 0;
+          if(hospServicestypes.length==0){
+            hospServicestypes.add(hldServiceTypes);
+          }else{
+            hospServicestypes.forEach((element) {
+              if(hldServiceTypes.id==element.id)
+              {
+                temp++;
+              }
+            });
+            if(temp==0){
+              hospServicestypes.add(hldServiceTypes);
+            }
+          }
+        }
+        hospServicestypes.forEach((element) {
+          print("Name : " +
+              element.name +
+              '\nImage : ' +
+              element.image +
+              '\nCatalogue : ' +
+              element.price +
+              '\nHomeCareId : ' +
+              element.id +
+              "\nId : " +
+              element.serviceId);
+        });
+      }
+
+      hospServicestypes.toSet();
+      return hospServicestypes;
+    } catch (error) {
+      isLoading = false;
+      print("Category . . . . . . :$error");
+      return null;
     }
   }
 }

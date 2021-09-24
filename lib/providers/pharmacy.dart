@@ -6,6 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../models/user_location.dart';
 
+enum Type{
+  Hospital,
+  Pharmacy,
+  Lab,
+  Diagnosis,
+  Trending,
+  HomeCare,
+  Company,
+  Importer
+}
 class PharmacyProvider with ChangeNotifier {
   List<Pharmacies> hospitals = [];
   List<Pharmacies> nearHospital = [];
@@ -29,6 +39,7 @@ class PharmacyProvider with ChangeNotifier {
           for (var i = 0; i < docs.docs.length; i++) {
             var data = docs.docs[i].data();
             final Pharmacies hos = Pharmacies(
+              type: Type.Pharmacy,
                 Id: docs.docs[i].id,
                 name: data['name'],
                 phone: data['phone'],
@@ -37,9 +48,23 @@ class PharmacyProvider with ChangeNotifier {
                 longitude: data['location'].longitude,
                 email: data['email'],
                 images: data['images'],
+                locationName: data['location_name'],
                 isPharma: true,
                 description: data['description']);
-            hospitals.add(hos);
+            int temp = 0;
+            if(hospitals.length==0){
+              hospitals.add(hos);
+            }else{
+              hospitals.forEach((element) {
+                if(hos.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                hospitals.add(hos);
+              }
+            }
           }
         }
         if (nearHospital.length == 0) {
@@ -89,12 +114,6 @@ class PharmacyProvider with ChangeNotifier {
           bool trending = await servicesList[i]['trending'];
           String importer = await servicesList[i]['importer_id'];
           ImportersPharmacies impoters = await getImporterById(importer);
-          // print("Service data : ($servicesData)");
-          // print("Price : ($price)");
-          // print("Quantity : ($quantity)");
-          // print("Trending : ($trending)");
-          // print("Importer: (${impoters.toString()})");
-          // print("This is my id: ${servicesData}");
           var document = await fire
               .collection('all_drugs')
               .where('id', isEqualTo: servicesData)
@@ -103,6 +122,7 @@ class PharmacyProvider with ChangeNotifier {
 
           print("Service type:"+serviceType.toString());
             final Drugs drug = Drugs(
+                type: Type.Importer,
                 id: serviceType['id'],
                 name: serviceType['name'],
                 quantity: quantity,
@@ -116,19 +136,31 @@ class PharmacyProvider with ChangeNotifier {
                 category: serviceType.containsKey('category')
                     ? serviceType['category']['name']
                     : '',
+                description: serviceType.containsKey('category')
+                    ? serviceType['category']['name']
+                    : '',
                 category_image: serviceType.containsKey('category')
                     ? serviceType['category']['image']
                     : '',
                 price: price ?? "0",
                 pharmacies: impoters,
                 trending: trending);
+          int temp = 0;
+          if(trendingDrugs.length==0){
             trendingDrugs.add(drug);
-          // return categoriesList;
-          // print("Also here$i");
+          }else{
+            trendingDrugs.forEach((element) {
+              if(drug.id==element.id)
+              {
+                temp++;
+              }
+            });
+            if(temp==0){
+              trendingDrugs.add(drug);
+            }
+          }
         }
-        // print("none here either");
       }
-      // print("------------------Importer done-----------------");
 
       docs =
       await fire.collection('pharmacy_drug').where('trending', isEqualTo: true).get();
@@ -144,12 +176,6 @@ class PharmacyProvider with ChangeNotifier {
           bool trending = await servicesList[i]['trending'];
           String pharmacy = await servicesList[i]['pharmacy_id'];
           ImportersPharmacies phar = await getPharmacyById(pharmacy);
-          // print("Service data : ($servicesData)");
-          // print("Price : ($price)");
-          // print("Quantity : ($quantity)");
-          // print("Trending : ($trending)");
-          // print("Importer: (${phar.toString()})");
-          // // print("This is my id: ${servicesData}");
           var document = await fire
               .collection('all_drugs')
               .where('id', isEqualTo: servicesData)
@@ -158,6 +184,7 @@ class PharmacyProvider with ChangeNotifier {
 
           print("Service type:"+serviceType.toString());
           final Drugs drug = Drugs(
+              type: Type.Pharmacy,
               id: serviceType['id'],
               itemId: servicesData,
               name: serviceType['name'],
@@ -174,10 +201,26 @@ class PharmacyProvider with ChangeNotifier {
               category_image: serviceType.containsKey('category')
                   ? serviceType['category']['image']
                   : '',
+              description: serviceType.containsKey('category')
+                  ? serviceType['category']['name']
+                  : '',
               price: price ?? "0",
               pharmacies: phar,
               trending: trending);
-          trendingDrugs.add(drug);
+          int temp = 0;
+          if(trendingDrugs.length==0){
+            trendingDrugs.add(drug);
+          }else{
+            trendingDrugs.forEach((element) {
+              if(drug.id==element.id)
+              {
+                temp++;
+              }
+            });
+            if(temp==0){
+              trendingDrugs.add(drug);
+            }
+          }
           // return categoriesList;
           print("Also here$i");
         }
@@ -234,7 +277,20 @@ class PharmacyProvider with ChangeNotifier {
                 images: data['images'],
                 isPharma: true,
                 description: data['description']);
-            trendingPharmacies.add(hos);
+            int temp = 0;
+            if(trendingPharmacies.length==0){
+              trendingPharmacies.add(hos);
+            }else{
+              trendingPharmacies.forEach((element) {
+                if(hos.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                trendingPharmacies.add(hos);
+              }
+            }
           }
         }
       }
@@ -260,6 +316,7 @@ class PharmacyProvider with ChangeNotifier {
             name: data['name'],
             phone: data['phone'],
             image: data['image'],
+            locationName: data['location_name'],
             latitude: data['location'].latitude,
             longitude: data['location'].longitude,
             officehours: data['officehours'],
@@ -292,6 +349,7 @@ class PharmacyProvider with ChangeNotifier {
             latitude: data['location'].latitude,
             longitude: data['location'].longitude,
             email: data['email'],
+            locationName: data['location_name'],
             images: data['images'],
             officehours: data['officehours'],
             isPharma: false,

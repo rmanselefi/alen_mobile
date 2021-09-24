@@ -90,6 +90,7 @@ class CompanySearch extends SearchDelegate<Company> {
                             longtude: result.longitude.toStringAsFixed(3),
                             email: result.email,
                             name: result.name,
+                            locationName: result.locationName,
                             description: result.description,
                             location: result.latitude.toString(),
                             services: result.services,

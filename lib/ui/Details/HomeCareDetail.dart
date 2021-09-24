@@ -1,12 +1,14 @@
 import 'package:alen/providers/HomeCare.dart';
 import 'package:alen/providers/hospital.dart';
 import 'package:alen/ui/Details/DetailForService.dart';
+import 'package:alen/ui/Details/NormalDetail.dart';
 import 'package:alen/ui/ListInCategoryService/ListInService.dart';
 import 'package:alen/ui/Models/Services.dart';
 import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllServices.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -27,6 +29,7 @@ class HomeCareDetail extends StatelessWidget {
   String longtude;
   String latitude;
   String email;
+  String locationName;
   List<dynamic> newservices;
   String hospitalId;
 
@@ -37,6 +40,7 @@ class HomeCareDetail extends StatelessWidget {
         this.title,
         this.description,
         this.image,
+        this.locationName,
         this.services,
         this.info,
         this.images,
@@ -50,7 +54,6 @@ class HomeCareDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
     // final PageController controller = PageController(initialPage: 0);
-    var hosProvider = Provider.of<HospitalProvider>(context, listen: false);
     var homeCareProvider = Provider.of<HomeCareProvider>(context, listen: false);
     // final names = services.map((e) => e['name']).toSet();
     // services.retainWhere((x) => names.remove(x['name']));
@@ -117,70 +120,7 @@ class HomeCareDetail extends StatelessWidget {
                           }
                         }),
                     Container(
-                      margin: EdgeInsets.fromLTRB(
-                          MediaQuery.of(context).size.width * 0.03,
-                          30,
-                          MediaQuery.of(context).size.width * 0.03,
-                          5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Home Cares',
-                            textScaleFactor: 1.5,
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                    FutureBuilder<List<HLDServices>>(
-                        future: hosProvider
-                            .getHospServicesByHospitalId(hospitalId),
-                        builder: (context, hospServSnapshot) {
-                          if (hospServSnapshot.connectionState ==
-                              ConnectionState.none &&
-                              hospServSnapshot.hasData == null) {
-                            return Container(
-                              height: 110,
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          }
-                          print(
-                              'project snapshot data is: ${hospServSnapshot.data}');
-                          if (hospServSnapshot.data == null) {
-                            return Container(
-                              height: 110,
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          } else {
-                            return Container(
-                                height: 110.0,
-                                margin: EdgeInsets.fromLTRB(
-                                    MediaQuery.of(context).size.width *
-                                        0.07,
-                                    5,
-                                    MediaQuery.of(context).size.width *
-                                        0.07,
-                                    30),
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder:
-                                      (BuildContext ctxt, int index) {
-                                    return _buildHopitalServicesListItem(
-                                        hospServSnapshot.data[index], ctxt);
-                                  },
-                                  itemCount: hospServSnapshot.data.length,
-                                ));
-                          }
-                        }),
-                    Container(
-                        padding: EdgeInsets.only(top: 10, bottom: 30),
+                        padding: EdgeInsets.only(top: 30, bottom: 10),
                         width: MediaQuery.of(context).size.width,
                         child: Center(
                             child: Text(
@@ -192,7 +132,7 @@ class HomeCareDetail extends StatelessWidget {
                             ))),
                     Container(
                         padding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 40),
                         width: MediaQuery.of(context).size.width,
                         child: Center(
                           child: Text(
@@ -307,7 +247,20 @@ class HomeCareDetail extends StatelessWidget {
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   child: IconButton(
-                                    onPressed: (){},
+                                    onPressed: ()async{
+                                      final coords = Coords(
+                                        double.parse(latitude),
+                                        double.parse(longtude),
+                                      );
+                                      final availableMaps = await MapLauncher.installedMaps;
+                                      print(availableMaps); // [AvailableMap { mapName: Google Maps, mapType: google }, ...]
+
+                                      await availableMaps.first.showMarker(
+                                        coords: coords,
+                                        title: name,
+                                        description: description,
+                                      );
+                                    },
                                     icon: Icon(
                                       Icons.location_pin,
                                       color: myCustomColors.loginBackgroud,
@@ -315,7 +268,8 @@ class HomeCareDetail extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  "$longtude - $latitude"??"-",
+                                  locationName,
+                                  // "${double.parse(latitude).toStringAsFixed(3)} - ${double.parse(longtude).toStringAsFixed(3)}"??"-",
                                   maxLines: 3,
                                   textAlign: TextAlign.left,
                                   overflow: TextOverflow.ellipsis,
@@ -351,14 +305,12 @@ class HomeCareDetail extends StatelessWidget {
           Navigator.push(
               ctxt,
               MaterialPageRoute(
-                  builder: (context) => DetailsForService(
+                  builder: (context) => NormalDetail(
                     name: hospitalServices.name,
                     imageUrl: hospitalServices.image,
-                    description: hospitalServices.detail,
-                    services: [],
-                    id: hospitalServices.id,
-                    role: Roles.HomeCare,
-                  )));
+                    description: hospitalServices.description,
+                    homeCareId: hospitalServices.serviceId,
+                    serviceId: hospitalServices.id,)));
         },
         child: Card(
             elevation: 0,

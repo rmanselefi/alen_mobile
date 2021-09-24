@@ -1,6 +1,7 @@
 import 'package:alen/models/hospital.dart';
+import 'package:alen/providers/pharmacy.dart';
 
-class Pharmacies implements ImportersPharmacies{
+class Pharmacies implements HospitalsLabsDiagnostics , ImportersPharmacies{
   @override
   String Id;
 
@@ -9,6 +10,9 @@ class Pharmacies implements ImportersPharmacies{
 
   @override
   String description;
+
+  @override
+  String locationName;
 
   @override
   double distance;
@@ -39,10 +43,11 @@ class Pharmacies implements ImportersPharmacies{
   String phone;
 
   Pharmacies(
-      {this.Id,
+      {this.type,this.Id,
         this.createdAt,
         this.description,
         this.distance,
+        this.locationName,
         this.email,
         this.image,
         this.images,
@@ -54,13 +59,30 @@ class Pharmacies implements ImportersPharmacies{
 
   @override
   bool isPharma;
+
+  @override
+  Type type;
+
+  @override
+  DateTime creditedDate;
+
+  @override
+  List services;
+
+  @override
+  String shopCredit;
+
+  @override
+  bool trending;
 }
 abstract class ImportersPharmacies{
+  Type type;
   String Id;
   String name;
   double latitude;
   double longitude;
   String phone;
+  String locationName;
   String description;
   double distance;
   String image;
@@ -71,6 +93,7 @@ abstract class ImportersPharmacies{
   String email;
 
   ImportersPharmacies(
+      this.type,
       this.Id,
       this.name,
       this.latitude,
@@ -78,6 +101,7 @@ abstract class ImportersPharmacies{
       this.phone,
       this.description,
       this.distance,
+  this.locationName,
       this.image,
       this.officehours,
       this.createdAt,

@@ -27,7 +27,20 @@ class AdsProvider with ChangeNotifier {
                 description: data['description'],
               size: Size.Small
             );
-            smallAds.add(hos);
+            int temp2 = 0;
+            if(smallAds.length==0){
+              smallAds.add(hos);
+            }else{
+              smallAds.forEach((element) {
+                if(hos.title==element.title)
+                {
+                  temp2++;
+                }
+              });
+              if(temp2==0){
+                smallAds.add(hos);
+              }
+            }
           }
         }
       }
@@ -57,7 +70,20 @@ class AdsProvider with ChangeNotifier {
                 description: data['description'],
                 size: Size.Main
             );
-            mainAds.add(hos);
+            int temp2 = 0;
+            if(mainAds.length==0){
+              mainAds.add(hos);
+            }else{
+              mainAds.forEach((element) {
+                if(hos.title==element.title)
+                {
+                  temp2++;
+                }
+              });
+              if(temp2==0){
+                mainAds.add(hos);
+              }
+            }
           }
         }
       }

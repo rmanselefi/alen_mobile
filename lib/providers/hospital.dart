@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../models/user_location.dart';
+import 'package:alen/providers/pharmacy.dart';
 
 class HospitalProvider with ChangeNotifier {
   List<Hospitals> hospitals = [];
@@ -42,7 +43,20 @@ class HospitalProvider with ChangeNotifier {
               await servicesList[i]['price'],
               serviceType['service_id']);
           if (category.serviceId == Id) {
-            hospServicestypes.add(category);
+            int temp = 0;
+            if(hospServicestypes.length==0){
+              hospServicestypes.add(category);
+            }else{
+              hospServicestypes.forEach((element) {
+                if(category.id==element.id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                hospServicestypes.add(category);
+              }
+            }
           }
           hospServicestypes.forEach((element) {
             print("Name : " +
@@ -77,8 +91,10 @@ class HospitalProvider with ChangeNotifier {
           for (var i = 0; i < docs.docs.length; i++) {
             var data = docs.docs[i].data();
             final Hospitals hos = Hospitals(
+                type: Type.Hospital,
                 Id: docs.docs[i].id,
                 name: data['name'],
+                locationName: data['location_name'],
                 phone: data['phone'],
                 image: data['image'],
                 latitude: data['location'].latitude,
@@ -89,7 +105,20 @@ class HospitalProvider with ChangeNotifier {
                 email: data['email'],
                 images: data['images']
             );
-            hospitals.add(hos);
+            int temp = 0;
+            if(hospitals.length==0){
+              hospitals.add(hos);
+            }else{
+              hospitals.forEach((element) {
+                if(hos.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                hospitals.add(hos);
+              }
+            }
           }
         }
         if (nearHospital.length == 0) {
@@ -140,11 +169,25 @@ class HospitalProvider with ChangeNotifier {
                 longitude: data['location'].longitude,
                 description: data['description'],
                 services: data['services'],
+                locationName: data['location_name'],
                 email: data['email'],
                 officehours: data['officehours'],
                 images: data['images']
             );
-            trendingHospital.add(hos);
+            int temp = 0;
+            if(trendingHospital.length==0){
+              trendingHospital.add(hos);
+            }else{
+              trendingHospital.forEach((element) {
+                if(hos.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                trendingHospital.add(hos);
+              }
+            }
           }
         }
       }
@@ -216,7 +259,20 @@ class HospitalProvider with ChangeNotifier {
               list[i]['image'],
             );
             if (hos.id == id) {
-              hospServices.add(hos);
+              int temp = 0;
+              if(hospServices.length==0){
+                hospServices.add(hos);
+              }else{
+                hospServices.forEach((element) {
+                  if(hos.id==element.id)
+                  {
+                    temp++;
+                  }
+                });
+                if(temp==0){
+                  hospServices.add(hos);
+                }
+              }
             }
           }
         }
@@ -269,7 +325,20 @@ class HospitalProvider with ChangeNotifier {
           print(i);
           final HLDServices category = new HLDServices(service['description'],
               service['id'], service['image'], service['name']);
-          hospServices.add(category);
+          int temp = 0;
+          if(hospServices.length==0){
+            hospServices.add(category);
+          }else{
+            hospServices.forEach((element) {
+              if(category.id==element.id)
+              {
+                temp++;
+              }
+            });
+            if(temp==0){
+              hospServices.add(category);
+            }
+          }
           return hospServices;
           print("Also here$i");
         }

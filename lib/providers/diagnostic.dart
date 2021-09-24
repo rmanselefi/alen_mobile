@@ -1,4 +1,5 @@
 import 'package:alen/models/diagnostic.dart';
+import 'package:alen/providers/pharmacy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -45,7 +46,20 @@ class DiagnosticProvider with ChangeNotifier {
               await servicesList[i]['price'],
               serviceType['service_id']);
           if (category.serviceId == Id) {
-            labServiceTypes.add(category);
+            int temp = 0;
+            if(labServiceTypes.length==0){
+              labServiceTypes.add(category);
+            }else{
+              labServiceTypes.forEach((element) {
+                if(category.id==element.id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                labServiceTypes.add(category);
+              }
+            }
           }
           labServiceTypes.forEach((element) {
             print("Name : " +
@@ -79,10 +93,12 @@ class DiagnosticProvider with ChangeNotifier {
           for (var i = 0; i < docs.docs.length; i++) {
             var data = docs.docs[i].data();
             final Diagnostics hos = Diagnostics(
+              type: Type.Diagnosis,
                 Id: docs.docs[i].id,
                 name: data['name'],
                 price: data['price'],
                 image: data['image'],
+              locationName: data['location_name'],
                 images: data['images'],
                 latitude: data['location'].latitude,
                 longitude: data['location'].longitude,
@@ -93,7 +109,20 @@ class DiagnosticProvider with ChangeNotifier {
                 description: data['description'],
                 dname: data['dname'],
             );
-            diagnosises.add(hos);
+            int temp = 0;
+            if(diagnosises.length==0){
+              diagnosises.add(hos);
+            }else{
+              diagnosises.forEach((element) {
+                if(hos.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                diagnosises.add(hos);
+              }
+            }
           }
         }
         if (nearHospital.length == 0) {
@@ -140,6 +169,7 @@ class DiagnosticProvider with ChangeNotifier {
             final Diagnostics diagnosis = Diagnostics(
               Id: docs.docs[i].id,
               name: data['name'],
+              locationName: data['location_name'],
               price: data['price'],
               image: data['image'],
               images: data['images'],
@@ -152,7 +182,20 @@ class DiagnosticProvider with ChangeNotifier {
               description: data['description'],
               dname: data['dname'],
             );
-            diagnosises.add(diagnosis);
+            int temp = 0;
+            if(diagnosises.length==0){
+              diagnosises.add(diagnosis);
+            }else{
+              diagnosises.forEach((element) {
+                if(diagnosis.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                diagnosises.add(diagnosis);
+              }
+            }
           }
         }
       }
@@ -207,7 +250,20 @@ class DiagnosticProvider with ChangeNotifier {
               list[i]['image'],
             );
             if (hos.id == id) {
-              diagnosisServices.add(hos);
+              int temp = 0;
+              if(diagnosisServices.length==0){
+                diagnosisServices.add(hos);
+              }else{
+                diagnosisServices.forEach((element) {
+                  if(hos.id==element.id)
+                  {
+                    temp++;
+                  }
+                });
+                if(temp==0){
+                  diagnosisServices.add(hos);
+                }
+              }
             }
           }
         }

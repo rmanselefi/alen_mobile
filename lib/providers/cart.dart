@@ -46,7 +46,20 @@ class CartProvider with ChangeNotifier {
           );
           var temporary = amount*num.parse(drug.price);
           totalPrice+=temporary;
-          cartItems.add(cart);
+          int temp2 = 0;
+          if(cartItems.length==0){
+            cartItems.add(cart);
+          }else{
+            cartItems.forEach((element) {
+              if(cart.id==element.id)
+              {
+                temp2++;
+              }
+            });
+            if(temp2==0){
+              cartItems.add(cart);
+            }
+          }
 
           print("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa(${cart.drug.name})(${cart.id})(${cart.amount})");
         print("none here either");
@@ -109,7 +122,20 @@ class CartProvider with ChangeNotifier {
           );
           var temporary = amount*num.parse(drug.price);
           totalPrice+=temporary;
-          cartItems.add(cart);
+          int temp2 = 0;
+          if(cartItems.length==0){
+            cartItems.add(cart);
+          }else{
+            cartItems.forEach((element) {
+              if(cart.id==element.id)
+              {
+                temp2++;
+              }
+            });
+            if(temp2==0){
+              cartItems.add(cart);
+            }
+          }
 
           print("Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa(${cart.drug.name})(${cart.id})(${cart.amount})");
           print("none here either");

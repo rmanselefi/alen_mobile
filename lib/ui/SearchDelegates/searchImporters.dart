@@ -93,6 +93,7 @@ class ImporterSearch extends SearchDelegate<Importers> {
                             latitude: result.latitude.toStringAsFixed(3),
                             longtude: result.longitude.toStringAsFixed(3),
                             email: result.email,
+                            locationName: result.locationName,
                             officeHours: result.officehours,
                           )));
                 },

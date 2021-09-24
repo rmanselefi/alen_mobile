@@ -1,10 +1,12 @@
-import 'package:alen/ui/Services/HospitalServices.dart';
+import 'package:alen/providers/pharmacy.dart';
 
 class Hospitals implements HospitalsLabsDiagnostics{
 
 
   Hospitals(
       {this.Id,
+        this.type,
+        this.locationName,
         this.name,
         this.phone,
         this.createdAt,
@@ -62,6 +64,12 @@ class Hospitals implements HospitalsLabsDiagnostics{
 
   @override
   bool trending;
+
+  @override
+  Type type;
+
+  @override
+  String locationName;
 }
 
 abstract class HospitalsLabsDiagnostics{
@@ -81,10 +89,13 @@ abstract class HospitalsLabsDiagnostics{
   List<dynamic> images;
   DateTime creditedDate;
   String shopCredit;
+  String locationName;
+  Type type;
 
   HospitalsLabsDiagnostics(
       this.email,
       this.Id,
+  this.locationName,
       this.name,
       this.latitude,
       this.longitude,
@@ -98,5 +109,6 @@ abstract class HospitalsLabsDiagnostics{
       this.services,
       this.images,
       this.creditedDate,
+      this.type,
       this.shopCredit);
 }

@@ -94,6 +94,7 @@ class HomeCareSearch extends SearchDelegate<HomeCare> {
                             location: result.latitude.toString(),
                             services: result.services,
                             newservices:result.services,
+                            locationName:result.locationName,
                             officeHours: result.officehours.toString(),
                             hospitalId: result.Id,
                           )));

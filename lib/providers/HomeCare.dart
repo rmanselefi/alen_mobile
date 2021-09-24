@@ -1,5 +1,6 @@
 import 'package:alen/models/company.dart';
 import 'package:alen/models/homeCare.dart';
+import 'package:alen/providers/pharmacy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -46,7 +47,20 @@ class HomeCareProvider with ChangeNotifier {
               await servicesList[i]['price'],
               serviceType['service_id']);
           if (category.serviceId == Id) {
-            labServiceTypes.add(category);
+            int temp = 0;
+            if(labServiceTypes.length==0){
+              labServiceTypes.add(category);
+            }else{
+              labServiceTypes.forEach((element) {
+                if(category.id==element.id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                labServiceTypes.add(category);
+              }
+            }
           }
           labServiceTypes.forEach((element) {
             print("Name : " +
@@ -80,21 +94,36 @@ class HomeCareProvider with ChangeNotifier {
           for (var i = 0; i < docs.docs.length; i++) {
             var data = docs.docs[i].data();
             final HomeCare hos = HomeCare(
+              type: Type.HomeCare,
               Id: docs.docs[i].id,
               name: data['name'],
               price: data['price'],
               image: data['image'],
               images: data['images'],
+              locationName: data['location_name'],
               latitude: data['location'].latitude,
               longitude: data['location'].longitude,
               procedureTime: data['procedure_time'],
-              officehours: data['whours'],
+              officehours: data['officehours'],
               phone: data['phone'],
               email: data['email'],
               description: data['description'],
               dname: data['dname'],
             );
-            diagnosises.add(hos);
+            int temp = 0;
+            if(diagnosises.length==0){
+              diagnosises.add(hos);
+            }else{
+              diagnosises.forEach((element) {
+                if(hos.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                diagnosises.add(hos);
+              }
+            }
           }
         }
         if (nearHospital.length == 0) {
@@ -142,18 +171,32 @@ class HomeCareProvider with ChangeNotifier {
               Id: docs.docs[i].id,
               name: data['name'],
               price: data['price'],
+              locationName: data['location_name'],
               image: data['image'],
               images: data['images'],
               latitude: data['location'].latitude,
               longitude: data['location'].longitude,
               procedureTime: data['procedure_time'],
-              officehours: data['whours'],
+              officehours: data['officehours'],
               phone: data['phone'],
               email: data['email'],
               description: data['description'],
               dname: data['dname'],
             );
-            diagnosises.add(diagnosis);
+            int temp = 0;
+            if(diagnosises.length==0){
+              diagnosises.add(diagnosis);
+            }else{
+              diagnosises.forEach((element) {
+                if(diagnosis.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                diagnosises.add(diagnosis);
+              }
+            }
           }
         }
       }
@@ -208,7 +251,20 @@ class HomeCareProvider with ChangeNotifier {
               list[i]['image'],
             );
             if (hos.id == id) {
-              diagnosisServices.add(hos);
+              int temp = 0;
+              if(diagnosisServices.length==0){
+                diagnosisServices.add(hos);
+              }else{
+                hospServicestypes.forEach((element) {
+                  if(hos.id==element.id)
+                  {
+                    temp++;
+                  }
+                });
+                if(temp==0){
+                  diagnosisServices.add(hos);
+                }
+              }
             }
           }
         }
@@ -273,7 +329,20 @@ class HomeCareProvider with ChangeNotifier {
           var service = serviceDocument.docs.first.data();
           final HLDServices category = new HLDServices(service['description'],
               service['id'], service['image'], service['name']);
-          diagnosisServices.add(category);
+          int temp = 0;
+          if(diagnosisServices.length==0){
+            diagnosisServices.add(category);
+          }else{
+            diagnosisServices.forEach((element) {
+              if(category.id==element.id)
+              {
+                temp++;
+              }
+            });
+            if(temp==0){
+              diagnosisServices.add(category);
+            }
+          }
           return diagnosisServices;
           print("Also here$i");
         }
@@ -284,6 +353,64 @@ class HomeCareProvider with ChangeNotifier {
       isLoading = false;
       print("Problem . . . . . . :$error");
       return diagnosisServices;
+    }
+  }
+  List<HLDServiceTypes> hospServicestypes = [];
+  Future<List<HLDServiceTypes>> getMyCataloguesTypes(String id) async {
+    isLoading = true;
+    hospServicestypes.clear();
+    var curr;
+    try {
+      var docs = await FirebaseFirestore.instance
+          .collection('home_care_services')
+          .where('home_care_id', isEqualTo: id)
+          .get();
+      if (docs.docs.isNotEmpty) {
+        for (var i = 0; i < docs.docs.length; i++) {
+          var data = docs.docs[i].data();
+          HLDServiceTypes hldServiceTypes =  new HLDServiceTypes(
+            docs.docs[i].id,
+            data['description'],
+            data['name'],
+            data['image'],
+            data['name'],
+            data['home_care_id'],
+          );
+          int temp = 0;
+          if(hospServicestypes.length==0){
+            hospServicestypes.add(hldServiceTypes);
+          }else{
+            hospServicestypes.forEach((element) {
+              if(hldServiceTypes.id==element.id)
+              {
+                temp++;
+              }
+            });
+            if(temp==0){
+              hospServicestypes.add(hldServiceTypes);
+            }
+          }
+        }
+        hospServicestypes.forEach((element) {
+          print("Name : " +
+              element.name +
+              '\nImage : ' +
+              element.image +
+              '\nCatalogue : ' +
+              element.price +
+              '\nHomeCareId : ' +
+              element.id +
+              "\nId : " +
+              element.serviceId);
+        });
+      }
+
+      hospServicestypes.toSet();
+      return hospServicestypes;
+    } catch (error) {
+      isLoading = false;
+      print("Category . . . . . . :$error");
+      return null;
     }
   }
 }

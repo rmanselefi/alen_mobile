@@ -1,12 +1,15 @@
+import 'package:alen/models/company.dart';
 import 'package:alen/providers/company.dart';
 import 'package:alen/providers/hospital.dart';
 import 'package:alen/ui/Details/DetailForService.dart';
+import 'package:alen/ui/Details/catalogueDetail.dart';
 import 'package:alen/ui/ListInCategoryService/ListInService.dart';
 import 'package:alen/ui/Models/Services.dart';
 import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllServices.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -29,12 +32,14 @@ class CompanyDetail extends StatelessWidget {
   String email;
   List<dynamic> newservices;
   String hospitalId;
+  String locationName;
 
   static const myCustomColors = AppColors();
 
   CompanyDetail(
       {this.name,
         this.title,
+        this.locationName,
         this.description,
         this.image,
         this.services,
@@ -123,21 +128,21 @@ class CompanyDetail extends StatelessWidget {
                           MediaQuery.of(context).size.width * 0.03,
                           5),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            'Companies',
+                            'Catalogues',
                             textScaleFactor: 1.5,
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
                     ),
-                    FutureBuilder<List<HLDServices>>(
-                        future: hosProvider
-                            .getHospServicesByHospitalId(hospitalId),
+                    FutureBuilder<List<Catalogue>>(
+                        future: companyProvider.getMyServiceTypes(hospitalId),
                         builder: (context, hospServSnapshot) {
                           if (hospServSnapshot.connectionState ==
                               ConnectionState.none &&
@@ -172,8 +177,11 @@ class CompanyDetail extends StatelessWidget {
                                   scrollDirection: Axis.horizontal,
                                   itemBuilder:
                                       (BuildContext ctxt, int index) {
+                                    print(hospServSnapshot.data[index]);
                                     return _buildHopitalServicesListItem(
-                                        hospServSnapshot.data[index], ctxt);
+                                        hospServSnapshot.data[index],
+                                        ctxt,
+                                        hospitalId);
                                   },
                                   itemCount: hospServSnapshot.data.length,
                                 ));
@@ -307,7 +315,20 @@ class CompanyDetail extends StatelessWidget {
                                 Container(
                                   alignment: Alignment.centerLeft,
                                   child: IconButton(
-                                    onPressed: (){},
+                                    onPressed: ()async{
+                                      final coords = Coords(
+                                        double.parse(latitude),
+                                        double.parse(longtude),
+                                      );
+                                      final availableMaps = await MapLauncher.installedMaps;
+                                      print(availableMaps); // [AvailableMap { mapName: Google Maps, mapType: google }, ...]
+
+                                      await availableMaps.first.showMarker(
+                                        coords: coords,
+                                        title: name,
+                                        description: description,
+                                      );
+                                    },
                                     icon: Icon(
                                       Icons.location_pin,
                                       color: myCustomColors.loginBackgroud,
@@ -315,7 +336,8 @@ class CompanyDetail extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  "$longtude - $latitude"??"-",
+                                  locationName,
+                                  // "${double.parse(latitude).toStringAsFixed(3)} - ${double.parse(longtude).toStringAsFixed(3)}"??"-",
                                   maxLines: 3,
                                   textAlign: TextAlign.left,
                                   overflow: TextOverflow.ellipsis,
@@ -343,22 +365,23 @@ class CompanyDetail extends StatelessWidget {
     );
   }
 
-
-
-  _buildHopitalServicesListItem(var hospitalServices, BuildContext ctxt) {
+  _buildHopitalServicesListItem(Catalogue hospitalServices, BuildContext ctxt, String companyId) {
     return GestureDetector(
         onTap: () {
           Navigator.push(
               ctxt,
               MaterialPageRoute(
-                  builder: (context) => DetailsForService(
-                    name: hospitalServices.name,
-                    imageUrl: hospitalServices.image,
-                    description: hospitalServices.detail,
-                    services: [],
-                    id: hospitalServices.id,
-                    role: Roles.Company,
-                  )));
+                  builder: (context) =>CatalogueDetail(
+                      companyId: companyId,
+                      name: hospitalServices.name,
+                      imageUrl: hospitalServices.image,
+                      description: hospitalServices.description,
+                      catalogue: hospitalServices.typeName,
+                      typeName: hospitalServices.typeName,
+                      typeDescription: hospitalServices.typeDescription,
+                      typeImageUrl: hospitalServices.typeImage,
+                      typeId: hospitalServices.typeId,
+                      serviceId: hospitalServices.id)));
         },
         child: Card(
             elevation: 0,
@@ -381,7 +404,7 @@ class CompanyDetail extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  hospitalServices.name,
+                  hospitalServices.typeName,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],

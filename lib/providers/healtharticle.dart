@@ -23,7 +23,20 @@ class HealthArticleProvider with ChangeNotifier {
                 Id: docs.docs[i].id,
                 link: data['link'],
                 image: data['image'],);
-            healtharticles.add(hos);
+            int temp = 0;
+            if(healtharticles.length==0){
+              healtharticles.add(hos);
+            }else{
+              healtharticles.forEach((element) {
+                if(hos.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                healtharticles.add(hos);
+              }
+            }
           }
         }
       }
