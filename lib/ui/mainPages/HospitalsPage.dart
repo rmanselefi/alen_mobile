@@ -53,13 +53,13 @@ class _HospitalPageState extends State<HospitalsPage> {
     //   duration: Duration(seconds: 10),
     //   curve: Curves.easeIn,
     // );
-    var duration= (7/500.0)*_scrollController.position.maxScrollExtent;
+    var duration= (20/7.0)*_scrollController.position.maxScrollExtent/10;
     _scrollController.animateTo(
-      // 676.5714285714286,
-        _scrollController.position.maxScrollExtent,
+      _scrollController.position.maxScrollExtent,
       duration: Duration(seconds: duration.toInt()),
-      curve: Curves.easeIn,
+      curve: Curves.easeOutCubic,
     );
+
     print("This is the position : {${_scrollController.position.maxScrollExtent}}");
   }
   @override

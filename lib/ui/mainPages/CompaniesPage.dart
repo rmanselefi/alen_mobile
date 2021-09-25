@@ -40,11 +40,11 @@ class _CompaniesPageState extends State<CompaniesPage> {
   ScrollController _scrollController = ScrollController();
 
   _scrollToBottom() {
-    var duration= (7/500.0)*_scrollController.position.maxScrollExtent;
+    var duration= (20/7.0)*_scrollController.position.maxScrollExtent/10;
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
       duration: Duration(seconds: duration.toInt()),
-      curve: Curves.easeIn,
+      curve: Curves.easeOutCubic,
     );
     print("This is the position : {${_scrollController.position.maxScrollExtent}}");
   }

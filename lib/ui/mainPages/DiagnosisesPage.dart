@@ -38,7 +38,7 @@ class _HospitalPageState extends State<DiagnosisesPage> {
 
   _scrollToBottom() {
     // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    var duration= (7/500.0)*_scrollController.position.maxScrollExtent;
+    var duration= (20/7.0)*_scrollController.position.maxScrollExtent/10;
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
       duration: Duration(seconds: duration.toInt()),

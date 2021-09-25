@@ -18,11 +18,34 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './providers/user_preference.dart';
+import 'package:splashscreen/splashscreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(MySplashScreen());
+}
+
+class MySplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Splash Screen',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
+      home: Scaffold(
+        body: SplashScreen(
+          seconds: 4,
+          navigateAfterSeconds: new MyApp(),
+          //image: new Image.asset('assets/images/splash.jpg'),
+          loaderColor: AppColors().loginButton,
+          imageBackground: AssetImage('assets/images/splash.jpg'),
+        ),
+      ),
+      debugShowCheckedModeBanner: false,
+    );
+  }
 }
 
 class MyApp extends StatefulWidget {

@@ -74,23 +74,7 @@ class _HomePageState extends State<HomePage> {
   //   );
   // }
   _scrollToBottom() {
-    // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    // var extent= _scrollController.position.maxScrollExtent;
     var duration= (20/7.0)*_scrollController.position.maxScrollExtent/10;
-    _scrollController.animateTo(
-      0,
-      duration: Duration(seconds: duration.toInt()),
-      curve: Curves.easeOutCubic,
-    );
-    String an="-"+duration.toString();
-    print("---------------------");
-    print(an);
-    print("---------------------");
-    double a=double.parse(an);
-    print(a.toString());
-    print("---------------------");
-
-    // _scrollController.jumpTo(_scrollController.position.minScrollExtent);
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
       duration: Duration(seconds: duration.toInt()),
@@ -229,7 +213,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     ListTile(
-                      leading: Icon(Icons.contacts),
+                      leading: Icon(Icons.contacts, color: myCustomColors.loginBackgroud),
                       title: Text("Contact Us"),
                       onTap: () {
                         Navigator.pop(context);
@@ -240,14 +224,14 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                     ListTile(
-                      leading: Icon(Icons.rate_review),
+                      leading: Icon(Icons.rate_review,color: myCustomColors.loginBackgroud,),
                       title: Text("Rate Us"),
                       onTap: () {
                         Navigator.pop(context);
                       },
                     ),
                     ListTile(
-                      leading: Icon(Icons.lock),
+                      leading: Icon(Icons.lock,color: myCustomColors.loginBackgroud,),
                       title: Text("Privacy Policy"),
                       onTap: () {
                         Navigator.pop(context);
@@ -258,7 +242,7 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                     ListTile(
-                      leading: Icon(Icons.shield),
+                      leading: Icon(Icons.shield,color: myCustomColors.loginBackgroud,),
                       title: Text("Terms & Conditions"),
                       onTap: () {
                         Navigator.pop(context);
@@ -269,7 +253,7 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                     ListTile(
-                      leading: Icon(Icons.flag),
+                      leading: Icon(Icons.flag,color: myCustomColors.loginBackgroud,),
                       title: Text("Transactions"),
                       onTap: () {
                         Navigator.pop(context);
@@ -286,15 +270,15 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   IconButton(
                     onPressed: (){},
-                    icon: Icon(MdiIcons.telegram),
+                    icon: Icon(MdiIcons.telegram,color: myCustomColors.loginBackgroud,),
                   ),
                   IconButton(
                     onPressed: (){},
-                    icon: Icon(MdiIcons.gmail),
+                    icon: Icon(MdiIcons.gmail,color: myCustomColors.loginBackgroud,),
                   ),
                   IconButton(
                     onPressed: (){},
-                    icon: Icon(Icons.facebook_outlined),
+                    icon: Icon(Icons.facebook_outlined,color: myCustomColors.loginBackgroud,),
                   ),
                 ],
               )
