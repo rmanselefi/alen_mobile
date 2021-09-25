@@ -1,6 +1,7 @@
 import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class ContactUs extends StatelessWidget {
@@ -45,7 +46,7 @@ class ContactUs extends StatelessWidget {
                           ),
                           Container(
                             child: Text(
-                              "Alen is created and Owned by alen technology group and developed by Qemer Software Technology.",
+                              "Alen is created and Owned by alen call center and mobile application and developed by Qemer Software Technology.",
                               textAlign: TextAlign.center,
                               maxLines: 4,
                             ),
@@ -80,7 +81,7 @@ class ContactUs extends StatelessWidget {
                                 Column(
                                   children: [
                                     IconButton(
-                                      onPressed: () {},
+                                      onPressed: () => launch("tel://9484"),
                                       icon: Icon(
                                           MdiIcons.phone,
                                         color: myCustomColors.loginBackgroud,

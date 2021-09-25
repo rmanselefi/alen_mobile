@@ -164,12 +164,10 @@ class _HomePageState extends State<HomePage> {
                 )),
             Container(
                 child: IconButton(
-                    onPressed: () {},
-                    icon: IconButton(
-                        onPressed: () => launch("tel://0910111213"),
+                        onPressed: () => launch("tel://9484"),
                         icon: Icon(
                           Icons.call,
-                        )))),
+                        ))),
             Container(
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
@@ -417,7 +415,7 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => HospitalsPage()));
+                                      builder: (context) => PharmaciesPage()));
                             },
                             child: Container(
                                 margin: EdgeInsets.symmetric(
@@ -430,13 +428,44 @@ class _HomePageState extends State<HomePage> {
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Image.asset(
-                                      "assets/images/hospital.png",
+                                      "assets/images/pharmacy.png",
                                       width: 60,
                                       height: 60,
                                       color: myCustomColors.loginBackgroud,
                                     ),
                                     Text(
-                                      'Hospitals',
+                                      "Pharmacies",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                )),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DiagnosisesPage()));
+                            },
+                            child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal:
+                                    MediaQuery.of(context).size.width *
+                                        0.02),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Image.asset(
+                                      "assets/images/diagnostic.png",
+                                      width: 60,
+                                      height: 60,
+                                      color: myCustomColors.loginBackgroud,
+                                    ),
+                                    Text(
+                                      "Diagnostics",
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     )
@@ -479,7 +508,7 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ImportersPage()));
+                                      builder: (context) => HomeCaresPage()));
                             },
                             child: Container(
                                 margin: EdgeInsets.symmetric(
@@ -492,44 +521,13 @@ class _HomePageState extends State<HomePage> {
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Image.asset(
-                                      "assets/images/importer.png",
+                                      "assets/images/homecare.png",
                                       width: 60,
                                       height: 60,
                                       color: myCustomColors.loginBackgroud,
                                     ),
                                     Text(
-                                      "Importers",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                )),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => PharmaciesPage()));
-                            },
-                            child: Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal:
-                                    MediaQuery.of(context).size.width *
-                                        0.02),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    Image.asset(
-                                      "assets/images/pharmacy.png",
-                                      width: 60,
-                                      height: 60,
-                                      color: myCustomColors.loginBackgroud,
-                                    ),
-                                    Text(
-                                      "Pharmacies",
+                                      "Home care",
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     )
@@ -551,7 +549,7 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => DiagnosisesPage()));
+                                      builder: (context) => HospitalsPage()));
                             },
                             child: Container(
                                 margin: EdgeInsets.symmetric(
@@ -564,25 +562,26 @@ class _HomePageState extends State<HomePage> {
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Image.asset(
-                                      "assets/images/diagnostic.png",
+                                      "assets/images/hospital.png",
                                       width: 60,
                                       height: 60,
                                       color: myCustomColors.loginBackgroud,
                                     ),
                                     Text(
-                                      "Diagnostics",
+                                      'Hospitals',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     )
                                   ],
                                 )),
                           ),
+
                           GestureDetector(
                             onTap: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => HomeCaresPage()));
+                                      builder: (context) => ImportersPage()));
                             },
                             child: Container(
                                 margin: EdgeInsets.symmetric(
@@ -595,13 +594,13 @@ class _HomePageState extends State<HomePage> {
                                   MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Image.asset(
-                                      "assets/images/homecare.png",
+                                      "assets/images/importer.png",
                                       width: 60,
                                       height: 60,
                                       color: myCustomColors.loginBackgroud,
                                     ),
                                     Text(
-                                      "Home care services",
+                                      "Importers",
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     )
