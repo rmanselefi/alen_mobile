@@ -15,6 +15,43 @@
       },
       "oauth_client": [
         {
+          "client_id": "355604807599-5pa8iuf3814eppjva2cucblp3hkss2it.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.alen",
+            "certificate_hash": "ee71d2583d733d82fd0481bd0db903e68295d2b6"
+          }
+        },
+        {
+          "client_id": "355604807599-m7pbn2512sq9dsd9nipk3s9daq4b07uc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOgRuZ9axW3SqYf953s0tROg76EobrRzw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "355604807599-m7pbn2512sq9dsd9nipk3s9daq4b07uc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:355604807599:android:6de5fce977ee40cbecb95a",
+        "android_client_info": {
+          "package_name": "com.example.alen_client"
+        }
+      },
+      "oauth_client": [
+        {
           "client_id": "355604807599-m7pbn2512sq9dsd9nipk3s9daq4b07uc.apps.googleusercontent.com",
           "client_type": 3
         }
