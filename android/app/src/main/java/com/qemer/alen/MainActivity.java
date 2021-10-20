@@ -1,4 +1,4 @@
-package com.example.alen;
+package com.qemer.alen;
 
 import io.flutter.embedding.android.FlutterActivity;
 
