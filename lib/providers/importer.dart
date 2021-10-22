@@ -244,6 +244,7 @@ class ImporterProvider with ChangeNotifier {
         }
       }
       nearby=nearHospital;
+      nearby.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
       return nearHospital;
     } catch (error) {
       isLoading = false;

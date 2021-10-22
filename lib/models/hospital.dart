@@ -1,7 +1,30 @@
 import 'package:alen/providers/pharmacy.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Hospitals implements HospitalsLabsDiagnostics{
 
+  List<Hospitals> dataListFromSnapshot(QuerySnapshot querySnapshot) {
+    return querySnapshot.docs.map((snapshot) {
+      final Map<String, dynamic> dataMap =
+      snapshot.data() as Map<String, dynamic>;
+
+      return Hospitals(
+          type: Type.Hospital,
+          Id: snapshot.id,
+          name: dataMap['name'],
+          locationName: dataMap['location_name'],
+          phone: dataMap['phone'],
+          image: dataMap['image'],
+          latitude: dataMap['location'].latitude,
+          longitude: dataMap['location'].longitude,
+          description: dataMap['description'],
+          services: dataMap['services'],
+          officehours: dataMap['officehours'],
+          email: dataMap['email'],
+          images: dataMap['images']
+      );
+    }).toList();
+  }
 
   Hospitals(
       {this.Id,

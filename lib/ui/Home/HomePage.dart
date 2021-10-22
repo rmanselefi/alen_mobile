@@ -30,7 +30,7 @@ import 'package:alen/utils/Detail.dart';
 import 'package:alen/utils/DetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:alen/ui/Models/HealthArticles.dart';
 import 'package:alen/ui/Models/MainAd.dart';
 import 'package:alen/ui/Models/Services.dart';
@@ -111,6 +111,30 @@ class _HomePageState extends State<HomePage> {
     _getPresreption(ctxt);
   }
 
+
+
+  Future<List<HospitalsLabsDiagnostics>> searchInitializer(BuildContext context) async {
+    context.loaderOverlay.show();
+    UserLocation location = await Provider.of<PharmacyProvider>(context,listen: false).getCurrentLocation();
+    await Provider.of<PharmacyProvider>(context,listen: false).fetchNearByHospitals(location);
+    await Provider.of<HospitalProvider>(context,listen: false).fetchNearByHospitals(location);
+    await Provider.of<DiagnosticProvider>(context,listen: false).fetchNearByDiagnostic(location);
+    await Provider.of<ImporterProvider>(context,listen: false).fetchNearByImporters(location);
+    await Provider.of<LaboratoryProvider>(context,listen: false).fetchNearByLaboratories(location);
+    await Provider.of<CompanyProvider>(context,listen: false).fetchNearByCompanies(location);
+    await Provider.of<HomeCareProvider>(context,listen: false).fetchNearByHomeCare(location);
+    List<HospitalsLabsDiagnostics> hld= [];
+    hld += PharmacyProvider.nearby;
+    hld += ImporterProvider.nearby;
+    hld += PharmacyProvider.trendingDRGS;
+    hld += HospitalProvider.nearby;
+    hld += LaboratoryProvider.nearby;
+    hld += DiagnosticProvider.nearby;
+    hld += HomeCareProvider.nearby;
+    hld += CompanyProvider.nearby;
+    context.loaderOverlay.hide();
+    return hld;
+  }
   @override
   Widget build(BuildContext context) {
     // Timer(
@@ -123,11 +147,14 @@ class _HomePageState extends State<HomePage> {
     //       curve: Curves.fastOutSlowIn,
     //     )
     // );
-    var drugProvider = Provider.of<CartProvider>(context,listen: true);
     var healthProvider = Provider.of<HealthArticleProvider>(context,listen: true);
     var adsProvider = Provider.of<AdsProvider>(context,listen: true);
     var pharmacyProvider = Provider.of<PharmacyProvider>(context,listen: true);
-    return  Scaffold(
+
+    return  LoaderOverlay(
+        overlayOpacity: 0.8,
+
+        child: Scaffold(
         appBar: AppBar(
           title: Text("Alen"),
           actions: [
@@ -156,25 +183,31 @@ class _HomePageState extends State<HomePage> {
                 margin: EdgeInsets.only(right: 10),
                 child: IconButton(
                     onPressed: () async {
-                      UserLocation location = await Provider.of<PharmacyProvider>(context,listen: false).getCurrentLocation();
-                      await Provider.of<PharmacyProvider>(context,listen: false).fetchNearByHospitals(location);
-                      await Provider.of<HospitalProvider>(context,listen: false).fetchNearByHospitals(location);
-                      await Provider.of<DiagnosticProvider>(context,listen: false).fetchNearByDiagnostic(location);
-                      await Provider.of<ImporterProvider>(context,listen: false).fetchNearByImporters(location);
-                      await Provider.of<LaboratoryProvider>(context,listen: false).fetchNearByLaboratories(location);
-                      await Provider.of<CompanyProvider>(context,listen: false).fetchNearByCompanies(location);
-                      await Provider.of<HomeCareProvider>(context,listen: false).fetchNearByHomeCare(location);
-                      List<HospitalsLabsDiagnostics> hld= [];
-                      hld += PharmacyProvider.nearby;
-                      hld += ImporterProvider.nearby;
-                      hld += PharmacyProvider.trendingDRGS;
-                      hld += HospitalProvider.nearby;
-                      hld += LaboratoryProvider.nearby;
-                      hld += DiagnosticProvider.nearby;
-                      hld += HomeCareProvider.nearby;
-                      hld += CompanyProvider.nearby;
+                      // FutureBuilder<List<HospitalsLabsDiagnostics>>(
+                      //     future: searchInitializer(),
+                      //     builder: (context, snapshot) {
+                      //       if (snapshot.connectionState == ConnectionState.none &&
+                      //           snapshot.hasData == null) {
+                      //         return Scaffold(
+                      //             body:
+                      //             Center(child: CircularProgressIndicator()));
+                      //       }
+                      //       print('project snapshot data is: ${snapshot.data}');
+                      //       if (snapshot.data == null) {
+                      //         return Scaffold(
+                      //             body:
+                      //             Center(child: CircularProgressIndicator()));
+                      //       } else {
+                      //         WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+                      //         showSearch<HospitalsLabsDiagnostics>(
+                      //             context: context,
+                      //             delegate: TrendingSearch(trendings:snapshot.data));
+                      //         return Container(
+                      //             );
+                      //       }
+                      //     });
 
-
+                      List<HospitalsLabsDiagnostics> hld= await searchInitializer(context);
                       showSearch<HospitalsLabsDiagnostics>(
                           context: context,
                           delegate: TrendingSearch(trendings:hld));
@@ -733,7 +766,8 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         )),
-      );
+      )
+    );
   }
 
   _buildSmallAdsListItem(var smallAd, BuildContext ctxt) {
@@ -937,7 +971,7 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.symmetric(horizontal: 5),
                     child: Text(
                       drugs.pharmacies.name,
-                      maxLines: 2,
+                      maxLines: 1,
                       softWrap: false,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,

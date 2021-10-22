@@ -87,6 +87,7 @@ class PharmacyProvider with ChangeNotifier {
         }
       }
       nearby=nearHospital;
+      nearby.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
       return nearHospital;
     } catch (error) {
       isLoading = false;
@@ -227,6 +228,7 @@ class PharmacyProvider with ChangeNotifier {
         print("none here either");
       }
       trendingDRGS=trendingDrugs;
+      trendingDRGS.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
       return trendingDrugs;
     } catch (error) {
       isLoading = false;

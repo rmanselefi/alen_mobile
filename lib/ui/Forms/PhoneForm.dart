@@ -1,6 +1,7 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../utils/AppColors.dart';
 import 'ConfirmationForm.dart';
@@ -18,7 +19,7 @@ class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
   FirebaseAuth auth = FirebaseAuth.instance;
   var isPressed = false;
-  Future<void> verifyPhone() async {
+  Future<void> verifyPhone(BuildContext ctxt) async {
     setState(() {
       isPressed = true;
     });
@@ -41,7 +42,10 @@ class _SignUpState extends State<SignUp> {
       });
     };
     final PhoneVerificationFailed verifyFailed = (error) {
-      print('${error.message}');
+      print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa${error.message}');
+      ctxt.loaderOverlay.hide();
+      final snackBar = SnackBar(content: Text('${error.message}}'));
+      ScaffoldMessenger.of(ctxt).showSnackBar(snackBar);
     };
 
     await FirebaseAuth.instance.verifyPhoneNumber(
@@ -64,9 +68,11 @@ class _SignUpState extends State<SignUp> {
         theme: new ThemeData(
             fontFamily: 'Ubuntu',
             scaffoldBackgroundColor: AppColors().loginButton),
-        home: Scaffold(
-          body: SingleChildScrollView(
-              child: Stack(
+        home: LoaderOverlay(
+          overlayOpacity: 0.8,
+          child: Scaffold(
+      body: SingleChildScrollView(
+          child: Stack(
             children: [
               Container(
                   width: MediaQuery.of(context).size.width,
@@ -98,8 +104,8 @@ class _SignUpState extends State<SignUp> {
                                         padding: EdgeInsets.only(
                                             top: 40.0, bottom: 40.0),
                                         width:
-                                            MediaQuery.of(context).size.width *
-                                                0.9,
+                                        MediaQuery.of(context).size.width *
+                                            0.9,
                                         child: TextFormField(
                                           autocorrect: true,
                                           maxLength: 10,
@@ -154,18 +160,18 @@ class _SignUpState extends State<SignUp> {
                                                   ? _countryCode = "+251"
                                                   : _countryCode = _countryCode;
                                               String temp0Checker =
-                                                  value.substring(0, 1);
+                                              value.substring(0, 1);
                                               temp0Checker == "0"
                                                   ? this.phoneNo =
-                                                      _countryCode +
-                                                          value.substring(1, 10)
+                                                  _countryCode +
+                                                      value.substring(1, 10)
                                                   : temp0Checker == "9"
-                                                      ? this.phoneNo =
-                                                          _countryCode +
-                                                              value.substring(
-                                                                  0, 9)
-                                                      : this.phoneNo =
-                                                          _countryCode + value;
+                                                  ? this.phoneNo =
+                                                  _countryCode +
+                                                      value.substring(
+                                                          0, 9)
+                                                  : this.phoneNo =
+                                                  _countryCode + value;
 
                                               print("on save text");
                                             });
@@ -185,7 +191,7 @@ class _SignUpState extends State<SignUp> {
                                                   _countryCode == null
                                                       ? _countryCode = "+251"
                                                       : _countryCode =
-                                                          _countryCode;
+                                                      _countryCode;
                                                 });
                                               },
                                               backgroundColor: Colors.white,
@@ -234,13 +240,13 @@ class _SignUpState extends State<SignUp> {
                                         )),
                                     style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                myCustomColors.loginBackgroud),
+                                        MaterialStateProperty.all<Color>(
+                                            myCustomColors.loginBackgroud),
                                         shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(30.0),
+                                                BorderRadius.circular(30.0),
                                                 side: BorderSide(
                                                     color: myCustomColors
                                                         .loginBackgroud)))),
@@ -249,7 +255,8 @@ class _SignUpState extends State<SignUp> {
                                       _formKey.currentState.save();
                                       if (_formKey.currentState.validate()) {
                                         print("object ${this.phoneNo}");
-                                        verifyPhone();
+                                        context.loaderOverlay.show();
+                                        verifyPhone(context);
                                       }
                                     })),
                           ])),
@@ -260,9 +267,12 @@ class _SignUpState extends State<SignUp> {
                   ))
             ],
           )),
-        ));
+    ),
+        )
+    );
   }
 }
+
 
 Route _createRoute(verId, smsCode) {
   return PageRouteBuilder(
