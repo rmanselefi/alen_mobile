@@ -1,5 +1,7 @@
 import 'package:alen/models/drugs.dart';
+import 'package:alen/models/importer.dart';
 import 'package:alen/models/newDrug.dart';
+import 'package:alen/models/pharmacy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -9,62 +11,62 @@ class DrugProvider with ChangeNotifier {
   List<Category> categoriesList = [];
   bool isLoading = false;
 
-  Future<List<Drugs>> getPharmacyById(String Id) async {
-    isLoading = true;
-    drugs.clear();
-    var curr;
-    try {
-      var docs = await FirebaseFirestore.instance
-          .collection('new_drugs')
-          .where('pharmacy_id', isEqualTo: Id)
-          .get();
-      if (docs.docs.isNotEmpty) {
-        for (var i = 0; i < docs.docs.length; i++) {
-          var data = docs.docs[i].data();
-          final Drugs drug = Drugs(
-              id: docs.docs[i].id,
-              name: data['name'],
-              quantity: data['quantity'],
-              dosage: data['dosage'],
-              madein: data['madein'],
-              root: data['root'],
-              image: data.containsKey('image') ? data['image'] : '',
-              category:
-                  data.containsKey('category') ? data['category']['name'] : '',
-              category_image:
-                  data.containsKey('category') ? data['category']['image'] : '',
-              trending: data['trending']);
-          int temp2 = 0;
-          if(drugs.length==0){
-            drugs.add(drug);
-          }else{
-            drugs.forEach((element) {
-              if(drug.id==element.id)
-              {
-                temp2++;
-              }
-            });
-            if(temp2==0){
-              drugs.add(drug);
-            }
-          }
-        }
-      }
-      // drugs.toSet();
-      return drugs;
-    } catch (error) {
-      isLoading = false;
-      print("mjkhjjhbjhvjhvhjvjhgv $error");
-      return null;
-    }
-  }
+  // Future<List<Drugs>> getPharmacyById(String Id) async {
+  //   isLoading = true;
+  //   drugs.clear();
+  //   var curr;
+  //   try {
+  //     var docs = await FirebaseFirestore.instance
+  //         .collection('new_drugs')
+  //         .where('pharmacy_id', isEqualTo: Id)
+  //         .get();
+  //     if (docs.docs.isNotEmpty) {
+  //       for (var i = 0; i < docs.docs.length; i++) {
+  //         var data = docs.docs[i].data();
+  //         final Drugs drug = Drugs(
+  //             id: docs.docs[i].id,
+  //             name: data['name'],
+  //             quantity: data['quantity'],
+  //             dosage: data['dosage'],
+  //             madein: data['madein'],
+  //             root: data['root'],
+  //             image: data.containsKey('image') ? data['image'] : '',
+  //             category:
+  //                 data.containsKey('category') ? data['category']['name'] : '',
+  //             category_image:
+  //                 data.containsKey('category') ? data['category']['image'] : '',
+  //             trending: data['trending']);
+  //         int temp2 = 0;
+  //         if(drugs.length==0){
+  //           drugs.add(drug);
+  //         }else{
+  //           drugs.forEach((element) {
+  //             if(drug.id==element.id)
+  //             {
+  //               temp2++;
+  //             }
+  //           });
+  //           if(temp2==0){
+  //             drugs.add(drug);
+  //           }
+  //         }
+  //       }
+  //     }
+  //     // drugs.toSet();
+  //     return drugs;
+  //   } catch (error) {
+  //     isLoading = false;
+  //     print("mjkhjjhbjhvjhvhjvjhgv $error");
+  //     return null;
+  //   }
+  // }
 
   Future<List<Category>> getCategoryById(String Id) async {
     FirebaseFirestore fire = FirebaseFirestore.instance;
     isLoading = true;
     categoriesList.clear();
     var curr;
-    try {
+    try {U
       var docs =
       await fire.collection('pharmacy_drug').where('pharmacy_id', isEqualTo: Id).get();
       if (docs.docs.isNotEmpty) {
@@ -232,7 +234,8 @@ class DrugProvider with ChangeNotifier {
           String price = await servicesList[i]['price'];
           String quantity = await servicesList[i]['quantity'];
           bool trending = await servicesList[i]['trending'];
-
+          String pharmacy = await servicesList[i]['pharmacy_id'];
+          ImportersPharmacies phar = await getPharmacyById(pharmacy);
           // print("This is my id: ${servicesData}");
           var document = await fire
               .collection('all_drugs')
@@ -248,6 +251,7 @@ class DrugProvider with ChangeNotifier {
                 itemId: pharmaDrugId,
                 name: serviceType['name'],
                 quantity: quantity,
+                pharmacies: phar,
                 dosage: serviceType['dosage'],
                 madein: serviceType['madein'],
                 root: serviceType['root'],
@@ -290,6 +294,66 @@ class DrugProvider with ChangeNotifier {
     }
   }
 
+  Future<Pharmacies> getPharmacyById(String Id) async {
+    isLoading = true;
+    var curr;
+    try {
+      var docs =
+      await FirebaseFirestore.instance.collection('pharmacy').doc(Id).get();
+      if (docs.exists) {
+        var data = docs.data();
+        final Pharmacies pharmacies = Pharmacies(
+            Id: docs.id,
+            name: data['name'],
+            phone: data['phone'],
+            image: data['image'],
+            locationName: data['location_name'],
+            latitude: data['location'].latitude,
+            longitude: data['location'].longitude,
+            officehours: data['officehours'],
+            email: data['email'],
+            images: data['images'],
+            isPharma: true,
+            description: data['description']);
+        return pharmacies;
+      }
+    } catch (error) {
+      isLoading = false;
+      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      return null;
+    }
+  }
+
+  Future<Importers> getImporterById(String Id) async {
+    isLoading = true;
+    var curr;
+    try {
+      var docs =
+      await FirebaseFirestore.instance.collection('importers').doc(Id).get();
+      if (docs.exists) {
+        var data = docs.data();
+        final Importers hos = Importers(
+            Id: docs.id,
+            name: data['name'],
+            phone: data['phone'],
+            image: data['image'],
+            latitude: data['location'].latitude,
+            longitude: data['location'].longitude,
+            email: data['email'],
+            locationName: data['location_name'],
+            images: data['images'],
+            officehours: data['officehours'],
+            isPharma: false,
+            description: data['description']);
+        return hos;
+      }
+    } catch (error) {
+      isLoading = false;
+      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      return null;
+    }
+  }
+
   Future<List<Drugs>> getDrugByCategoryAndImporterId(
       String Id, Category category) async {
     FirebaseFirestore fire = FirebaseFirestore.instance;
@@ -309,6 +373,8 @@ class DrugProvider with ChangeNotifier {
           String price = await servicesList[i]['price'];
           String quantity = await servicesList[i]['quantity'];
           bool trending = await servicesList[i]['trending'];
+          String importer = await servicesList[i]['importer_id'];
+          ImportersPharmacies phar = await getImporterById(importer);
           print("Service data : ($servicesData)");
           print("Price : ($price)");
           print("Quantity : ($quantity)");
@@ -332,6 +398,7 @@ class DrugProvider with ChangeNotifier {
                 image: serviceType.containsKey('image')
                     ? serviceType['image']
                     : '',
+                pharmacies: phar,
                 category: serviceType.containsKey('category')
                     ? serviceType['category']['name']
                     : '',

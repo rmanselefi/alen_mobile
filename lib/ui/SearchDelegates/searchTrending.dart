@@ -20,6 +20,7 @@ class TrendingSearch extends SearchDelegate<HospitalsLabsDiagnostics> {
 
   TrendingSearch({this.trendings});
 
+
   @override
   String get searchFieldLabel => 'Search Everything...';
 
@@ -229,31 +230,145 @@ class TrendingSearch extends SearchDelegate<HospitalsLabsDiagnostics> {
     return ListView.builder(
         itemCount: suggestions.length,
         itemBuilder: (BuildContext context, int index) {
-          return Column(children: [
-            ListTile(
-              tileColor: myCustomColors.mainBackground,
-              title: Text(suggestions.elementAt(index).name),
-              subtitle: Text(
-                (suggestions.elementAt(index).description!=null)?
-                suggestions.elementAt(index).description:
-                "",
-                maxLines: 1,
-              ),
-              leading: CircleAvatar(
-                backgroundImage: (suggestions.elementAt(index).image!=null)?NetworkImage(
-                  suggestions.elementAt(index).image,
-                ):AssetImage(
-                  'assets/images/alen_no_name.png',
-                ),
-              ),
-              onTap: () {
-                query = suggestions.elementAt(index).name;
-              },
-            ),
-            Divider(
-              color: Colors.black38,
-            )
-          ]);
+          return ListView.builder(
+              itemCount: suggestions.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Column(children: [
+                  ListTile(
+                      onTap: () {
+                        result = suggestions.elementAt(index);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                (result.type==Type.Hospital)
+                                    ?
+                                HospitalDetail(
+                                  title: result.name,
+                                  phone: result.phone,
+                                  image: result.image,
+                                  name: result.name,
+                                  images: result.images,
+                                  email: result.email,
+                                  locationName: result.locationName,
+                                  hospitalId: result.Id,
+                                  description: result.description,
+                                  latitude: result.latitude.toString(),
+                                  longtude: result.longitude.toString(),
+                                  officeHours: result.officehours,
+                                )
+                                    :(result.type==Type.Lab)
+                                    ?
+                                LabDetail(
+                                  title: result.name,
+                                  phone: result.phone,
+                                  image: result.image,
+                                  name: result.name,
+                                  images: result.images,
+                                  email: result.email,
+                                  locationName: result.locationName,
+                                  hospitalId: result.Id,
+                                  description: result.description,
+                                  latitude: result.latitude.toString(),
+                                  longtude: result.longitude.toString(),
+                                  officeHours: result.officehours,
+                                )
+                                    :(result.type==Type.Diagnosis)
+                                    ?
+                                DiagnosticDetail(
+                                  title: result.name,
+                                  phone: result.phone,
+                                  image: result.image,
+                                  name: result.name,
+                                  images: result.images,
+                                  email: result.email,
+                                  locationName: result.locationName,
+                                  hospitalId: result.Id,
+                                  description: result.description,
+                                  latitude: result.latitude.toString(),
+                                  longtude: result.longitude.toString(),
+                                  officeHours: result.officehours,
+                                )
+                                    :(result.type==Type.Pharmacy)
+                                    ?
+                                PharamacyDetail(
+                                  title: result.name,
+                                  phone: result.phone,
+                                  imagesList: result.image,
+                                  name: result.name,
+                                  images: result.images,
+                                  email: result.email,
+                                  id: result.Id,
+                                  locationName: result.locationName,
+                                  description: result.description,
+                                  latitude: result.latitude.toString(),
+                                  longtude: result.longitude.toString(),
+                                  officeHours: result.officehours,
+                                )
+                                    :(result.type==Type.Importer)
+                                    ?
+                                ImporterDetail(
+                                  title: result.name,
+                                  phone: result.phone,
+                                  imagesList: result.image,
+                                  name: result.name,
+                                  images: result.images,
+                                  email: result.email,
+                                  id: result.Id,
+                                  locationName: result.locationName,
+                                  description: result.description,
+                                  latitude: result.latitude.toString(),
+                                  longtude: result.longitude.toString(),
+                                  officeHours: result.officehours,
+                                ):(result.type==Type.HomeCare)
+                                    ?
+                                HomeCareDetail(
+                                  title: result.name,
+                                  phone: result.phone,
+                                  image: result.image,
+                                  name: result.name,
+                                  images: result.images,
+                                  email: result.email,
+                                  hospitalId: result.Id,
+                                  locationName: result.locationName,
+                                  description: result.description,
+                                  latitude: result.latitude.toString(),
+                                  longtude: result.longitude.toString(),
+                                  officeHours: result.officehours,
+                                )
+                                    :CompanyDetail(
+                                  title: result.name,
+                                  phone: result.phone,
+                                  image: result.image,
+                                  name: result.name,
+                                  images: result.images,
+                                  email: result.email,
+                                  locationName: result.locationName,
+                                  hospitalId: result.Id,
+                                  description: result.description,
+                                  latitude: result.latitude.toString(),
+                                  longtude: result.longitude.toString(),
+                                  officeHours: result.officehours,
+                                )
+                            ));
+                      },
+                      title: Text(suggestions.elementAt(index).name),
+                      subtitle: Text(
+                        (suggestions.elementAt(index).description!=null)?
+                        suggestions.elementAt(index).description:
+                        "",
+                        maxLines: 1,
+                      ),
+                      leading: CircleAvatar(
+                        backgroundImage: (suggestions.elementAt(index).image!=null)?NetworkImage(
+                          suggestions.elementAt(index).image,
+                        ):AssetImage(
+                          'assets/images/alen_no_name.png',
+                        ),
+                      )),
+                  Divider(color: Colors.black38)
+                ]);
+              });
         });
   }
 }

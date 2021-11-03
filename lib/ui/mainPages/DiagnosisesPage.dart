@@ -5,6 +5,7 @@ import 'package:alen/models/user_location.dart';
 import 'package:alen/providers/diagnostic.dart';
 import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/laboratory.dart';
+import 'package:alen/providers/language.dart';
 import 'package:alen/ui/Details/DiagnosticDetail.dart';
 import 'package:alen/ui/Details/HospitalDetail.dart';
 import 'package:alen/ui/Details/LabDetail.dart';
@@ -19,6 +20,7 @@ import 'package:alen/ui/Models/Trending.dart';
 import 'package:alen/ui/Pages/Hospital.dart';
 import 'package:alen/ui/SearchDelegates/searchHospitals.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/AppColors.dart';
 
@@ -58,201 +60,218 @@ class _HospitalPageState extends State<DiagnosisesPage> {
   Widget build(BuildContext context) {
     // final PageController controller = PageController(initialPage: 0);
     var diagnosticsProvider = Provider.of<DiagnosticProvider>(context, listen: false);
-    return Scaffold(
-      appBar: AppBar(
-          elevation: 2,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context, false),
-          ),
-          title: Text("Diagnostics", textAlign: TextAlign.center)),
-      body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    GestureDetector(
-                        onTap: () {
-                          showSearch<Diagnostics>(
-                              context: context,
-                              delegate: DiagnosisSearch(diagnosises: DiagnosticProvider.nearby));
-                        },
-                        child: Container(
-                            margin: EdgeInsets.fromLTRB(0, 60, 0, 50),
-                            child: Center(
+    return FutureBuilder<dynamic>(
+        future: SharedPreferences.getInstance(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.none &&
+              snapshot.hasData == null) {
+            return CircularProgressIndicator();
+          }
+          print('project snapshot data is: ${snapshot.data}');
+          if (snapshot.data == null) {
+            return Container(
+                child: Center(child: CircularProgressIndicator()));
+          } else {
+            var _myLanguage = snapshot.data.getString("lang");
+            var languageProvider = Provider.of<LanguageProvider>(context, listen: true);
+            languageProvider.langOPT = _myLanguage;
+            return Scaffold(
+              appBar: AppBar(
+                  elevation: 2,
+                  leading: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () => Navigator.pop(context, false),
+                  ),
+                  title: Text("Diagnostics", textAlign: TextAlign.center)),
+              body: SingleChildScrollView(
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            GestureDetector(
+                                onTap: () {
+                                  showSearch<Diagnostics>(
+                                      context: context,
+                                      delegate: DiagnosisSearch(diagnosises: DiagnosticProvider.nearby));
+                                },
                                 child: Container(
-                                  // padding: EdgeInsets.all(40.0),
-                                    width:
-                                    MediaQuery.of(context).size.width * 0.90,
-                                    child: Theme(
-                                        data: ThemeData(
-                                          hintColor: Colors.white,
-                                        ),
-                                        child: Card(
-                                            elevation: 4,
-                                            shape: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(50.0)),
-                                              borderSide: BorderSide(
-                                                  color: myCustomColors
-                                                      .loginBackgroud,
-                                                  width: 2),
-                                            ),
-                                            child: SizedBox(
-                                              height: 50,
-                                              child: ListTile(
-                                                leading: Icon(
-                                                  Icons.search,
-                                                  color: myCustomColors
-                                                      .loginBackgroud,
+                                    margin: EdgeInsets.fromLTRB(0, 60, 0, 50),
+                                    child: Center(
+                                        child: Container(
+                                          // padding: EdgeInsets.all(40.0),
+                                            width:
+                                            MediaQuery.of(context).size.width * 0.90,
+                                            child: Theme(
+                                                data: ThemeData(
+                                                  hintColor: Colors.white,
                                                 ),
-                                                title: Text(
-                                                  'Search',
-                                                  style: TextStyle(
-                                                    color: myCustomColors
-                                                        .loginBackgroud,
-                                                  ),
-                                                ),
-                                              ),
-                                            ))))))),
-                    Divider(
-                      color: Colors.black38,
-                    ),
-                    Container(
-                        margin: EdgeInsets.fromLTRB(
-                            MediaQuery.of(context).size.width * 0.05,
-                            0,
-                            MediaQuery.of(context).size.width * 0.05,
-                            0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Top Diagnostics",
-                              textAlign: TextAlign.left,
-                              textScaleFactor: 1.7,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                                                child: Card(
+                                                    elevation: 4,
+                                                    shape: OutlineInputBorder(
+                                                      borderRadius: BorderRadius.all(
+                                                          Radius.circular(50.0)),
+                                                      borderSide: BorderSide(
+                                                          color: myCustomColors
+                                                              .loginBackgroud,
+                                                          width: 2),
+                                                    ),
+                                                    child: SizedBox(
+                                                      height: 50,
+                                                      child: ListTile(
+                                                        leading: Icon(
+                                                          Icons.search,
+                                                          color: myCustomColors
+                                                              .loginBackgroud,
+                                                        ),
+                                                        title: Text(
+                                                          'Search',
+                                                          style: TextStyle(
+                                                            color: myCustomColors
+                                                                .loginBackgroud,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ))))))),
+                            Divider(
+                              color: Colors.black38,
                             ),
+                            Container(
+                                margin: EdgeInsets.fromLTRB(
+                                    MediaQuery.of(context).size.width * 0.05,
+                                    0,
+                                    MediaQuery.of(context).size.width * 0.05,
+                                    0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Top Diagnostics",
+                                      textAlign: TextAlign.left,
+                                      textScaleFactor: 1.7,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
 
-                          ],
-                        )),
-                    Container(
-                        height: 190.0,
-                        margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
-                        child: FutureBuilder<List<Diagnostics>>(
-                            future: diagnosticsProvider.fetchTrendingDiagnostic(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.none &&
-                                  snapshot.hasData == null) {
-                                return CircularProgressIndicator();
-                              }
-                              print(
-                                  'project snapshot data is: ${snapshot.data}');
-                              if (snapshot.data == null) {
-                                return Container(
-                                    child: Center(child: CircularProgressIndicator())
-                                );
-                              } else {
-                                WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-                                return ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  controller: _scrollController,
-                                  // reverse: true,
-                                  shrinkWrap: true,
-                                  itemBuilder:
-                                      (BuildContext ctxt, int index) {
-                                    return _buildHospitalsListItem(
-                                        snapshot.data[index], ctxt);
-                                  },
-                                  itemCount: snapshot.data.length,
-                                );
-                              }
-                            })),
-                    Divider(
-                      color: Colors.black38,
-                    ),
-                    Container(
-                        margin: EdgeInsets.fromLTRB(
-                            MediaQuery.of(context).size.width * 0.05,
-                            0,
-                            MediaQuery.of(context).size.width * 0.05,
-                            0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Nearby Diagnostics",
-                              textAlign: TextAlign.left,
-                              textScaleFactor: 1.7,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ],
+                                )),
+                            Container(
+                                height: 190.0,
+                                margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
+                                child: FutureBuilder<List<Diagnostics>>(
+                                    future: diagnosticsProvider.fetchTrendingDiagnostic(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.none &&
+                                          snapshot.hasData == null) {
+                                        return CircularProgressIndicator();
+                                      }
+                                      print(
+                                          'project snapshot data is: ${snapshot.data}');
+                                      if (snapshot.data == null) {
+                                        return Container(
+                                            child: Center(child: CircularProgressIndicator())
+                                        );
+                                      } else {
+                                        WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+                                        return ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          controller: _scrollController,
+                                          // reverse: true,
+                                          shrinkWrap: true,
+                                          itemBuilder:
+                                              (BuildContext ctxt, int index) {
+                                            return _buildHospitalsListItem(
+                                                snapshot.data[index], ctxt);
+                                          },
+                                          itemCount: snapshot.data.length,
+                                        );
+                                      }
+                                    })),
+                            Divider(
+                              color: Colors.black38,
                             ),
+                            Container(
+                                margin: EdgeInsets.fromLTRB(
+                                    MediaQuery.of(context).size.width * 0.05,
+                                    0,
+                                    MediaQuery.of(context).size.width * 0.05,
+                                    0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Nearby Diagnostics",
+                                      textAlign: TextAlign.left,
+                                      textScaleFactor: 1.7,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                )),
+                            Container(
+                              // height: 190.0,
+                                margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
+                                child: FutureBuilder<UserLocation>(
+                                    future: diagnosticsProvider.getCurrentLocation(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.none &&
+                                          snapshot.hasData == null) {
+                                        return CircularProgressIndicator();
+                                      }
+                                      return FutureBuilder<List<Diagnostics>>(
+                                          future: diagnosticsProvider
+                                              .fetchNearByDiagnostic(snapshot.data),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.none &&
+                                                snapshot.hasData == null) {
+                                              return CircularProgressIndicator();
+                                            }
+                                            print(
+                                                'project snapshot data is: ${snapshot.data}');
+                                            if (snapshot.data == null) {
+                                              return Container(
+                                                  child: Center(child: CircularProgressIndicator())
+                                              );
+                                            } else {
+                                              return GridView.builder(
+                                                gridDelegate:
+                                                SliverGridDelegateWithMaxCrossAxisExtent(
+                                                    maxCrossAxisExtent: 160,
+                                                    childAspectRatio:
+                                                    (MediaQuery.of(context)
+                                                        .orientation ==
+                                                        Orientation.portrait)
+                                                        ? 2 / 3
+                                                        : 2 / 2.2,
+                                                    crossAxisSpacing: 0,
+                                                    mainAxisSpacing: 0),
+                                                shrinkWrap: true,
+                                                physics: NeverScrollableScrollPhysics(),
+                                                scrollDirection: Axis.vertical,
+                                                itemBuilder:
+                                                    (BuildContext ctxt, int index) {
+                                                  return _buildHospitalsListItem(
+                                                      snapshot.data[index], ctxt);
+                                                },
+                                                itemCount: snapshot.data.length,
+                                              );
+                                            }
+                                          });
+                                    }))
                           ],
-                        )),
-                    Container(
-                        // height: 190.0,
-                        margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
-                        child: FutureBuilder<UserLocation>(
-                            future: diagnosticsProvider.getCurrentLocation(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.none &&
-                                  snapshot.hasData == null) {
-                                return CircularProgressIndicator();
-                              }
-                              return FutureBuilder<List<Diagnostics>>(
-                                  future: diagnosticsProvider
-                                      .fetchNearByDiagnostic(snapshot.data),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.none &&
-                                        snapshot.hasData == null) {
-                                      return CircularProgressIndicator();
-                                    }
-                                    print(
-                                        'project snapshot data is: ${snapshot.data}');
-                                    if (snapshot.data == null) {
-                                      return Container(
-                                          child: Center(child: CircularProgressIndicator())
-                                      );
-                                    } else {
-                                      return GridView.builder(
-                                        gridDelegate:
-                                        SliverGridDelegateWithMaxCrossAxisExtent(
-                                            maxCrossAxisExtent: 160,
-                                            childAspectRatio:
-                                            (MediaQuery.of(context)
-                                                .orientation ==
-                                                Orientation.portrait)
-                                                ? 2 / 3
-                                                : 2 / 2.2,
-                                            crossAxisSpacing: 0,
-                                            mainAxisSpacing: 0),
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        scrollDirection: Axis.vertical,
-                                        itemBuilder:
-                                            (BuildContext ctxt, int index) {
-                                          return _buildHospitalsListItem(
-                                              snapshot.data[index], ctxt);
-                                        },
-                                        itemCount: snapshot.data.length,
-                                      );
-                                    }
-                                  });
-                            }))
-                  ],
-                ),
-              )
-            ],
-          )),
-    );
+                        ),
+                      )
+                    ],
+                  )),
+            );
+          }
+        });
   }
 
   _buildHospitalsListItem(var hospital, BuildContext ctxt) {
@@ -307,7 +326,14 @@ class _HospitalPageState extends State<DiagnosisesPage> {
                       width: 120,
                       child: hospital.images != null
                           ? Image.network(hospital.images.first,
-                          width: 120, height: 120, fit: BoxFit.fill)
+                          width: 120, height: 120, fit: BoxFit.fill,
+                          errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                            return Image.asset("assets/images/hos1.jpg",
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,);
+                          }
+                      )
                           : Container(
                         child: Center(
                           child: Text('Image'),

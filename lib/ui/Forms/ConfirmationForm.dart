@@ -1,9 +1,11 @@
 import 'package:alen/providers/auth.dart';
+import 'package:alen/providers/language.dart';
 import 'package:alen/ui/Forms/NameForm.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:alen/ui/Home/HomePage.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfirmationForm extends StatefulWidget {
   final verId;
@@ -28,10 +30,25 @@ class _ConfirmationFormState extends State<ConfirmationForm> {
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
             fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.loginButton),
-        home: Scaffold(
-          body: SingleChildScrollView(
-              child: Stack(
+            scaffoldBackgroundColor: myCustomColors.mainBackground),
+        home: FutureBuilder<dynamic>(
+    future: SharedPreferences.getInstance(),
+    builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.none &&
+    snapshot.hasData == null) {
+    return CircularProgressIndicator();
+    }
+    print('project snapshot data is: ${snapshot.data}');
+    if (snapshot.data == null) {
+    return Container(
+    child: Center(child: CircularProgressIndicator()));
+    } else {
+    var _myLanguage = snapshot.data.getString("lang");
+    var languageProvider = Provider.of<LanguageProvider>(context, listen: true);
+    languageProvider.langOPT = _myLanguage;
+    return Scaffold(
+      body: SingleChildScrollView(
+          child: Stack(
             children: [
               Container(
                   width: MediaQuery.of(context).size.width,
@@ -56,8 +73,8 @@ class _ConfirmationFormState extends State<ConfirmationForm> {
                                         padding: EdgeInsets.only(
                                             top: 40.0, bottom: 40.0),
                                         width:
-                                            MediaQuery.of(context).size.width *
-                                                0.9,
+                                        MediaQuery.of(context).size.width *
+                                            0.9,
                                         child: TextFormField(
                                           autocorrect: true,
                                           maxLength: 6,
@@ -95,7 +112,7 @@ class _ConfirmationFormState extends State<ConfirmationForm> {
                                             prefixIcon: Icon(
                                               Icons.message,
                                               color:
-                                                  myCustomColors.loginButton,
+                                              myCustomColors.loginButton,
                                             ),
                                             hintStyle: TextStyle(
                                                 color: myCustomColors
@@ -136,13 +153,13 @@ class _ConfirmationFormState extends State<ConfirmationForm> {
                                         )),
                                     style: ButtonStyle(
                                         backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                myCustomColors.loginBackgroud),
+                                        MaterialStateProperty.all<Color>(
+                                            myCustomColors.loginBackgroud),
                                         shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(30.0),
+                                                BorderRadius.circular(30.0),
                                                 side: BorderSide(
                                                     color: myCustomColors
                                                         .loginBackgroud)))),
@@ -150,9 +167,9 @@ class _ConfirmationFormState extends State<ConfirmationForm> {
                                       _formKey.currentState.save();
                                       if (_formKey.currentState.validate()) {
                                         Map<String, dynamic> successInfo =
-                                            await auth.signInWithPhone(
-                                                this.widget.verId,
-                                                _confirmationCode);
+                                        await auth.signInWithPhone(
+                                            this.widget.verId,
+                                            _confirmationCode);
                                         print(successInfo);
                                         if (successInfo['success']) {
                                           var user = successInfo['user'];
@@ -173,6 +190,9 @@ class _ConfirmationFormState extends State<ConfirmationForm> {
                   ))
             ],
           )),
-        ));
+    );
+    }
+    })
+    );
   }
 }
