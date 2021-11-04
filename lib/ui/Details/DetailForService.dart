@@ -2,12 +2,14 @@ import 'package:alen/models/hospital.dart';
 import 'package:alen/providers/diagnostic.dart';
 import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/laboratory.dart';
+import 'package:alen/providers/language.dart';
 import 'package:alen/providers/user_preference.dart';
 import 'package:alen/ui/ServiceCategory/Service.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:alen/utils/DetailsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'HospitalDetail.dart';
 
@@ -40,137 +42,160 @@ class DetailsForService extends StatelessWidget {
     var hosProvider = Provider.of<HospitalProvider>(context, listen: false);
     var diagnosisProvider = Provider.of<DiagnosticProvider>(context, listen: false);
     var labProvider = Provider.of<LaboratoryProvider>(context, listen: false);
-    return Scaffold(
-      appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context, false),
-          )),
-      body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      height: 200,
-                      width: 350,
-                      child: (imageUrl==null)?Text("Image not available"):
-                      Image.network(imageUrl,
-                          width: 200, height: 120, fit: BoxFit.fill),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(
-                          MediaQuery.of(context).size.width * 0.03,
-                          30,
-                          MediaQuery.of(context).size.width * 0.03,
-                          5),
-                      child:Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Types',
-                            textScaleFactor: 1.5,
-                            textAlign: TextAlign.left,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                    FutureBuilder<List<HLDServiceTypes>>(
-                        future: (role==Roles.Hospital)?
-                        hosProvider.getHospServiceTypesByHospitalId(id, hospitalId)
-                            :(role==Roles.Diagnosis)?
-                        diagnosisProvider.getDiagnosticsServiceTypesByDiagnosticsId(id, hospitalId):
-                        labProvider.getLabServiceTypesByLabId(id, hospitalId)
-                        ,
-                        builder: (context , hospServSnapshot) {
-                          if (hospServSnapshot.connectionState ==
-                              ConnectionState.none &&
-                              hospServSnapshot.hasData == null) {
-                            return Container(
-                              height: 110,
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          }
-                          print(
-                              'project snapshot data is: ${hospServSnapshot.data}');
-                          if (hospServSnapshot.data == null) {
-                            return Container(
-                              height: 110,
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          }
-                          else {
-                            List<dynamic> list=[];
-                            for(int i=0; i<hospServSnapshot.data.length; i++){
-                              var temp=hospServSnapshot.data[i];
-                              if(temp.serviceId==id){
-                                list.add(temp);
-                              }
-                            }
-                            return Container(
-                                height: 110.0,
-                                margin: EdgeInsets.fromLTRB(
-                                    MediaQuery.of(context).size.width * 0.07,
-                                    5,
-                                    MediaQuery.of(context).size.width * 0.07,
-                                    30),
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (BuildContext ctxt, int index) {
-                                    return _buildHopitalServicesListItem(
-                                        list[index], ctxt, hospitalId,id, role);
-                                  },
-                                  itemCount: list.length,
-                                ));
-                          }
-                        }),
-                    Container(
-                        padding: EdgeInsets.all(30),
+    return
+    FutureBuilder<dynamic>(
+        future: SharedPreferences.getInstance(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.none &&
+              snapshot.hasData == null) {
+            return CircularProgressIndicator();
+          }
+          print('project snapshot data is: ${snapshot.data}');
+          if (snapshot.data == null) {
+            return Container(
+                child: Center(child: CircularProgressIndicator()));
+          } else {
+            var _myLanguage = snapshot.data.getString("lang");
+            var languageProvider = Provider.of<LanguageProvider>(context, listen: true);
+            languageProvider.langOPT = _myLanguage;
+            return Scaffold(
+              appBar: AppBar(
+                  leading: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () => Navigator.pop(context, false),
+                  )),
+              body: SingleChildScrollView(
+                  child: Stack(
+                    children: [
+                      Container(
                         width: MediaQuery.of(context).size.width,
-                        child: Center(
-                            child:Text(
-                              name??"Name",
-                              textAlign: TextAlign.left,
-                              textScaleFactor: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            )
-                        )
-                    ),
-                    Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-                        width: MediaQuery.of(context).size.width,
-                        child: Center(
-                          child: Text(
-                            description??"Description",
-                            textDirection: TextDirection.ltr,
-                            maxLines: 10,
-                          ),
-                        )
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              height: 200,
+                              width: 350,
+                              child: (imageUrl==null)?Text("Image not available"):
+                              Image.network(imageUrl,
+                                  width: 200, height: 120, fit: BoxFit.fill,errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                                    return Image.asset("assets/images/hos1.jpg",
+                                      width: 200,
+                                      height: 120,
+                                      fit: BoxFit.cover,);
+                                  }),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(
+                                  MediaQuery.of(context).size.width * 0.03,
+                                  30,
+                                  MediaQuery.of(context).size.width * 0.03,
+                                  5),
+                              child:Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Types',
+                                    textScaleFactor: 1.5,
+                                    textAlign: TextAlign.left,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            FutureBuilder<List<HLDServiceTypes>>(
+                                future: (role==Roles.Hospital)?
+                                hosProvider.getHospServiceTypesByHospitalId(id, hospitalId)
+                                    :(role==Roles.Diagnosis)?
+                                diagnosisProvider.getDiagnosticsServiceTypesByDiagnosticsId(id, hospitalId):
+                                labProvider.getLabServiceTypesByLabId(id, hospitalId)
+                                ,
+                                builder: (context , hospServSnapshot) {
+                                  if (hospServSnapshot.connectionState ==
+                                      ConnectionState.none &&
+                                      hospServSnapshot.hasData == null) {
+                                    return Container(
+                                      height: 110,
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    );
+                                  }
+                                  print(
+                                      'project snapshot data is: ${hospServSnapshot.data}');
+                                  if (hospServSnapshot.data == null) {
+                                    return Container(
+                                      height: 110,
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    );
+                                  }
+                                  else {
+                                    List<dynamic> list=[];
+                                    for(int i=0; i<hospServSnapshot.data.length; i++){
+                                      var temp=hospServSnapshot.data[i];
+                                      if(temp.serviceId==id){
+                                        list.add(temp);
+                                      }
+                                    }
+                                    return Container(
+                                        height: 110.0,
+                                        margin: EdgeInsets.fromLTRB(
+                                            MediaQuery.of(context).size.width * 0.07,
+                                            5,
+                                            MediaQuery.of(context).size.width * 0.07,
+                                            30),
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (BuildContext ctxt, int index) {
+                                            return _buildHopitalServicesListItem(
+                                                list[index], ctxt, hospitalId,id, role);
+                                          },
+                                          itemCount: list.length,
+                                        ));
+                                  }
+                                }),
+                            Container(
+                                padding: EdgeInsets.all(30),
+                                width: MediaQuery.of(context).size.width,
+                                child: Center(
+                                    child:Text(
+                                      name??"Name",
+                                      textAlign: TextAlign.left,
+                                      textScaleFactor: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    )
+                                )
+                            ),
+                            Container(
+                                padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                                width: MediaQuery.of(context).size.width,
+                                child: Center(
+                                  child: Text(
+                                    description??"Description",
+                                    textDirection: TextDirection.ltr,
+                                    maxLines: 10,
+                                  ),
+                                )
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
 
-                    SizedBox(
-                      height: 30,
-                    )
-                  ],
-                ),
-              )
-            ],
-          )),
-    );
+                            SizedBox(
+                              height: 30,
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
+            );
+          }
+        });
   }
   _buildHopitalServicesListItem(HLDServiceTypes service, BuildContext ctxt, String hospitalId, String serviceID, Roles role) {
     return GestureDetector(

@@ -1,191 +1,272 @@
-import 'package:alen/models/cart.dart';
 import 'package:alen/providers/cart.dart';
+import 'package:alen/providers/language.dart';
 import 'package:alen/ui/Details/DetailForCartDrug.dart';
 import 'package:alen/utils/AppColors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PharmacyCart extends StatefulWidget {
+  const PharmacyCart({Key key}) : super(key: key);
 
   @override
   _PharmacyCartState createState() => _PharmacyCartState();
 }
-
 class _PharmacyCartState extends State<PharmacyCart> {
-
   static const myCustomColors = AppColors();
-  var cartProvider;
+
   @override
   Widget build(BuildContext coontext) {
-    cartProvider = Provider.of<CartProvider>(coontext);
+    var cartProvider = Provider.of<CartProvider>(context, listen: false);
+    return LoaderOverlay(
+      child:
+        FutureBuilder<dynamic>(
+    future: SharedPreferences.getInstance(),
+    builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.none &&
+    snapshot.hasData == null) {
+    return CircularProgressIndicator();
+    }
+    print('project snapshot data is: ${snapshot.data}');
+    if (snapshot.data == null) {
+    return Container(
+    child: Center(child: CircularProgressIndicator()));
+    } else {
+    var _myLanguage = snapshot.data.getString("lang");
+    var languageProvider = Provider.of<LanguageProvider>(context, listen: true);
+    languageProvider.langOPT = _myLanguage;
     return Scaffold(
-        appBar: AppBar(
-            backgroundColor: myCustomColors.loginBackgroud,
-            title: Text("Pharmacy Cart"),
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              onPressed: () => Navigator.pop(coontext, false),
-            )),
-        body: SingleChildScrollView(
-            child: Stack(children: <Widget>[
+      appBar: AppBar(
+        backgroundColor: myCustomColors.loginBackgroud,
+        title: Text("Pharmacy Cart"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(coontext, false),
+        ),
+      ),
+      body: SingleChildScrollView(
+          child: Stack(
+            children: [
               Container(
-                  child: FutureBuilder<List<Cart>>(
-                      future: cartProvider.getMyPharmaCartDrugs(""),//TODO add the user id after login
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.none &&
-                            snapshot.hasData == null) {
-                          return Container(
-                              height: MediaQuery.of(context).size.height,
-                              child:
-                              Center(child: CircularProgressIndicator()));
-                        }
-                        if (snapshot.data == null) {
-                          return Container(
-                            height: MediaQuery.of(context).size.height,
-                              child:
-                              Center(child: CircularProgressIndicator()));
-                        } else {
-                          return snapshot.data.length==0?Container(
-                            height: MediaQuery.of(context).size.height,
-                            child: Center(
-                              child: Text(
-                                "No items available."
-                              ),
-                            ),
-                          )
-                              :
-                          Column(
-                            children: [
-                              Container(
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+
+                    FutureBuilder<List<CartDrug>>(
+                        future: cartProvider.getPharmacyDrugFromLocalCart() ,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.none &&
+                              snapshot.hasData == null) {
+                            return CircularProgressIndicator();
+                          }
+                          print(
+                              'project snapshot data is: ${snapshot.data}');
+                          if (snapshot.data == null) {
+                            return Container(
                                 child: Center(
-                                  child:StatefulBuilder(  // You need this, notice the parameters below:
-                                      builder: (BuildContext context, StateSetter setState) {
-                                        return Text(
-                                          // "Total price : "+totalPrice.toStringAsFixed(2),
-                                          "Total price : "+CartProvider.totalPrice.toStringAsFixed(2),
-                                          textScaleFactor: 2.5,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: myCustomColors.loginBackgroud
-                                          ),
-                                          maxLines: 3,
-                                        );
+                                    child:
+                                    CircularProgressIndicator()));
+                          } else {
+                            if(snapshot.data.length==0){
+                              return Container(
+                                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.45  ),
+                                child: Center(
+                                  child: Text(
+                                      "You have no item in your Pharmacy cart"
+                                  ),
+                                ),
+                              );
+                            }
+                            else{
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Container(
+                                    // width: 190.0,
+                                      margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
+                                      child:ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        scrollDirection: Axis.vertical,
+                                        itemBuilder:
+                                            (BuildContext ctxt, int index) {
+                                          return _buildCategoriesListItem(
+                                              snapshot.data[index], ctxt, coontext);
+                                        },
+                                        itemCount: snapshot.data.length,
+                                      )),
+                                  FutureBuilder<num>(
+                                      future: cartProvider.getPharmacyTotalPayment() ,
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.none &&
+                                            snapshot.hasData == null) {
+                                          return CircularProgressIndicator();
+                                        }
+                                        print(
+                                            'project snapshot data is: ${snapshot.data}');
+                                        if (snapshot.data == null) {
+                                          return Container(
+                                              child: Center(
+                                                  child:
+                                                  CircularProgressIndicator()));
+                                        } else {
+                                          return Container(
+                                            padding: EdgeInsets.symmetric(horizontal: 40),
+                                            child: Center(
+                                                child:Text(
+                                                  "Total price : "+snapshot.data.toString(),
+                                                  textScaleFactor: 2,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                )
+                                            ),
+                                          );
+                                        }
                                       }),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 30,
-                                    horizontal: 15
-                                ),
-                              ),
-                              GridView.builder(
-                                gridDelegate:
-                                SliverGridDelegateWithMaxCrossAxisExtent(
-                                    maxCrossAxisExtent: 200,
-                                    childAspectRatio: 2 / 3.7,
-                                    crossAxisSpacing: 0,
-                                    mainAxisSpacing: 0),
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                itemBuilder: (BuildContext ctxt, int index) {
-                                  add(
-                                      snapshot.data[index].amount,
-                                      num.parse(snapshot.data[index].drug.price)
-                                  );
-                                  return _buildCategoriesListItem(
-                                      snapshot.data[index], ctxt, "",coontext);
-                                },
-                                itemCount: snapshot.data.length,
-                              )
-                            ],
-                          );
-                        }
-                      })),
-            ])));
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(
+                                        MediaQuery.of(context).size.width * 0.1,
+                                        20,
+                                        MediaQuery.of(context).size.width * 0.1,
+                                        30),
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+
+                                        var prefs = await SharedPreferences.getInstance();
+                                        String userId = prefs.getString('user_id');
+                                        num result = await cartProvider.finalizePharmacyCart(userId);
+
+                                        var snackBar;
+                                        result==1? snackBar = SnackBar(
+                                          content: const Text('✓ Successfully ordered.'),
+                                          backgroundColor: myCustomColors.loginBackgroud,
+                                        ):result==2?snackBar = SnackBar(
+                                          content: const Text('Your order has already been registered.'),
+                                          backgroundColor: myCustomColors.loginButton,
+                                        ):snackBar = SnackBar(
+                                          content: const Text('Order Failed! Please check your internet connection.'),
+                                          backgroundColor: myCustomColors.loginButton,
+                                        );
+
+                                        ScaffoldMessenger.of(coontext).showSnackBar(snackBar);
+                                        // addToCart(context, "abcd");
+                                        // print("Added");
+                                        // //addProduct(context);
+                                        // // Navigator.push(
+                                        // //     context,
+                                        // //     MaterialPageRoute(
+                                        // //         builder: (context) => AddDrugs(
+                                        // //           hospitalLabDiagnosis:
+                                        // //           widget.pharmacy,
+                                        // //           index: 0,
+                                        // //         )));
+                                      },
+                                      style: ButtonStyle(
+                                          backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              myCustomColors.loginBackgroud),
+                                          shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(30.0),
+                                                  side: BorderSide(
+                                                      color: myCustomColors
+                                                          .loginBackgroud)))),
+                                      child: Container(
+                                          height: 50,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Text(
+                                                'Buy all cart Items',
+                                                textScaleFactor: 1.5,
+                                                textAlign: TextAlign.left,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(left: 20),
+                                                child: Icon(
+                                                  Icons.add_shopping_cart,
+                                                  size: 30,
+                                                ),
+                                              )
+                                            ],
+                                          )),
+                                    ),
+                                  ),
+
+                                ],
+                              );
+                            }
+                          }
+                        }),
+                  ],
+                ),
+              )
+            ],
+          )),
+    );
+    }
+    }),
+    );
   }
-  _buildCategoriesListItem(var category, BuildContext ctxt, String id, BuildContext coontext) {
+  _buildCategoriesListItem(CartDrug cartItem, BuildContext ctxt, BuildContext coontext) {
     return GestureDetector(
         onTap: () {
           Navigator.push(
               ctxt,
               MaterialPageRoute(
                   builder: (context) => DetailForCartDrug(
-                      cart: category,
-                      id: id,
+                      cart: cartItem,
                       isPharma: true,
-                    coontext: coontext,
+                      isOther: false,
+                      coontext: coontext
                   )));
         },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Card(
-              elevation: 8,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-              ),
-              clipBehavior: Clip.hardEdge,
-              child: Container(
-                width: 150,
-                height: 150,
-                child: SizedBox(
-                  height: 150,
-                  width: 150,
-                  child: Image.network(category.drug.image,
-                      width: 150, height: 150, fit: BoxFit.fill),
+        child: Container(
+            padding: EdgeInsets.only(bottom: 5),
+            child : Column(
+              children: <Widget>[
+                Divider(),
+                ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(cartItem.drug.image),
+                  ),
+                  title: Text(cartItem.drug.name),
+                  subtitle: Text("Price : ${(num.parse(cartItem.drug.price) * cartItem.amount).toStringAsFixed(2)} Birr"),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete_forever_rounded),
+                    onPressed: (){
+                      var cartProvider = Provider.of<CartProvider>(ctxt, listen: false);
+                      cartProvider.deletePharmacyDrugToLocalCart(cartItem);
+                      Navigator.pop(coontext);
+                      Navigator.push(
+                          ctxt,
+                          MaterialPageRoute(
+                              builder: (context) => PharmacyCart(
+                              )));
+                    },
+                  ),
                 ),
-              ),
-            ),
-            Text(
-              category.drug.name,
-              maxLines: 2,
-              textScaleFactor: 1.1,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Text(
-              "price : "+category.getTotalPrice().toString(),
-              maxLines: 2,
-              // style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Container(
-              width: 120,
-              height: 25,
-              child: ElevatedButton(
-                  onPressed: (){
-                    Provider.of<CartProvider>(context, listen: false).deleteDrugFromCart(category);
-                    Navigator.pop(coontext);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PharmacyCart()
-                        )
-                    );
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        "Remove "
-                      ),
-                      Icon(
-                          Icons.remove_shopping_cart
-                      )
-                    ],
-                  )
-              ),
+                Divider()
+              ],
             )
-          ],
-        ));
-  }
-
-  num totalPrice=0;
-  void add(num price, num amount){
-    num product=price*amount;
-    totalPrice+=product;
-    print("Total price: $totalPrice");
+        )
+    );
   }
 }
+
 

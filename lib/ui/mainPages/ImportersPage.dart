@@ -1,6 +1,8 @@
 import 'package:alen/models/importer.dart';
 import 'package:alen/models/user_location.dart';
 import 'package:alen/providers/importer.dart';
+import 'package:alen/providers/language.dart';
+import 'package:alen/ui/Cart/ImportCart.dart';
 import 'package:alen/ui/Cart/ImportCart.dart';
 import 'package:alen/ui/Cart/PharmacyCart.dart';
 import 'package:alen/ui/Details/ImporterDetail.dart';
@@ -18,6 +20,7 @@ import 'package:alen/ui/SearchDelegates/searchPharmacies.dart';
 import 'package:provider/provider.dart';
 import 'package:alen/providers/pharmacy.dart';
 import 'package:alen/models/pharmacy.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/AppColors.dart';
 
@@ -43,222 +46,239 @@ class ImportersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var importerProvider =
     Provider.of<ImporterProvider>(context, listen: false);
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 2,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context, false),
-        ),
-        title: Text("Importers", textAlign: TextAlign.center),
-        actions: [
-          IconButton(
-            padding: EdgeInsets.only(right: 15),
-            onPressed: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ImporterCart()
-                  )
-              );
-            },
-            icon: Icon(
-                Icons.shopping_cart
-            ),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    GestureDetector(
-                        onTap: () {
-                          showSearch<Importers>(
-                              context: context,
-                              delegate: ImporterSearch(importers: ImporterProvider.nearby));
-                        },
-                        child: Container(
-                            margin: EdgeInsets.fromLTRB(0, 60, 0, 50),
-                            child: Center(
-                                child: Container(
-                                  // padding: EdgeInsets.all(40.0),
-                                    width:
-                                    MediaQuery.of(context).size.width * 0.90,
-                                    child: Theme(
-                                        data: ThemeData(
-                                          hintColor: Colors.white,
-                                        ),
-                                        child: Card(
-                                            elevation: 4,
-                                            shape: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(50.0)),
-                                              borderSide: BorderSide(
-                                                  color: myCustomColors
-                                                      .loginBackgroud,
-                                                  width: 2),
-                                            ),
-                                            child: SizedBox(
-                                              height: 50,
-                                              child: ListTile(
-                                                leading: Icon(
-                                                  Icons.search,
-                                                  color: myCustomColors
-                                                      .loginBackgroud,
-                                                ),
-                                                title: Text(
-                                                  'Search',
-                                                  style: TextStyle(
-                                                    color: myCustomColors
-                                                        .loginBackgroud,
-                                                  ),
-                                                ),
-                                              ),
-                                            ))))))),
-                    Divider(
-                      color: Colors.black38,
-                    ),
-                    Container(
-                        margin: EdgeInsets.fromLTRB(
-                            MediaQuery.of(context).size.width * 0.05,
-                            0,
-                            MediaQuery.of(context).size.width * 0.05,
-                            0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Top Importers",
-                              textAlign: TextAlign.left,
-                              textScaleFactor: 1.7,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-
-                          ],
-                        )),
-                    Container(
-                        height: 190.0,
-                        margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
-                        child: FutureBuilder<List<Importers>>(
-                            future: importerProvider.fetchTrendingImporters() ,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.none &&
-                                  snapshot.hasData == null) {
-                                return CircularProgressIndicator();
-                              }
-                              print(
-                                  'project snapshot data is: ${snapshot.data}');
-                              if (snapshot.data == null) {
-                                return Container(
-                                    child: Center(
-                                        child:
-                                        CircularProgressIndicator()));
-                              } else {
-                                WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-                                return ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  controller: _scrollController,
-                                  // reverse: true,
-                                  shrinkWrap: true,
-                                  itemBuilder:
-                                      (BuildContext ctxt, int index) {
-                                    return _buildPharmaciesListItem(
-                                        snapshot.data[index], ctxt);
-                                  },
-                                  itemCount: snapshot.data.length,
-                                );
-                              }
-                            })),
-                    Divider(
-                      color: Colors.black38,
-                    ),
-                    Container(
-                        margin: EdgeInsets.fromLTRB(
-                            MediaQuery.of(context).size.width * 0.05,
-                            0,
-                            MediaQuery.of(context).size.width * 0.05,
-                            0),
-
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Nearby Importers",
-                              textAlign: TextAlign.left,
-                              textScaleFactor: 1.7,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-
-                          ],
-                        )),
-                    Container(
-                        // height: 190.0,
-                        margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
-                        child: FutureBuilder<UserLocation>(
-                            future: importerProvider.getCurrentLocation(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.none &&
-                                  snapshot.hasData == null) {
-                                return CircularProgressIndicator();
-                              }
-                              return FutureBuilder<List<Importers>>(
-                                  future: importerProvider
-                                      .fetchNearByImporters(snapshot.data),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.none &&
-                                        snapshot.hasData == null) {
-                                      return CircularProgressIndicator();
-                                    }
-                                    print(
-                                        'project snapshot data is: ${snapshot.data}');
-                                    if (snapshot.data == null) {
-                                      return Container(
-                                          child: Center(
-                                              child:
-                                              CircularProgressIndicator()));
-                                    } else {
-                                      return GridView.builder(
-                                        gridDelegate:
-                                        SliverGridDelegateWithMaxCrossAxisExtent(
-                                            maxCrossAxisExtent: 160,
-                                            childAspectRatio:
-                                            (MediaQuery.of(context)
-                                                .orientation ==
-                                                Orientation.portrait)
-                                                ? 2 / 3
-                                                : 2 / 2.2,
-                                            crossAxisSpacing: 0,
-                                            mainAxisSpacing: 0),
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        scrollDirection: Axis.vertical,
-                                        itemBuilder:
-                                            (BuildContext ctxt, int index) {
-                                          return _buildPharmaciesListItem(
-                                              snapshot.data[index], ctxt);
-                                        },
-                                        itemCount: snapshot.data.length,
-                                      );
-                                    }
-                                  });
-                            })),
-                  ],
+    return FutureBuilder<dynamic>(
+        future: SharedPreferences.getInstance(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.none &&
+              snapshot.hasData == null) {
+            return CircularProgressIndicator();
+          }
+          print('project snapshot data is: ${snapshot.data}');
+          if (snapshot.data == null) {
+            return Container(
+                child: Center(child: CircularProgressIndicator()));
+          } else {
+            var _myLanguage = snapshot.data.getString("lang");
+            var languageProvider = Provider.of<LanguageProvider>(context, listen: true);
+            languageProvider.langOPT = _myLanguage;
+            return Scaffold(
+              appBar: AppBar(
+                elevation: 2,
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.pop(context, false),
                 ),
-              )
-            ],
-          )),
-    );
+                title: Text("Importers", textAlign: TextAlign.center),
+                actions: [
+                  IconButton(
+                    padding: EdgeInsets.only(right: 15),
+                    onPressed: (){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ImportCart()
+                          )
+                      );
+                    },
+                    icon: Icon(
+                        Icons.shopping_cart
+                    ),
+                  )
+                ],
+              ),
+              body: SingleChildScrollView(
+                  child: Stack(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            GestureDetector(
+                                onTap: () {
+                                  showSearch<Importers>(
+                                      context: context,
+                                      delegate: ImporterSearch(importers: ImporterProvider.nearby));
+                                },
+                                child: Container(
+                                    margin: EdgeInsets.fromLTRB(0, 60, 0, 50),
+                                    child: Center(
+                                        child: Container(
+                                          // padding: EdgeInsets.all(40.0),
+                                            width:
+                                            MediaQuery.of(context).size.width * 0.90,
+                                            child: Theme(
+                                                data: ThemeData(
+                                                  hintColor: Colors.white,
+                                                ),
+                                                child: Card(
+                                                    elevation: 4,
+                                                    shape: OutlineInputBorder(
+                                                      borderRadius: BorderRadius.all(
+                                                          Radius.circular(50.0)),
+                                                      borderSide: BorderSide(
+                                                          color: myCustomColors
+                                                              .loginBackgroud,
+                                                          width: 2),
+                                                    ),
+                                                    child: SizedBox(
+                                                      height: 50,
+                                                      child: ListTile(
+                                                        leading: Icon(
+                                                          Icons.search,
+                                                          color: myCustomColors
+                                                              .loginBackgroud,
+                                                        ),
+                                                        title: Text(
+                                                          'Search',
+                                                          style: TextStyle(
+                                                            color: myCustomColors
+                                                                .loginBackgroud,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ))))))),
+                            Divider(
+                              color: Colors.black38,
+                            ),
+                            Container(
+                                margin: EdgeInsets.fromLTRB(
+                                    MediaQuery.of(context).size.width * 0.05,
+                                    0,
+                                    MediaQuery.of(context).size.width * 0.05,
+                                    0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Top Importers",
+                                      textAlign: TextAlign.left,
+                                      textScaleFactor: 1.7,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+
+                                  ],
+                                )),
+                            Container(
+                                height: 190.0,
+                                margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
+                                child: FutureBuilder<List<Importers>>(
+                                    future: importerProvider.fetchTrendingImporters() ,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.none &&
+                                          snapshot.hasData == null) {
+                                        return CircularProgressIndicator();
+                                      }
+                                      print(
+                                          'project snapshot data is: ${snapshot.data}');
+                                      if (snapshot.data == null) {
+                                        return Container(
+                                            child: Center(
+                                                child:
+                                                CircularProgressIndicator()));
+                                      } else {
+                                        WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+                                        return ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          controller: _scrollController,
+                                          // reverse: true,
+                                          shrinkWrap: true,
+                                          itemBuilder:
+                                              (BuildContext ctxt, int index) {
+                                            return _buildPharmaciesListItem(
+                                                snapshot.data[index], ctxt);
+                                          },
+                                          itemCount: snapshot.data.length,
+                                        );
+                                      }
+                                    })),
+                            Divider(
+                              color: Colors.black38,
+                            ),
+                            Container(
+                                margin: EdgeInsets.fromLTRB(
+                                    MediaQuery.of(context).size.width * 0.05,
+                                    0,
+                                    MediaQuery.of(context).size.width * 0.05,
+                                    0),
+
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Nearby Importers",
+                                      textAlign: TextAlign.left,
+                                      textScaleFactor: 1.7,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+
+                                  ],
+                                )),
+                            Container(
+                              // height: 190.0,
+                                margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
+                                child: FutureBuilder<UserLocation>(
+                                    future: importerProvider.getCurrentLocation(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.none &&
+                                          snapshot.hasData == null) {
+                                        return CircularProgressIndicator();
+                                      }
+                                      return FutureBuilder<List<Importers>>(
+                                          future: importerProvider
+                                              .fetchNearByImporters(snapshot.data),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.none &&
+                                                snapshot.hasData == null) {
+                                              return CircularProgressIndicator();
+                                            }
+                                            print(
+                                                'project snapshot data is: ${snapshot.data}');
+                                            if (snapshot.data == null) {
+                                              return Container(
+                                                  child: Center(
+                                                      child:
+                                                      CircularProgressIndicator()));
+                                            } else {
+                                              return GridView.builder(
+                                                gridDelegate:
+                                                SliverGridDelegateWithMaxCrossAxisExtent(
+                                                    maxCrossAxisExtent: 160,
+                                                    childAspectRatio:
+                                                    (MediaQuery.of(context)
+                                                        .orientation ==
+                                                        Orientation.portrait)
+                                                        ? 2 / 3
+                                                        : 2 / 2.2,
+                                                    crossAxisSpacing: 0,
+                                                    mainAxisSpacing: 0),
+                                                shrinkWrap: true,
+                                                physics: NeverScrollableScrollPhysics(),
+                                                scrollDirection: Axis.vertical,
+                                                itemBuilder:
+                                                    (BuildContext ctxt, int index) {
+                                                  return _buildPharmaciesListItem(
+                                                      snapshot.data[index], ctxt);
+                                                },
+                                                itemCount: snapshot.data.length,
+                                              );
+                                            }
+                                          });
+                                    })),
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
+            );
+          }
+        });
   }
 
   _buildPharmaciesListItem(var pharmacy, BuildContext ctxt) {
@@ -310,7 +330,14 @@ class ImportersPage extends StatelessWidget {
                       width: 120,
                       child: pharmacy.images != null
                           ? Image.network(pharmacy.images.first,
-                          width: 120, height: 120, fit: BoxFit.fill)
+                          width: 120, height: 120, fit: BoxFit.fill,
+                          errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                            return Image.asset("assets/images/hos1.jpg",
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,);
+                          }
+                      )
                           : Container(
                         child: Center(
                           child: Text('Image'),
@@ -319,16 +346,23 @@ class ImportersPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  pharmacy.name,
-                  maxLines: 2,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                Container(
+                  width: 120,
+                  child: Text(
+                    pharmacy.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
-                Text(
-                  pharmacy.phone,
-                  maxLines: 2,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                )
+                Container(
+                    width: 120,
+                    child:Text(
+                      pharmacy.phone,
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ))
               ],
             )));
   }

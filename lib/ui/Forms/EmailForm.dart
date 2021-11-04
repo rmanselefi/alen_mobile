@@ -1,7 +1,9 @@
 import 'package:alen/providers/auth.dart';
+import 'package:alen/providers/language.dart';
 import 'package:alen/ui/Home/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/AppColors.dart';
 
@@ -30,10 +32,25 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
             fontFamily: 'Ubuntu',
-            scaffoldBackgroundColor: myCustomColors.loginButton),
-        home: Scaffold(
-          body: SingleChildScrollView(
-              child: Stack(
+            scaffoldBackgroundColor: myCustomColors.mainBackground),
+        home: FutureBuilder<dynamic>(
+    future: SharedPreferences.getInstance(),
+    builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.none &&
+    snapshot.hasData == null) {
+    return CircularProgressIndicator();
+    }
+    print('project snapshot data is: ${snapshot.data}');
+    if (snapshot.data == null) {
+    return Container(
+    child: Center(child: CircularProgressIndicator()));
+    } else {
+    var _myLanguage = snapshot.data.getString("lang");
+    var languageProvider = Provider.of<LanguageProvider>(context, listen: true);
+    languageProvider.langOPT = _myLanguage;
+    return Scaffold(
+      body: SingleChildScrollView(
+          child: Stack(
             children: [
               Container(
                   width: MediaQuery.of(context).size.width,
@@ -55,7 +72,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                         textScaleFactor: 2.5,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white),
+                            fontWeight: FontWeight.bold),
                       ),
                       Form(
                         key: _formKey,
@@ -64,14 +81,14 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                               child: Center(
                                   child: Container(
                                       padding:
-                                          EdgeInsets.fromLTRB(10, 25, 10, 5),
+                                      EdgeInsets.fromLTRB(10, 25, 10, 5),
                                       width: MediaQuery.of(context).size.width *
                                           0.90,
                                       child: TextFormField(
                                         autocorrect: true,
                                         maxLines: 1,
                                         keyboardType:
-                                            TextInputType.emailAddress,
+                                        TextInputType.emailAddress,
                                         validator: (String value) {
                                           if (value == null) {
                                             return 'First name is required!';
@@ -80,7 +97,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                             return null;
                                           }
                                           if (!RegExp(
-                                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                               .hasMatch(value)) {
                                             return "Incorrect Email Address";
                                           }
@@ -104,14 +121,14 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                           labelText: 'Email',
                                           hintText: 'Email',
                                           counterStyle:
-                                              TextStyle(color: Colors.white54),
+                                          TextStyle(color: Colors.white54),
                                           labelStyle: TextStyle(
                                               color: myCustomColors
                                                   .loginButton),
                                           prefixIcon: Icon(
                                             Icons.email_outlined,
                                             color:
-                                                myCustomColors.loginButton,
+                                            myCustomColors.loginButton,
                                           ),
                                           hintStyle: TextStyle(
                                               color: myCustomColors
@@ -126,7 +143,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                           ),
                                           border: OutlineInputBorder(
                                             borderRadius:
-                                                const BorderRadius.all(
+                                            const BorderRadius.all(
                                               const Radius.circular(40.0),
                                             ),
                                             borderSide: BorderSide(
@@ -144,7 +161,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                               child: Center(
                                   child: Container(
                                       padding:
-                                          EdgeInsets.fromLTRB(10, 25, 10, 5),
+                                      EdgeInsets.fromLTRB(10, 25, 10, 5),
                                       width: MediaQuery.of(context).size.width *
                                           0.90,
                                       child: TextFormField(
@@ -161,7 +178,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                           }
                                           if (!RegExp(r"^[0-9]+")
                                               .hasMatch(value)) {
-                                            return "Incorrect Age";
+                                            return "Age must be a number";
                                           }
                                           return null;
                                         },
@@ -180,14 +197,14 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                           labelText: 'Age',
                                           hintText: 'Age',
                                           counterStyle:
-                                              TextStyle(color: Colors.white54),
+                                          TextStyle(color: Colors.white54),
                                           labelStyle: TextStyle(
                                               color: myCustomColors
                                                   .loginButton),
                                           prefixIcon: Icon(
                                             Icons.assignment_ind,
                                             color:
-                                                myCustomColors.loginButton,
+                                            myCustomColors.loginButton,
                                           ),
                                           hintStyle: TextStyle(
                                               color: myCustomColors
@@ -202,7 +219,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                           ),
                                           border: OutlineInputBorder(
                                             borderRadius:
-                                                const BorderRadius.all(
+                                            const BorderRadius.all(
                                               const Radius.circular(40.0),
                                             ),
                                             borderSide: BorderSide(
@@ -220,7 +237,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                               child: Center(
                                   child: Container(
                                       padding:
-                                          EdgeInsets.fromLTRB(10, 5, 10, 25),
+                                      EdgeInsets.fromLTRB(10, 5, 10, 25),
                                       width: MediaQuery.of(context).size.width *
                                           0.90,
                                       child: FormField<String>(
@@ -234,30 +251,30 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                           _sex = value;
                                         },
                                         builder: (
-                                          FormFieldState<String> state,
-                                        ) {
+                                            FormFieldState<String> state,
+                                            ) {
                                           return Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             children: <Widget>[
                                               new InputDecorator(
                                                 decoration:
-                                                    const InputDecoration(
+                                                const InputDecoration(
                                                   counterStyle: TextStyle(
                                                       color: Colors.white54),
                                                   enabledBorder:
-                                                      OutlineInputBorder(
+                                                  OutlineInputBorder(
                                                     borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                40.0)),
+                                                    BorderRadius.all(
+                                                        Radius.circular(
+                                                            40.0)),
                                                     borderSide: BorderSide(
                                                         color: Colors.green,
                                                         width: 2),
                                                   ),
                                                   border: OutlineInputBorder(
                                                     borderRadius:
-                                                        const BorderRadius.all(
+                                                    const BorderRadius.all(
                                                       const Radius.circular(
                                                           40.0),
                                                     ),
@@ -266,11 +283,11 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                                         width: 2),
                                                   ),
                                                   focusedBorder:
-                                                      OutlineInputBorder(
+                                                  OutlineInputBorder(
                                                     borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                40.0)),
+                                                    BorderRadius.all(
+                                                        Radius.circular(
+                                                            40.0)),
                                                     borderSide: BorderSide(
                                                         color: Colors.green,
                                                         width: 2),
@@ -281,7 +298,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                                   filled: true,
                                                   fillColor: Colors.white,
                                                   contentPadding:
-                                                      EdgeInsets.all(0.0),
+                                                  EdgeInsets.all(0.0),
                                                   labelText: 'Sex',
                                                   hintText: 'Sex',
                                                   labelStyle: TextStyle(
@@ -290,11 +307,11 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                                   prefixIcon: Icon(
                                                     Icons.wc,
                                                     color:
-                                                        const Color(0xFF9516B6),
+                                                    const Color(0xFF9516B6),
                                                   ),
                                                 ),
                                                 child:
-                                                    DropdownButtonHideUnderline(
+                                                DropdownButtonHideUnderline(
                                                   child: DropdownButton<String>(
                                                     hint: new Text(
                                                         "Select your Sex"),
@@ -338,7 +355,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                               child: Center(
                                   child: Container(
                                       padding:
-                                          EdgeInsets.fromLTRB(10, 5, 10, 25),
+                                      EdgeInsets.fromLTRB(10, 5, 10, 25),
                                       width: MediaQuery.of(context).size.width *
                                           0.90,
                                       child: TextFormField(
@@ -374,7 +391,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                         },
                                         decoration: InputDecoration(
                                           counterStyle:
-                                              TextStyle(color: Colors.white54),
+                                          TextStyle(color: Colors.white54),
                                           labelText: 'Location',
                                           hintText: 'Location',
                                           labelStyle: TextStyle(
@@ -383,7 +400,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                           prefixIcon: Icon(
                                             Icons.location_on_outlined,
                                             color:
-                                                myCustomColors.loginButton,
+                                            myCustomColors.loginButton,
                                           ),
                                           hintStyle: TextStyle(
                                               color: myCustomColors
@@ -398,7 +415,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                           ),
                                           border: OutlineInputBorder(
                                             borderRadius:
-                                                const BorderRadius.all(
+                                            const BorderRadius.all(
                                               const Radius.circular(40.0),
                                             ),
                                             borderSide: BorderSide(
@@ -422,13 +439,13 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                     )),
                                 style: ButtonStyle(
                                     backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            myCustomColors.loginBackgroud),
+                                    MaterialStateProperty.all<Color>(
+                                        myCustomColors.loginBackgroud),
                                     shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(30.0),
+                                            BorderRadius.circular(30.0),
                                             side: BorderSide(
                                                 color: myCustomColors
                                                     .loginBackgroud)))),
@@ -456,6 +473,8 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                   )),
             ],
           )),
-        ));
+    );
+    }
+    }));
   }
 }
