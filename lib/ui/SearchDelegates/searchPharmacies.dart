@@ -130,9 +130,11 @@ class PharmacySearch extends SearchDelegate<Pharmacies> {
                 maxLines: 1,
               ),
               leading: CircleAvatar(
-                  backgroundImage: NetworkImage(
+                  backgroundImage: (suggestions.elementAt(index).images!=null)?NetworkImage(
                 suggestions.elementAt(index).images.first,
-              )),
+              ):AssetImage(
+                    'assets/images/alen_no_name.png',
+                  )),
               onTap: () {
                 query = suggestions.elementAt(index).name;
               },

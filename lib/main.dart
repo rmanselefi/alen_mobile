@@ -48,7 +48,7 @@ class MySplashScreen extends StatelessWidget {
           seconds: 4,
           navigateAfterSeconds: new MyApp(),
           //image: new Image.asset('assets/images/splash.jpg'),
-          loaderColor: AppColors().loginButton,
+          loaderColor: AppColors().loginBackgroud,
           imageBackground: AssetImage('assets/images/splash.jpg'),
         ),
       ),

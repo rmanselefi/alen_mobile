@@ -1,9 +1,8 @@
 import 'package:alen/providers/language.dart';
 import 'package:flutter/material.dart';
-
-import 'package:alen/utils/AppColors.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:alen/utils/AppColors.dart';
 
 class UserRepresentationAndWarranties extends StatelessWidget {
   const UserRepresentationAndWarranties({Key key}) : super(key: key);
@@ -79,7 +78,7 @@ class UserRepresentationAndWarranties extends StatelessWidget {
                                       textScaleFactor: 1.3,
                                       maxLines: 3,
                                       overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                      style: const TextStyle(fontWeight: FontWeight.normal),
                                     )
                                 )
                             ),
@@ -132,7 +131,7 @@ class UserRepresentationAndWarranties extends StatelessWidget {
                                     "> False, misleading or deceptive statements\n\n"
                                         "> You will not copy, modify, distribute any"
                                         " other service provider Content without "
-                                        "consent of    the respective provider \n\n"
+                                        "consent of the respective provider \n\n"
                                         "> You have the necessary license or are"
                                         " otherwise authorized, as required by"
                                         " applicable law, to offer for service,"

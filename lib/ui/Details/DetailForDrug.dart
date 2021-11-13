@@ -516,7 +516,7 @@ class _DetailForDrugState extends State<DetailForDrug> {
                         backgroundColor: myCustomColors.loginBackgroud,
                         ):snackBar = SnackBar(
                         content: const Text('Item is already in Cart.'),
-                        backgroundColor: myCustomColors.loginButton,
+                        backgroundColor: myCustomColors.loginBackgroud,
                         );
 
                         ScaffoldMessenger.of(ctxt).showSnackBar(snackBar);

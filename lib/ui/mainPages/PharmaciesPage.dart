@@ -286,7 +286,7 @@ class PharmaciesPage extends StatelessWidget {
                     phone: pharmacy.phone??"Phone",
                     imagesList: pharmacy.image??"Image",
                     name: pharmacy.name??"Name",
-                    images: pharmacy.images??"-",
+                    // images: pharmacy.images??"-",
                     description:pharmacy.description??"Description",
                     latitude: pharmacy.latitude.toString()??"-",
                     longtude: pharmacy.longitude.toString()??"-",

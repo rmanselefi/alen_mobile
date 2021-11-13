@@ -1,12 +1,11 @@
 import 'package:alen/providers/language.dart';
-import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:alen/utils/AppColors.dart';
 
-
-class AcceptanceOfTerms extends StatelessWidget {
-  const AcceptanceOfTerms({Key key}) : super(key: key);
+class Service extends StatelessWidget {
+  const Service({Key key}) : super(key: key);
 
   static const myCustomColors = AppColors();
 
@@ -57,7 +56,7 @@ class AcceptanceOfTerms extends StatelessWidget {
                                 width: MediaQuery.of(context).size.width,
                                 child: Center(
                                     child:Text(
-                                      "Acceptance Of The Terms",
+                                      "Service",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.6,
                                       maxLines: 3,
@@ -72,29 +71,40 @@ class AcceptanceOfTerms extends StatelessWidget {
                                 width: MediaQuery.of(context).size.width,
                                 child: Center(
                                   child: Text(
-                                    "1.1. These Terms of Use (the “Terms”) constitute "
-                                        "a binding and enforceable legal contract between "
-                                        "Hyssop Pharma Trading P.L.C and you. Please "
-                                        "read these Terms carefully.\n\n"
-                                        "1.2. Your access and use of the “Alen” call"
-                                        " center and mobile application, as well"
-                                        " as any service, content, and data available"
-                                        " via them (together, the “Service” or the "
-                                        "“Platform”) are governed by these Terms.\n\n"
-                                        "1.3. If you do not agree with any part of these"
-                                        " Terms, or if you are not eligible or "
-                                        "authorized to be bound by the Terms, "
-                                        "then do not access or use the Service.\n\n"
-                                        "1.4. Please also review our Privacy Policy."
-                                        " The terms of the Privacy Policy and other "
-                                        "supplemental terms, rules, policies, or"
-                                        " documents that may be posted on the "
-                                        "Platform from time to time are hereby "
-                                        "expressly incorporated herein by reference. "
-                                        "We reserve the right, in our sole discretion, "
-                                        "to make changes or modifications to these Terms "
-                                        "at any time and for any reason with or without"
-                                        " prior notice.",
+                                    "3.1. The Platform is an online service that "
+                                        "allows service providers to create and "
+                                        "publish announcements, users use to view "
+                                        "announcements published by service"
+                                        " providers, to communicate with service"
+                                        " providers using the contact details"
+                                        " provided in the announcements.\n\n"
+                                        "3.2. The Administrator itself is not an"
+                                        " importer, manufacturer, distributor, "
+                                        "or seller of any item, as well as not "
+                                        "a provider of any service posted by"
+                                        " users on the Platform. In addition, "
+                                        "the Administrator is neither a marketer"
+                                        " nor a person acting on user's behalf"
+                                        " with respect to the marketing of any "
+                                        "goods or services posted on the Platform. "
+                                        "The Administrator provides users with an "
+                                        "opportunity to communicate.\n\n"
+                                        "3.3. The Administrator reserves a right "
+                                        "to delete or block access to announcements "
+                                        "posted by service providers with a notice"
+                                        " (1) if payment is not issued accordingly "
+                                        " (2) if the service provider doesn't serve "
+                                        "as the agreement . \n\n"
+                                        "3.4. Each Service provider is solely responsible"
+                                        " for any and all his or her services.\n\n"
+                                        "3.5. You hereby release us, our employees, from "
+                                        "claims, demands any and all losses, damages,"
+                                        " rights, claims, and actions of any kind "
+                                        "including personal injuries, death, and"
+                                        " property damage, that is either directly "
+                                        "or indirectly related to or arises from any"
+                                        " interactions with or conduct of any"
+                                        " Service users .\n\n",
                                     textDirection: TextDirection.ltr,
                                     maxLines: 20,
                                   ),

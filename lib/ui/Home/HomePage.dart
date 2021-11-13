@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:alen/Terms%20Of%20Use/Terms%20Of%20Use.dart';
 import 'package:alen/main.dart';
 import 'package:alen/models/ads.dart';
 import 'package:alen/models/hospital.dart';
@@ -25,7 +25,6 @@ import 'package:alen/ui/Pages/Pharmacy.dart';
 import 'package:alen/ui/Privacy%20Policy/PrivacyPolicy.dart';
 import 'package:alen/ui/SeeAllPages/Home/SeeAllHealthArticles.dart';
 import 'package:alen/ui/SeeAllPages/Home/SeeAllTrendings.dart';
-import 'package:alen/ui/Terms%20Of%20Use/Terms%20Of%20Use.dart';
 import 'package:alen/ui/mainPages/CompaniesPage.dart';
 import 'package:alen/ui/mainPages/HomeCaresPage.dart';
 import 'package:alen/utils/AppColors.dart';
@@ -138,6 +137,55 @@ class _HomePageState extends State<HomePage> {
     return hld;
   }
 
+  search()async{
+    UserLocation location =
+        await Provider.of<PharmacyProvider>(context, listen: false)
+        .getCurrentLocation();
+    print("Done for Location");
+    await Provider.of<PharmacyProvider>(context, listen: false)
+        .fetchNearByHospitals(location);
+    print("Done for Pharmacy");
+    PharmacyProvider.nearby.forEach((element) {
+      print(element.name);
+    });
+    await Provider.of<HospitalProvider>(context, listen: false)
+        .fetchNearByHospitals(location);
+    print("Done for Hospital");
+    HospitalProvider.nearby.forEach((element) {
+      print(element.name);
+    });
+    await Provider.of<DiagnosticProvider>(context, listen: false)
+        .fetchNearByDiagnostic(location);
+
+    print("Done for Diagnostic");
+    DiagnosticProvider.nearby.forEach((element) {
+      print(element.name);
+    });
+    await Provider.of<ImporterProvider>(context, listen: false)
+        .fetchNearByImporters(location);
+    print("Done for Importer");
+    ImporterProvider.nearby.forEach((element) {
+      print(element.name);
+    });
+    await Provider.of<LaboratoryProvider>(context, listen: false)
+        .fetchNearByLaboratories(location);
+    print("Done for Lab");
+    LaboratoryProvider.nearby.forEach((element) {
+      print(element.name);
+    });
+    await Provider.of<CompanyProvider>(context, listen: false)
+        .fetchNearByCompanies(location);
+    print("Done for Company");
+    CompanyProvider.nearby.forEach((element) {
+      print(element.name);
+    });
+    await Provider.of<HomeCareProvider>(context, listen: false)
+        .fetchNearByHomeCare(location);
+    print("Done for HomeCare");
+    HomeCareProvider.nearby.forEach((element) {
+      print(element.name);
+    });
+  }
   @override
   void didChangeDependencies() async{
     UserLocation location =
@@ -181,7 +229,7 @@ class _HomePageState extends State<HomePage> {
         Provider.of<HealthArticleProvider>(context, listen: true);
     var adsProvider = Provider.of<AdsProvider>(context, listen: true);
     var pharmacyProvider = Provider.of<PharmacyProvider>(context, listen: true);
-
+    search();
     return LoaderOverlay(
         overlayOpacity: 0.8,
         child: FutureBuilder<dynamic>(
@@ -1645,7 +1693,8 @@ class _HomePageState extends State<HomePage> {
                             })
                       ),
                     ),
-                    SizedBox(height: 5,),
+                    Divider(color: Colors.black12,),
+                    // SizedBox(height: 5,),
                   Text(
                                   drugs.name,
                                   maxLines: 2,

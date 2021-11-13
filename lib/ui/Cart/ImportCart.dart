@@ -150,24 +150,13 @@ class _ImportCartState extends State<ImportCart> {
                                                     backgroundColor: myCustomColors.loginBackgroud,
                                                   ):result==2?snackBar = SnackBar(
                                                     content: const Text('Your order has already been registered.'),
-                                                    backgroundColor: myCustomColors.loginButton,
+                                                    backgroundColor: myCustomColors.loginBackgroud,
                                                   ):snackBar = SnackBar(
                                                     content: const Text('Order Failed! Please check your internet connection.'),
-                                                    backgroundColor: myCustomColors.loginButton,
+                                                    backgroundColor: myCustomColors.loginBackgroud,
                                                   );
 
                                                   ScaffoldMessenger.of(coontext).showSnackBar(snackBar);
-                                                  // addToCart(context, "abcd");
-                                                  // print("Added");
-                                                  // //addProduct(context);
-                                                  // // Navigator.push(
-                                                  // //     context,
-                                                  // //     MaterialPageRoute(
-                                                  // //         builder: (context) => AddDrugs(
-                                                  // //           hospitalLabDiagnosis:
-                                                  // //           widget.pharmacy,
-                                                  // //           index: 0,
-                                                  // //         )));
                                                 },
                                                 style: ButtonStyle(
                                                     backgroundColor:
@@ -242,10 +231,12 @@ class _ImportCartState extends State<ImportCart> {
             Divider(),
             ListTile(
               leading: CircleAvatar(
-                backgroundImage: NetworkImage(cartItem.drug.image),
+                backgroundImage: NetworkImage(cartItem.drug.image)??AssetImage(
+                  'assets/images/alen_no_name.png',
+                ),
               ),
-              title: Text(cartItem.drug.name),
-              subtitle: Text("Price : ${(num.parse(cartItem.drug.price) * cartItem.amount).toStringAsFixed(2)} Birr"),
+              title: Text(cartItem.drug.name??"Name"),
+              subtitle: Text("Price : ${(num.parse(cartItem.drug.price) * cartItem.amount).toStringAsFixed(2)??0} Birr"),
               trailing: IconButton(
                 icon: Icon(Icons.delete_forever_rounded),
                 onPressed: (){

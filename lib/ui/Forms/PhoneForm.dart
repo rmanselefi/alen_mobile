@@ -199,7 +199,7 @@ class _SignUpState extends State<SignUp> {
                                                     labelText: 'Phone Number',
                                                     labelStyle: TextStyle(
                                                         color: myCustomColors
-                                                            .loginButton),
+                                                            .loginBackgroud),
                                                     counterStyle: TextStyle(
                                                         color: Colors.white54),
                                                     prefixIcon: CountryCodePicker(
@@ -221,7 +221,7 @@ class _SignUpState extends State<SignUp> {
                                                     ),
                                                     hintStyle: TextStyle(
                                                         color: myCustomColors
-                                                            .loginButton),
+                                                            .loginBackgroud),
                                                     filled: true,
                                                     fillColor: Colors.white,
                                                     enabledBorder: OutlineInputBorder(
@@ -229,7 +229,7 @@ class _SignUpState extends State<SignUp> {
                                                           Radius.circular(40.0)),
                                                       borderSide: BorderSide(
                                                           color: myCustomColors
-                                                              .loginButton,
+                                                              .loginBackgroud,
                                                           width: 2),
                                                     ),
                                                     border: OutlineInputBorder(

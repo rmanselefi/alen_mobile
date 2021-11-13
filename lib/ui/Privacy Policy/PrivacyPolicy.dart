@@ -1,17 +1,17 @@
 import 'package:alen/providers/language.dart';
-import 'package:alen/ui/Privacy%20Policy/2.%20CATEGORIES%20OF%20PERSONAL%20DATA%20WE%20COLLECT.dart';
-import 'package:alen/ui/Privacy%20Policy/CHANGES%20TO%20THIS%20PRIVACY%20POLICY.dart';
-import 'package:alen/ui/Privacy%20Policy/CONTACT%20US.dart';
-import 'package:alen/ui/Privacy%20Policy/DATA%20RETENTION.dart';
-import 'package:alen/ui/Privacy%20Policy/FOR%20WHAT%20PURPOSES%20WE%20PROCESS%20YOUR%20PERSONAL%20DATA.dart';
-import 'package:alen/ui/Privacy%20Policy/HOW%20YOU%20CAN%20EXCERSISE%20YOUR%20RIGHTS.dart';
-import 'package:alen/ui/Privacy%20Policy/Personal%20Data%20Controller.dart';
-import 'package:alen/ui/Privacy%20Policy/UNDER%20WHAT%20LEGAL%20BASES%20WE%20PROCESS%20YOUR%20PERSONAL%20DATA.dart';
 import 'package:flutter/material.dart';
-
-import 'package:alen/utils/AppColors.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:alen/utils/AppColors.dart';
+
+import '2. CATEGORIES OF PERSONAL DATA WE COLLECT.dart';
+import 'CHANGES TO THIS PRIVACY POLICY.dart';
+import 'CONTACT US.dart';
+import 'DATA RETENTION.dart';
+import 'FOR WHAT PURPOSES WE PROCESS YOUR PERSONAL DATA.dart';
+import 'HOW YOU CAN EXCERSISE YOUR RIGHTS.dart';
+import 'Personal Data Controller.dart';
+import 'UNDER WHAT LEGAL BASES WE PROCESS YOUR PERSONAL DATA.dart';
 
 class PrivacyPolicy extends StatelessWidget {
   const PrivacyPolicy({Key key}) : super(key: key);

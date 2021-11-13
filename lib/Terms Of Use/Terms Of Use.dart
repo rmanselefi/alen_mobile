@@ -1,16 +1,17 @@
 import 'package:alen/providers/language.dart';
-import 'package:alen/ui/Terms%20Of%20Use/AcceptanceOfTerms.dart';
-import 'package:alen/ui/Terms%20Of%20Use/AccountRegistration.dart';
-import 'package:alen/ui/Terms%20Of%20Use/Contact.dart';
-import 'package:alen/ui/Terms%20Of%20Use/Fees.dart';
-import 'package:alen/ui/Terms%20Of%20Use/MiscellaneousProvisions.dart';
-import 'package:alen/ui/Terms%20Of%20Use/PostingOfAnnouncementsByUsers.dart';
-import 'package:alen/ui/Terms%20Of%20Use/Service.dart';
-import 'package:alen/ui/Terms%20Of%20Use/UserRepresentationAndWarranties.dart';
 import 'package:flutter/material.dart';
-import 'package:alen/utils/AppColors.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:alen/utils/AppColors.dart';
+
+import 'AcceptanceOfTerms.dart';
+import 'AccountRegistration.dart';
+import 'Contact.dart';
+import 'Fees.dart';
+import 'MiscellaneousProvisions.dart';
+import 'PostingOfAnnouncementsByUsers.dart';
+import 'Service.dart';
+import 'UserRepresentationAndWarranties.dart';
 
 class TermsOfUse extends StatelessWidget {
   const TermsOfUse({Key key}) : super(key: key);

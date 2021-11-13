@@ -126,16 +126,16 @@ class _NameFormScreenState extends State<NameFormScreen> {
                                                   hintText: 'First Name',
                                                   labelStyle: TextStyle(
                                                       color: myCustomColors
-                                                          .loginButton),
+                                                          .loginBackgroud),
                                                   prefixIcon: Icon(
                                                     Icons.perm_identity,
                                                     color:
-                                                    myCustomColors.loginButton,
+                                                    myCustomColors.loginBackgroud,
                                                   ),
                                                   counterStyle:
                                                   TextStyle(color: Colors.white54),
                                                   hintStyle:
-                                                  TextStyle(color: myCustomColors.loginButton),
+                                                  TextStyle(color: myCustomColors.loginBackgroud),
                                                   filled: true,
                                                   fillColor: Colors.white,
                                                   enabledBorder: OutlineInputBorder(
@@ -188,17 +188,17 @@ class _NameFormScreenState extends State<NameFormScreen> {
                                                   hintText: 'Middle Name',
                                                   labelStyle: TextStyle(
                                                       color: myCustomColors
-                                                          .loginButton),
+                                                          .loginBackgroud),
                                                   prefixIcon: Icon(
                                                     Icons.perm_identity,
                                                     color:
-                                                    myCustomColors.loginButton,
+                                                    myCustomColors.loginBackgroud,
                                                   ),
                                                   counterStyle:
                                                   TextStyle(color: Colors.white54),
                                                   hintStyle: TextStyle(
                                                       color: myCustomColors
-                                                          .loginButton),
+                                                          .loginBackgroud),
                                                   filled: true,
                                                   fillColor: Colors.white,
                                                   enabledBorder: OutlineInputBorder(
@@ -268,17 +268,17 @@ class _NameFormScreenState extends State<NameFormScreen> {
                                                   hintText: 'Last Name',
                                                   labelStyle: TextStyle(
                                                       color: myCustomColors
-                                                          .loginButton),
+                                                          .loginBackgroud),
                                                   prefixIcon: Icon(
                                                     Icons.perm_identity,
                                                     color:
-                                                    myCustomColors.loginButton,
+                                                    myCustomColors.loginBackgroud,
                                                   ),
                                                   counterStyle:
                                                   TextStyle(color: Colors.white54),
                                                   hintStyle: TextStyle(
                                                       color: myCustomColors
-                                                          .loginButton),
+                                                          .loginBackgroud),
                                                   filled: true,
                                                   fillColor: Colors.white,
                                                   enabledBorder: OutlineInputBorder(
