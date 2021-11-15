@@ -197,9 +197,6 @@ class _SignUpState extends State<SignUp> {
                                                   decoration: InputDecoration(
                                                     hintText: '900000000',
                                                     labelText: 'Phone Number',
-                                                    labelStyle: TextStyle(
-                                                        color: myCustomColors
-                                                            .loginBackgroud),
                                                     counterStyle: TextStyle(
                                                         color: Colors.white54),
                                                     prefixIcon: CountryCodePicker(
