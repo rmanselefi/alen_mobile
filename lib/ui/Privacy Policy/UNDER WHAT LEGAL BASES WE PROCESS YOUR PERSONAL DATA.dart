@@ -1,9 +1,8 @@
 import 'package:alen/providers/language.dart';
 import 'package:flutter/material.dart';
-
-import 'package:alen/utils/AppColors.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:alen/utils/AppColors.dart';
 
 class UnderWhatLegalBasesWeProcessOurPersonalData extends StatelessWidget {
   const UnderWhatLegalBasesWeProcessOurPersonalData({Key key}) : super(key: key);

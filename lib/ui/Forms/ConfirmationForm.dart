@@ -106,17 +106,17 @@ class _ConfirmationFormState extends State<ConfirmationForm> {
                                             labelText: 'Confirmation Code',
                                             labelStyle: TextStyle(
                                                 color: myCustomColors
-                                                    .loginButton),
+                                                    .loginBackgroud),
                                             counterStyle: TextStyle(
                                                 color: Colors.white54),
                                             prefixIcon: Icon(
                                               Icons.message,
                                               color:
-                                              myCustomColors.loginButton,
+                                              myCustomColors.loginBackgroud,
                                             ),
                                             hintStyle: TextStyle(
                                                 color: myCustomColors
-                                                    .loginButton),
+                                                    .loginBackgroud),
                                             filled: true,
                                             fillColor: Colors.white,
                                             enabledBorder: OutlineInputBorder(
@@ -124,7 +124,7 @@ class _ConfirmationFormState extends State<ConfirmationForm> {
                                                   Radius.circular(40.0)),
                                               borderSide: BorderSide(
                                                   color: myCustomColors
-                                                      .loginButton,
+                                                      .loginBackgroud,
                                                   width: 2),
                                             ),
                                             border: OutlineInputBorder(

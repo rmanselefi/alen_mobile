@@ -32,6 +32,9 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
             fontFamily: 'Ubuntu',
+            appBarTheme: AppBarTheme(
+                color: AppColors().loginBackgroud
+            ),
             scaffoldBackgroundColor: myCustomColors.mainBackground),
         home: FutureBuilder<dynamic>(
     future: SharedPreferences.getInstance(),
@@ -124,15 +127,15 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                           TextStyle(color: Colors.white54),
                                           labelStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginButton),
+                                                  .loginBackgroud),
                                           prefixIcon: Icon(
                                             Icons.email_outlined,
                                             color:
-                                            myCustomColors.loginButton,
+                                            myCustomColors.loginBackgroud,
                                           ),
                                           hintStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginButton),
+                                                  .loginBackgroud),
                                           filled: true,
                                           fillColor: Colors.white,
                                           enabledBorder: OutlineInputBorder(
@@ -200,15 +203,15 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                           TextStyle(color: Colors.white54),
                                           labelStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginButton),
+                                                  .loginBackgroud),
                                           prefixIcon: Icon(
                                             Icons.assignment_ind,
                                             color:
-                                            myCustomColors.loginButton,
+                                            myCustomColors.loginBackgroud,
                                           ),
                                           hintStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginButton),
+                                                  .loginBackgroud),
                                           filled: true,
                                           fillColor: Colors.white,
                                           enabledBorder: OutlineInputBorder(
@@ -396,15 +399,15 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                           hintText: 'Location',
                                           labelStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginButton),
+                                                  .loginBackgroud),
                                           prefixIcon: Icon(
                                             Icons.location_on_outlined,
                                             color:
-                                            myCustomColors.loginButton,
+                                            myCustomColors.loginBackgroud,
                                           ),
                                           hintStyle: TextStyle(
                                               color: myCustomColors
-                                                  .loginButton),
+                                                  .loginBackgroud),
                                           filled: true,
                                           fillColor: Colors.white,
                                           enabledBorder: OutlineInputBorder(
@@ -455,11 +458,14 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                   if (_formKey.currentState.validate()) {
                                     var res = await auth.signUp(user);
                                     if (res['success']) {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  HomePage()));
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              HomePage(),
+                                        ),
+                                            (route) => false,
+                                      );
                                     }
                                   }
                                 },

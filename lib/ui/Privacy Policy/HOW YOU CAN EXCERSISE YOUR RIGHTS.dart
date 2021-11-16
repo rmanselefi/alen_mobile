@@ -1,8 +1,8 @@
 import 'package:alen/providers/language.dart';
 import 'package:flutter/material.dart';
-import 'package:alen/utils/AppColors.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:alen/utils/AppColors.dart';
 
 class HowCanYouExerciseYourRights extends StatelessWidget {
   const HowCanYouExerciseYourRights({Key key}) : super(key: key);
@@ -87,7 +87,7 @@ class HowCanYouExerciseYourRights extends StatelessWidget {
                                         "Objecting to or restricting the use of your personal"
                                         " data.You can ask us to stop using all"
                                         " or some of your personal data or limit our"
-                                        " use thereof by sending a request at name@com",
+                                        " use thereof by sending a request at hyssoppharma.com",
                                     textDirection: TextDirection.ltr,
                                     maxLines: 25,
                                   ),

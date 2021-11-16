@@ -171,13 +171,13 @@ class _TransactionDetailState extends State<TransactionDetail> {
                     children: [
                       Icon(
                         Icons.pending_actions,
-                        color: myCustomColors.loginButton,
+                        color: myCustomColors.loginBackgroud,
                       ),
                       Text(
                         " Pending",
                         overflow: TextOverflow.fade,
                         style: TextStyle(
-                            color: myCustomColors.loginButton
+                            color: myCustomColors.loginBackgroud
                         ),
                       ),
                     ],

@@ -1,9 +1,9 @@
 import 'package:alen/providers/language.dart';
-import 'package:flutter/material.dart';
-
 import 'package:alen/utils/AppColors.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class Fees extends StatelessWidget {
   const Fees({Key key}) : super(key: key);
 

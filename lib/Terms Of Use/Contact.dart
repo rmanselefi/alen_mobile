@@ -1,9 +1,8 @@
 import 'package:alen/providers/language.dart';
 import 'package:flutter/material.dart';
-
-import 'package:alen/utils/AppColors.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:alen/utils/AppColors.dart';
 
 class Contact extends StatelessWidget {
   const Contact({Key key}) : super(key: key);
