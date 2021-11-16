@@ -66,7 +66,7 @@ class DrugProvider with ChangeNotifier {
     isLoading = true;
     categoriesList.clear();
     var curr;
-    try {U
+    try {
       var docs =
       await fire.collection('pharmacy_drug').where('pharmacy_id', isEqualTo: Id).get();
       if (docs.docs.isNotEmpty) {
