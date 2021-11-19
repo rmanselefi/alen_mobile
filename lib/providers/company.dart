@@ -41,6 +41,7 @@ class CompanyProvider with ChangeNotifier {
           final HLDServiceTypes category = new HLDServiceTypes(
               serviceType['id'],
               serviceType['description'],
+              "",
               serviceType['name'],
               serviceType['image'],
               await servicesList[i]['price'],
@@ -572,6 +573,7 @@ class CompanyProvider with ChangeNotifier {
           HLDServiceTypes hldServiceTypes =  new HLDServiceTypes(
             docs.docs[i].id,
             data['description'],
+            "",
             data['catalogue'],
             data['image'],
             data['catalogue'],

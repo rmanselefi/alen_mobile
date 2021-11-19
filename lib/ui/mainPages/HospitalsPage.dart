@@ -144,7 +144,7 @@ class _HospitalPageState extends State<HospitalsPage> {
                     icon: Icon(Icons.arrow_back),
                     onPressed: () => Navigator.pop(context, false),
                   ),
-                  title: Text("Hospitals", textAlign: TextAlign.center)),
+                  title: Text("Health Facilities", textAlign: TextAlign.center)),
               body: SingleChildScrollView(
                   child: Stack(
                     children: [
@@ -212,7 +212,7 @@ class _HospitalPageState extends State<HospitalsPage> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Top Hospitals",
+                                      "Top Health Facilities",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,
@@ -267,7 +267,7 @@ class _HospitalPageState extends State<HospitalsPage> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Nearby Hospitals",
+                                      "Nearby Health Facilities",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,

@@ -5,34 +5,40 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'AppColors.dart';
 
-class DetailsPage extends StatelessWidget {
-  final String name;
-  final String imageUrl;
-  final String description;
+class DetailsPage extends StatefulWidget {
+  String name;
+  String imageUrl;
+  String description;
+  String additionalDescription;
   String price;
-  final String colName;
-  final String serviceId;
-  final String hospitalId;
-  final Roles role;
-
-  DetailsPage({
-    Key key,
-    this.name,
-    this.imageUrl,
-    this.description,
+  String colName;
+  String serviceId;
+  String hospitalId;
+  Roles role;
+  static String Price;
+  static String addDesc;
+  BuildContext editDetailContext;
+  BuildContext editPageContext;
+  DetailsPage({Key key, this.name, this.imageUrl,
     this.price,
-    this.colName,
-    this.serviceId,
-    this.hospitalId,
-    this.role
-  }) : super(key: key);
+    this.description, this.additionalDescription,
+    this.colName, this.serviceId, this.hospitalId,
+    this.editPageContext,
+    this.role, this.editDetailContext}) : super(key: key);
+
+  @override
+  _DetailsPageState createState() => _DetailsPageState();
+}
+
+class _DetailsPageState extends State<DetailsPage> {
 
   static const myCustomColors = AppColors();
   static String prc;
-
+  static String description="";
   @override
-  Widget build(BuildContext context) {
-    prc=price;
+  Widget build(BuildContext detailPageContext) {
+    prc=DetailsPage.Price;
+    description=DetailsPage.addDesc;
     // final PageController controller = PageController(initialPage: 0);
     return FutureBuilder<dynamic>(
         future: SharedPreferences.getInstance(),
@@ -68,8 +74,8 @@ class DetailsPage extends StatelessWidget {
                             SizedBox(
                               height: 200,
                               width: 350,
-                              child: (imageUrl==null)?Text("Image not available"):
-                              Image.network(imageUrl,
+                              child: (widget.imageUrl==null)?Text("Image not available"):
+                              Image.network(widget.imageUrl,
                                   width: 200, height: 120, fit: BoxFit.fill,errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
                                     return Image.asset("assets/images/hos1.jpg",
                                       width: 200,
@@ -82,7 +88,7 @@ class DetailsPage extends StatelessWidget {
                                 width: MediaQuery.of(context).size.width,
                                 child: Center(
                                     child:Text(
-                                      name??"Name",
+                                      widget.name??"Name",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 2,
                                       overflow: TextOverflow.ellipsis,
@@ -95,12 +101,40 @@ class DetailsPage extends StatelessWidget {
                                 width: MediaQuery.of(context).size.width,
                                 child: Center(
                                   child: Text(
-                                    description??"Description",
+                                    widget.description??"Description",
                                     textDirection: TextDirection.ltr,
                                     maxLines: 10,
                                   ),
                                 )
                             ),
+
+                            (DetailsPage.addDesc!=null&&DetailsPage.addDesc!="")?
+                            Column(children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 10),
+                                child: Text(
+                                  "Additional Description",
+                                  textScaleFactor: 1.2,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 20, ),
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Center(
+                                    child: Text(
+                                      description??"",
+                                      textDirection: TextDirection.ltr,
+                                      maxLines: 10,
+                                    ),
+                                  )
+                              ),
+                            ],):SizedBox(
+                              height: 5,
+                            ),
+
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -122,7 +156,7 @@ class DetailsPage extends StatelessWidget {
                                       return Container(
                                         padding: EdgeInsets.symmetric(horizontal: 5,vertical: 20),
                                         child: Text(
-                                          price??"0",
+                                          prc??"0",
                                           textDirection: TextDirection.ltr,
                                           maxLines: 1,
                                         ),
@@ -140,3 +174,4 @@ class DetailsPage extends StatelessWidget {
         });
   }
 }
+

@@ -82,7 +82,7 @@ class _HospitalPageState extends State<DiagnosisesPage> {
                     icon: Icon(Icons.arrow_back),
                     onPressed: () => Navigator.pop(context, false),
                   ),
-                  title: Text("Diagnostics", textAlign: TextAlign.center)),
+                  title: Text("Imaging", textAlign: TextAlign.center)),
               body: SingleChildScrollView(
                   child: Stack(
                     children: [
@@ -149,7 +149,7 @@ class _HospitalPageState extends State<DiagnosisesPage> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Top Diagnostics",
+                                      "Top Imaging",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,
@@ -204,7 +204,7 @@ class _HospitalPageState extends State<DiagnosisesPage> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Nearby Diagnostics",
+                                      "Nearby Imaging",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,
@@ -281,22 +281,22 @@ class _HospitalPageState extends State<DiagnosisesPage> {
               ctxt,
               MaterialPageRoute(
                   builder: (context) => DiagnosticDetail(
-                    title: hospital.name,
-                    info: hospital.createdAt.toString(),
-                    phone: hospital.phone,
-                    locationName: hospital.locationName,
-                    latitude: hospital.latitude.toString(),
-                    longtude: hospital.longitude.toString(),
-                    email: hospital.email,
-                    images: hospital.images,
-                    image: hospital.image,
-                    name: hospital.name,
-                    description: hospital.description,
-                    location: hospital.latitude.toString(),
-                    services: hospital.services,
-                    newservices:hospital.services,
-                    officeHours: hospital.officehours.toString(),
-                    hospitalId: hospital.Id,
+                    title: hospital.name??"",
+                    info: hospital.createdAt.toString()??"",
+                    phone: hospital.phone??"",
+                    locationName: hospital.locationName??"",
+                    latitude: hospital.latitude.toString()??"",
+                    longtude: hospital.longitude.toString()??"",
+                    email: hospital.email??"",
+                    images: hospital.images??[],
+                    image: hospital.image??"",
+                    name: hospital.name??"",
+                    description: hospital.description??"",
+                    location: hospital.latitude.toString()??"",
+                    services: hospital.services??[],
+                    newservices:hospital.services??[],
+                    officeHours: hospital.officehours.toString()??"",
+                    hospitalId: hospital.Id??"",
                   )));
         },
         child: Card(
@@ -343,12 +343,12 @@ class _HospitalPageState extends State<DiagnosisesPage> {
                   ),
                 ),
                 Text(
-                  hospital.name,
+                  hospital.name??"",
                   maxLines: 2,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  hospital.phone,
+                  hospital.phone??"",
                   maxLines: 2,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 )

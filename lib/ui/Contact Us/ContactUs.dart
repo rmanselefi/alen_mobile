@@ -1,6 +1,7 @@
 import 'package:alen/providers/language.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -112,7 +113,9 @@ class ContactUs extends StatelessWidget {
                                         Column(
                                           children: [
                                             IconButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                launch("http://t.me/alen9484");
+                                              },
                                               icon: Icon(
                                                 MdiIcons.telegram,
                                                 color: myCustomColors.loginBackgroud,
@@ -124,7 +127,19 @@ class ContactUs extends StatelessWidget {
                                         Column(
                                           children: [
                                             IconButton(
-                                              onPressed: () {},
+                                              onPressed: () async {
+                                                final coords = Coords(
+                                                    9.068365128410308, 38.71896070648838
+                                                );
+                                                final availableMaps = await MapLauncher.installedMaps;
+                                                print(availableMaps); // [AvailableMap { mapName: Google Maps, mapType: google }, ...]
+
+                                                await availableMaps.first.showMarker(
+                                                  coords: coords,
+                                                  title: "Hyssop pharma Trading PLC",
+                                                  description: "Alen Headquarters",
+                                                );
+                                              },
                                               icon: Icon(
                                                 Icons.location_on_outlined,
                                                 color: myCustomColors.loginBackgroud,

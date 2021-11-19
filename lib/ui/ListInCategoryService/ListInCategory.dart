@@ -1,6 +1,8 @@
 import 'package:alen/models/drugs.dart';
 import 'package:alen/providers/drug.dart';
 import 'package:alen/providers/language.dart';
+import 'package:alen/ui/Cart/ImportCart.dart';
+import 'package:alen/ui/Cart/PharmacyCart.dart';
 import 'package:alen/ui/Details/DetailForDrug.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +48,40 @@ class _ListInCategoriesState extends State<ListInCategories> {
                     leading: IconButton(
                       icon: Icon(Icons.arrow_back),
                       onPressed: () => Navigator.pop(context, false),
-                    )),
+                    ),
+                    actions: [
+                      widget.isPharma?
+                      IconButton(
+                        padding: EdgeInsets.only(right: 15),
+                        onPressed: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PharmacyCart()
+                              )
+                          );
+                        },
+                        icon: Icon(
+                            Icons.shopping_cart
+                        ),
+                      ):
+                      IconButton(
+                        padding: EdgeInsets.only(right: 15),
+                        onPressed: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                // builder: (context) => ImporterCart()
+                                  builder: (context) => ImportCart()
+                              )
+                          );
+                        },
+                        icon: Icon(
+                            Icons.shopping_cart
+                        ),
+                      )
+                    ]
+                ),
                 body: SingleChildScrollView(
                     child: Stack(children: <Widget>[
                       Container(

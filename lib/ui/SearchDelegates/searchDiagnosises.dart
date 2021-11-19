@@ -129,12 +129,12 @@ class DiagnosisSearch extends SearchDelegate<Diagnostics> {
               tileColor: myCustomColors.mainBackground,
               title: Text(suggestions.elementAt(index).name),
               subtitle: Text(
-                suggestions.elementAt(index).description,
+                suggestions.elementAt(index).description??"",
                 maxLines: 1,
               ),
               leading: CircleAvatar(
                   backgroundImage: NetworkImage(
-                suggestions.elementAt(index).images.first,
+                suggestions.elementAt(index).images.first??"",
               )),
               onTap: () {
                 query = suggestions.elementAt(index).name;
