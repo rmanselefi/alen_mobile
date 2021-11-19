@@ -41,6 +41,7 @@ class DiagnosticProvider with ChangeNotifier {
           final HLDServiceTypes category = new HLDServiceTypes(
               serviceType['id'],
               serviceType['description'],
+              serviceType['additional_detail'],
               serviceType['name'],
               serviceType['image'],
               await servicesList[i]['price'],

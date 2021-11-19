@@ -355,13 +355,13 @@ class DiagnosticDetail extends StatelessWidget {
                                         Container(
                                           width: screenWidth * 0.2,
                                           child: Text(
-                                            snapshot.data.locationName ?? "",
+                                            locationName ?? "",
                                             // "${snapshot.data.longitude.toStringAsFixed(2)} - ${snapshot.data.latitude.toStringAsFixed(2)}"??"-",
                                             maxLines: 3,
                                             textAlign: TextAlign.left,
                                             overflow: TextOverflow.ellipsis,
-                                          ),
-                                        )
+                                          ),)
+
                                       ],
                                     ),
                                     // child: Text(
@@ -400,6 +400,7 @@ class DiagnosticDetail extends StatelessWidget {
                     services: [],
                     id: hospitalServices.id,
                     role: Roles.Diagnosis,
+                    editPageContext: ctxt,
                   )));
         },
         child: Card(

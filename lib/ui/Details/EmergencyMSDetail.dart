@@ -1,19 +1,24 @@
+import 'package:alen/providers/EmergencyMS.dart';
+import 'package:alen/providers/HomeCare.dart';
 import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/language.dart';
 import 'package:alen/ui/Details/DetailForService.dart';
+import 'package:alen/ui/Details/NormalDetail.dart';
 import 'package:alen/ui/ListInCategoryService/ListInService.dart';
 import 'package:alen/ui/Models/Services.dart';
 import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllServices.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:map_launcher/map_launcher.dart';
-import '../../utils/AppColors.dart';
 
-class HospitalDetail extends StatelessWidget {
+import '../../utils/AppColors.dart';
+import 'HospitalDetail.dart';
+
+class EmergencyMSDetail extends StatelessWidget {
   String name;
   String title;
   String image;
@@ -33,30 +38,29 @@ class HospitalDetail extends StatelessWidget {
 
   static const myCustomColors = AppColors();
 
-  HospitalDetail(
+  EmergencyMSDetail(
       {this.name,
-      this.title,
+        this.title,
+        this.description,
+        this.image,
         this.locationName,
-      this.description,
-      this.image,
-      this.services,
-      this.info,
+        this.services,
+        this.info,
         this.images,
-      this.location,
+        this.location,
         this.latitude, this.email, this.longtude,
-      this.phone,
-      this.officeHours,this.newservices, this.hospitalId});
+        this.phone,
+        this.officeHours,this.newservices, this.hospitalId});
 
   double screenWidth;
   @override
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
     // final PageController controller = PageController(initialPage: 0);
-    var hosProvider = Provider.of<HospitalProvider>(context, listen: false);
+    var emergencyMSProvider = Provider.of<EmergencyMSProvider>(context, listen: false);
     // final names = services.map((e) => e['name']).toSet();
     // services.retainWhere((x) => names.remove(x['name']));
-    return
-    FutureBuilder<dynamic>(
+    return FutureBuilder<dynamic>(
         future: SharedPreferences.getInstance(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.none &&
@@ -90,7 +94,7 @@ class HospitalDetail extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             FutureBuilder<List<dynamic>>(
-                                future: hosProvider
+                                future: emergencyMSProvider
                                     .fetchImages(hospitalId),
                                 builder: (context, imageSnapshot) {
                                   if (imageSnapshot.connectionState ==
@@ -123,8 +127,8 @@ class HospitalDetail extends StatelessWidget {
                                       ),
                                       itemBuilder: (context, index) {
                                         return Image.network(
-                                          imageSnapshot.data[index],
-                                          fit: BoxFit.cover,
+                                            imageSnapshot.data[index],
+                                            fit: BoxFit.cover,
                                             errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
                                               return Image.asset("assets/images/hos1.jpg",
                                                 fit: BoxFit.cover,);
@@ -138,74 +142,11 @@ class HospitalDetail extends StatelessWidget {
                                   }
                                 }),
                             Container(
-                              margin: EdgeInsets.fromLTRB(
-                                  MediaQuery.of(context).size.width * 0.03,
-                                  30,
-                                  MediaQuery.of(context).size.width * 0.03,
-                                  5),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Service',
-                                    textScaleFactor: 1.5,
-                                    textAlign: TextAlign.left,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            FutureBuilder<List<HLDServices>>(
-                                future: hosProvider
-                                    .getHospServicesByHospitalId(hospitalId),
-                                builder: (context, hospServSnapshot) {
-                                  if (hospServSnapshot.connectionState ==
-                                      ConnectionState.none &&
-                                      hospServSnapshot.hasData == null) {
-                                    return Container(
-                                      height: 110,
-                                      child: Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    );
-                                  }
-                                  print(
-                                      'project snapshot data is: ${hospServSnapshot.data}');
-                                  if (hospServSnapshot.data == null) {
-                                    return Container(
-                                      height: 110,
-                                      child: Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    );
-                                  } else {
-                                    return Container(
-                                        height: 110.0,
-                                        margin: EdgeInsets.fromLTRB(
-                                            MediaQuery.of(context).size.width *
-                                                0.07,
-                                            5,
-                                            MediaQuery.of(context).size.width *
-                                                0.07,
-                                            30),
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder:
-                                              (BuildContext ctxt, int index) {
-                                            return _buildHopitalServicesListItem(
-                                                hospServSnapshot.data[index], ctxt);
-                                          },
-                                          itemCount: hospServSnapshot.data.length,
-                                        ));
-                                  }
-                                }),
-                            Container(
-                                padding: EdgeInsets.only(top: 10, bottom: 30),
+                                padding: EdgeInsets.only(top: 30, bottom: 10),
                                 width: MediaQuery.of(context).size.width,
                                 child: Center(
                                     child: Text(
-                                      name,
+                                      name??"Name",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 2,
                                       overflow: TextOverflow.ellipsis,
@@ -213,11 +154,11 @@ class HospitalDetail extends StatelessWidget {
                                     ))),
                             Container(
                                 padding:
-                                EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                EdgeInsets.symmetric(horizontal: 20, vertical: 40),
                                 width: MediaQuery.of(context).size.width,
                                 child: Center(
                                   child: Text(
-                                    description,
+                                    description??"Description",
                                     textDirection: TextDirection.ltr,
                                     maxLines: 10,
                                   ),
@@ -348,15 +289,15 @@ class HospitalDetail extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                    Container(
-                                      width: screenWidth * 0.2,
-                                      child: Text(
-                                        locationName ?? "",
-                                        // "${snapshot.data.longitude.toStringAsFixed(2)} - ${snapshot.data.latitude.toStringAsFixed(2)}"??"-",
-                                        maxLines: 3,
-                                        textAlign: TextAlign.left,
-                                        overflow: TextOverflow.ellipsis,
-                                      ))
+                                        Container(
+                                            width: screenWidth * 0.2,
+                                            child: Text(
+                                              locationName ?? "",
+                                              // "${snapshot.data.longitude.toStringAsFixed(2)} - ${snapshot.data.latitude.toStringAsFixed(2)}"??"-",
+                                              maxLines: 3,
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                            ))
                                       ],
                                     ),
                                     // child: Text(
@@ -390,15 +331,12 @@ class HospitalDetail extends StatelessWidget {
           Navigator.push(
               ctxt,
               MaterialPageRoute(
-                  builder: (context) => DetailsForService(
+                  builder: (context) => NormalDetail(
                     name: hospitalServices.name,
                     imageUrl: hospitalServices.image,
-                    description: hospitalServices.detail,
-                    services: [],
-                    id: hospitalServices.id,
-                    role: Roles.Hospital,
-                    editPageContext: ctxt,
-                  )));
+                    description: hospitalServices.description,
+                    homeCareId: hospitalServices.serviceId,
+                    serviceId: hospitalServices.id,)));
         },
         child: Card(
             elevation: 0,
@@ -413,10 +351,10 @@ class HospitalDetail extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(150.0),
                     child: Image.network(
-                      hospitalServices.image,
-                      fit: BoxFit.fitHeight,
-                      height: 70.0,
-                      width: 70.0,
+                        hospitalServices.image,
+                        fit: BoxFit.fitHeight,
+                        height: 70.0,
+                        width: 70.0,
                         errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
                           return Image.asset("assets/images/hos1.jpg",
                             width: 70,
@@ -434,4 +372,3 @@ class HospitalDetail extends StatelessWidget {
             )));
   }
 }
-enum Roles { Hospital, Pharmacist, Importer, Diagnosis, Lab, Company, HomeCare }

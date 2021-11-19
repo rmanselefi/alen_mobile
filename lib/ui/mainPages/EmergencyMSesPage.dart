@@ -1,12 +1,15 @@
-import 'package:alen/models/company.dart';
+import 'package:alen/models/EmergencyMS.dart';
+import 'package:alen/models/homeCare.dart';
 import 'package:alen/models/hospital.dart';
 import 'package:alen/models/user_location.dart';
-import 'package:alen/providers/company.dart';
+import 'package:alen/providers/EmergencyMS.dart';
+import 'package:alen/providers/HomeCare.dart';
 import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/language.dart';
-import 'package:alen/ui/Details/CompanyDetail.dart';
+import 'package:alen/ui/Details/HomeCareDetail.dart';
 import 'package:alen/ui/Details/HospitalDetail.dart';
-import 'package:alen/ui/SearchDelegates/searchCompany.dart';
+import 'package:alen/ui/SearchDelegates/searchEmergencyMS.dart';
+import 'package:alen/ui/SearchDelegates/searchHomeCare.dart';
 import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllServices.dart';
 import 'package:alen/ui/SeeAllPages/SecondPage/SeeAllHospitals.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
@@ -21,15 +24,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/AppColors.dart';
 
-class CompaniesPage extends StatefulWidget {
+class EmergencyMSesPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _CompaniesPageState();
+    return _EmergencyMSesPageState();
   }
 }
 
-class _CompaniesPageState extends State<CompaniesPage> {
+class _EmergencyMSesPageState extends State<EmergencyMSesPage> {
 
   static const myCustomColors = AppColors();
   @override
@@ -52,7 +55,7 @@ class _CompaniesPageState extends State<CompaniesPage> {
   }
   @override
   Widget build(BuildContext context) {
-    var companyProvider = Provider.of<CompanyProvider>(context, listen: false);
+    var emergencyMSProvider = Provider.of<EmergencyMSProvider>(context, listen: false);
     return FutureBuilder<dynamic>(
         future: SharedPreferences.getInstance(),
         builder: (context, snapshot) {
@@ -75,7 +78,7 @@ class _CompaniesPageState extends State<CompaniesPage> {
                     icon: Icon(Icons.arrow_back),
                     onPressed: () => Navigator.pop(context, false),
                   ),
-                  title: Text("CompaniesPage", textAlign: TextAlign.center)),
+                  title: Text("Emergency", textAlign: TextAlign.center)),
               body: SingleChildScrollView(
                   child: Stack(
                     children: [
@@ -87,9 +90,9 @@ class _CompaniesPageState extends State<CompaniesPage> {
                           children: <Widget>[
                             GestureDetector(
                                 onTap: () {
-                                  showSearch<Company>(
+                                  showSearch<EmergencyMS>(
                                       context: context,
-                                      delegate: CompanySearch(company: CompanyProvider.nearby));
+                                      delegate: EmergencyMSSearch(homeCare: EmergencyMSProvider.nearby));
                                 },
                                 child: Container(
                                     margin: EdgeInsets.fromLTRB(0, 60, 0, 50),
@@ -138,24 +141,22 @@ class _CompaniesPageState extends State<CompaniesPage> {
                                     0,
                                     MediaQuery.of(context).size.width * 0.05,
                                     0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Top Companies",
-                                      textAlign: TextAlign.left,
-                                      textScaleFactor: 1.7,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-
-                                  ],
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*0.9,
+                                  margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05),
+                                  child: Text(
+                                    "Top Emergency Medical Services",
+                                    textAlign: TextAlign.left,
+                                    textScaleFactor: 1.7,
+                                    overflow: TextOverflow.clip,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
                                 )),
                             Container(
                                 height: 190.0,
                                 margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
-                                child: FutureBuilder<List<Company>>(
-                                    future: companyProvider.fetchTrendingCompanies(),
+                                child: FutureBuilder<List<EmergencyMS>>(
+                                    future: emergencyMSProvider.fetchTrendingEmergencyMS(),
                                     builder: (context, snapshot) {
                                       if (snapshot.connectionState ==
                                           ConnectionState.none &&
@@ -193,32 +194,31 @@ class _CompaniesPageState extends State<CompaniesPage> {
                                     0,
                                     MediaQuery.of(context).size.width * 0.05,
                                     0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Nearby Companies",
-                                      textAlign: TextAlign.left,
-                                      textScaleFactor: 1.7,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width*0.9,
+                                  margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.05),
+                                  child: Text(
+                                    "Nearby Emergency Medical Services",
+                                    textAlign: TextAlign.left,
+                                    textScaleFactor: 1.7,
+                                    overflow: TextOverflow.clip,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
                                 )),
                             Container(
                               // height: 190.0,
                                 margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
                                 child: FutureBuilder<UserLocation>(
-                                    future: companyProvider.getCurrentLocation(),
+                                    future: emergencyMSProvider.getCurrentLocation(),
                                     builder: (context, snapshot) {
                                       if (snapshot.connectionState ==
                                           ConnectionState.none &&
                                           snapshot.hasData == null) {
                                         return CircularProgressIndicator();
                                       }
-                                      return FutureBuilder<List<Company>>(
-                                          future: companyProvider
-                                              .fetchNearByCompanies(snapshot.data),
+                                      return FutureBuilder<List<EmergencyMS>>(
+                                          future: emergencyMSProvider
+                                              .fetchNearByEmergencyMS(snapshot.data),
                                           builder: (context, snapshot) {
                                             if (snapshot.connectionState ==
                                                 ConnectionState.none &&
@@ -273,16 +273,16 @@ class _CompaniesPageState extends State<CompaniesPage> {
           Navigator.push(
               ctxt,
               MaterialPageRoute(
-                  builder: (context) => CompanyDetail(
+                  builder: (context) => HomeCareDetail(
                     title: hospital.name??"",
                     info: hospital.createdAt.toString()??"",
                     phone: hospital.phone??"",
                     image: hospital.image??"",
                     images: hospital.images??[],
-                    locationName: hospital.locationName??"",
                     latitude: hospital.latitude.toString()??"",
                     longtude: hospital.longitude.toString()??"",
                     email: hospital.email??"",
+                    locationName: hospital.locationName??"",
                     name: hospital.name??"",
                     description: hospital.description??"",
                     location: hospital.latitude.toString()??"",
@@ -325,8 +325,9 @@ class _CompaniesPageState extends State<CompaniesPage> {
                             return Image.asset("assets/images/hos1.jpg",
                               width: 120,
                               height: 120,
-                              fit: BoxFit.fill,);
-                          })
+                              fit: BoxFit.cover,);
+                          }
+                      )
                           : Container(
                         child: Center(
                           child: Text('Image'),
@@ -349,48 +350,4 @@ class _CompaniesPageState extends State<CompaniesPage> {
             )));
   }
 
-  _buildTopServicesListItem(
-      Hospitals hospitalService, BuildContext ctxt) {
-    return GestureDetector(
-        onTap: () {
-          Navigator.push(
-              ctxt,
-              MaterialPageRoute(
-                  builder: (context) => DetailsPage(
-                    name: hospitalService.name,
-                    description: hospitalService.description,
-                    imageUrl: hospitalService.image,
-                  )));
-        },
-        child: Card(
-            elevation: 14,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            clipBehavior: Clip.hardEdge,
-            child: Container(
-                width: 120.0,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Container(
-                      width: 120,
-                      height: 147,
-                      child: SizedBox(
-                        height: 147,
-                        width: 120,
-                        child: Image.network(hospitalService.image,
-                            width: 120, height: 147, fit: BoxFit.fill,
-                            errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                              return Image.asset("assets/images/hos1.jpg",
-                                width: 120,
-                                height: 147,
-                                fit: BoxFit.cover,);
-                            }),
-                      ),
-                    ),
-                  ],
-                ))));
-  }
 }

@@ -2,6 +2,8 @@ import 'package:alen/models/cart.dart';
 import 'package:alen/models/drugs.dart';
 import 'package:alen/providers/cart.dart';
 import 'package:alen/providers/language.dart';
+import 'package:alen/ui/Cart/ImportCart.dart';
+import 'package:alen/ui/Cart/PharmacyCart.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -49,6 +51,38 @@ class _DetailForDrugState extends State<DetailForDrug> {
                     onPressed: () {
                       Navigator.pop(context, false);
                     }),
+                  actions: [
+                    widget.isPharma?
+                    IconButton(
+                      padding: EdgeInsets.only(right: 15),
+                      onPressed: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PharmacyCart()
+                            )
+                        );
+                      },
+                      icon: Icon(
+                          Icons.shopping_cart
+                      ),
+                    ):
+                    IconButton(
+                      padding: EdgeInsets.only(right: 15),
+                      onPressed: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              // builder: (context) => ImporterCart()
+                                builder: (context) => ImportCart()
+                            )
+                        );
+                      },
+                      icon: Icon(
+                          Icons.shopping_cart
+                      ),
+                    )
+                  ]
               ),
               body: SingleChildScrollView(
                   child: Stack(

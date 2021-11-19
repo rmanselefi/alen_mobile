@@ -1,17 +1,19 @@
-import 'package:alen/models/company.dart';
-import 'package:alen/ui/Details/CompanyDetail.dart';
+import 'package:alen/models/EmergencyMS.dart';
+import 'package:alen/models/homeCare.dart';
+import 'package:alen/ui/Details/EmergencyMSDetail.dart';
+import 'package:alen/ui/Details/HomeCareDetail.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/material.dart';
 
-class CompanySearch extends SearchDelegate<Company> {
+class EmergencyMSSearch extends SearchDelegate<EmergencyMS> {
   static const myCustomColors = AppColors();
-  Company result;
-  List<Company> company;
+  EmergencyMS result;
+  List<EmergencyMS> homeCare;
 
-  CompanySearch({this.company});
+  EmergencyMSSearch({this.homeCare});
 
   @override
-  String get searchFieldLabel => 'Search Company...';
+  String get searchFieldLabel => 'Search Emergency Medical Services...';
 
   ThemeData appBarTheme(BuildContext context) {
     assert(context != null);
@@ -66,7 +68,7 @@ class CompanySearch extends SearchDelegate<Company> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final suggestions = company.where((hospital) {
+    final suggestions = homeCare.where((hospital) {
       return hospital.name.toLowerCase().contains((query.toLowerCase()));
     });
 
@@ -80,7 +82,7 @@ class CompanySearch extends SearchDelegate<Company> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>CompanyDetail(
+                          builder: (context) =>EmergencyMSDetail(
                             title: result.name,
                             info: result.createdAt.toString(),
                             phone: result.phone,
@@ -90,18 +92,18 @@ class CompanySearch extends SearchDelegate<Company> {
                             longtude: result.longitude.toStringAsFixed(3),
                             email: result.email,
                             name: result.name,
-                            locationName: result.locationName,
                             description: result.description,
                             location: result.latitude.toString(),
                             services: result.services,
                             newservices:result.services,
+                            locationName:result.locationName,
                             officeHours: result.officehours.toString(),
                             hospitalId: result.Id,
                           )));
                 },
                 title: Text(suggestions.elementAt(index).name),
                 subtitle: Text(
-                  suggestions.elementAt(index).description,
+                  suggestions.elementAt(index).description??"",
                   maxLines: 1,
                 ),
                 leading: CircleAvatar(
@@ -116,7 +118,7 @@ class CompanySearch extends SearchDelegate<Company> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestions = company.where((hospital) {
+    final suggestions = homeCare.where((hospital) {
       return hospital.name.toLowerCase().contains((query.toLowerCase()));
     });
     return ListView.builder(
@@ -132,7 +134,7 @@ class CompanySearch extends SearchDelegate<Company> {
               ),
               leading: CircleAvatar(
                   backgroundImage: NetworkImage(
-                    suggestions.elementAt(index).images.first??"",
+                    suggestions.elementAt(index).images.first,
                   )),
               onTap: () {
                 query = suggestions.elementAt(index).name;

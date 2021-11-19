@@ -38,6 +38,7 @@ class HospitalProvider with ChangeNotifier {
           final HLDServiceTypes category = new HLDServiceTypes(
               serviceType['id'],
               serviceType['description'],
+              serviceType['additional_detail'],
               serviceType['name'],
               serviceType['image'],
               await servicesList[i]['price'],
@@ -369,7 +370,8 @@ class HLDServiceTypes {
   String image;
   String serviceId;
   String price;
+  String additionalDiscription;
 
-  HLDServiceTypes(this.id, this.description, this.name, this.image,
+  HLDServiceTypes(this.id, this.description, this.additionalDiscription, this.name, this.image,
       this.price, this.serviceId);
 }

@@ -42,6 +42,7 @@ class HomeCareProvider with ChangeNotifier {
           final HLDServiceTypes category = new HLDServiceTypes(
               serviceType['id'],
               serviceType['description'],
+              "",
               serviceType['name'],
               serviceType['image'],
               await servicesList[i]['price'],
@@ -372,6 +373,7 @@ class HomeCareProvider with ChangeNotifier {
           HLDServiceTypes hldServiceTypes =  new HLDServiceTypes(
             docs.docs[i].id,
             data['description'],
+            "",
             data['name'],
             data['image'],
             data['name'],

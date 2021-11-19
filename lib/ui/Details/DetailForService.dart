@@ -13,37 +13,36 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'HospitalDetail.dart';
 
-class DetailsForService extends StatelessWidget {
+class DetailsForService extends StatefulWidget {
+
   final String name;
   final String imageUrl;
   final String description;
   final List<Service> services;
   final String id;
+  final String Hospid;
   final String price;
   final Roles role;
-  final String hospitalId;
+  final BuildContext editPageContext;
 
-  DetailsForService({
-    Key key,
-    this.name,
-    this.imageUrl,
-    this.description,
-    this.services,
-    this.id,
-    this.price,
-    this.role,
-    this.hospitalId
-  }) : super(key: key);
+  DetailsForService({Key key, this.name, this.imageUrl,
+    this.description, this.services, this.id, this.price,
+    this.role, this.editPageContext, this.Hospid}) : super(key: key);
 
+  @override
+  _DetailsForServiceState createState() => _DetailsForServiceState();
+}
+
+class _DetailsForServiceState extends State<DetailsForService> {
   static const myCustomColors = AppColors();
 
   @override
-  Widget build(BuildContext context) {
-    var hosProvider = Provider.of<HospitalProvider>(context, listen: false);
-    var diagnosisProvider = Provider.of<DiagnosticProvider>(context, listen: false);
-    var labProvider = Provider.of<LaboratoryProvider>(context, listen: false);
-    return
-    FutureBuilder<dynamic>(
+  Widget build(BuildContext detailPageContext) {
+    var hosProvider = Provider.of<HospitalProvider>(detailPageContext, listen: false);
+    var diagnosisProvider = Provider.of<DiagnosticProvider>(detailPageContext, listen: false);
+    var labProvider = Provider.of<LaboratoryProvider>(detailPageContext, listen: false);
+    String hospitalId=widget.Hospid;
+    return FutureBuilder<dynamic>(
         future: SharedPreferences.getInstance(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.none &&
@@ -76,9 +75,10 @@ class DetailsForService extends StatelessWidget {
                             SizedBox(
                               height: 200,
                               width: 350,
-                              child: (imageUrl==null)?Text("Image not available"):
-                              Image.network(imageUrl,
-                                  width: 200, height: 120, fit: BoxFit.fill,errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                              child: (widget.imageUrl==null)?Text("Image not available"):
+                              Image.network(widget.imageUrl,
+                                  width: 200, height: 120, fit: BoxFit.fill,
+                                  errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
                                     return Image.asset("assets/images/hos1.jpg",
                                       width: 200,
                                       height: 120,
@@ -105,11 +105,11 @@ class DetailsForService extends StatelessWidget {
                               ),
                             ),
                             FutureBuilder<List<HLDServiceTypes>>(
-                                future: (role==Roles.Hospital)?
-                                hosProvider.getHospServiceTypesByHospitalId(id, hospitalId)
-                                    :(role==Roles.Diagnosis)?
-                                diagnosisProvider.getDiagnosticsServiceTypesByDiagnosticsId(id, hospitalId):
-                                labProvider.getLabServiceTypesByLabId(id, hospitalId)
+                                future: (widget.role==Roles.Hospital)?
+                                hosProvider.getHospServiceTypesByHospitalId(widget.id, hospitalId)
+                                    :(widget.role==Roles.Diagnosis)?
+                                diagnosisProvider.getDiagnosticsServiceTypesByDiagnosticsId(widget.id, hospitalId):
+                                labProvider.getLabServiceTypesByLabId(widget.id, hospitalId)
                                 ,
                                 builder: (context , hospServSnapshot) {
                                   if (hospServSnapshot.connectionState ==
@@ -136,7 +136,7 @@ class DetailsForService extends StatelessWidget {
                                     List<dynamic> list=[];
                                     for(int i=0; i<hospServSnapshot.data.length; i++){
                                       var temp=hospServSnapshot.data[i];
-                                      if(temp.serviceId==id){
+                                      if(temp.serviceId==widget.id){
                                         list.add(temp);
                                       }
                                     }
@@ -151,7 +151,7 @@ class DetailsForService extends StatelessWidget {
                                           scrollDirection: Axis.horizontal,
                                           itemBuilder: (BuildContext ctxt, int index) {
                                             return _buildHopitalServicesListItem(
-                                                list[index], ctxt, hospitalId,id, role);
+                                                list[index], detailPageContext, hospitalId,widget.id, widget.role);
                                           },
                                           itemCount: list.length,
                                         ));
@@ -162,7 +162,7 @@ class DetailsForService extends StatelessWidget {
                                 width: MediaQuery.of(context).size.width,
                                 child: Center(
                                     child:Text(
-                                      name??"Name",
+                                      widget.name??"Name",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 2,
                                       overflow: TextOverflow.ellipsis,
@@ -175,7 +175,7 @@ class DetailsForService extends StatelessWidget {
                                 width: MediaQuery.of(context).size.width,
                                 child: Center(
                                   child: Text(
-                                    description??"Description",
+                                    widget.description??"Description",
                                     textDirection: TextDirection.ltr,
                                     maxLines: 10,
                                   ),
@@ -200,13 +200,18 @@ class DetailsForService extends StatelessWidget {
   _buildHopitalServicesListItem(HLDServiceTypes service, BuildContext ctxt, String hospitalId, String serviceID, Roles role) {
     return GestureDetector(
         onTap: () {
+          DetailsPage.Price = service.price;
+          DetailsPage.addDesc = service.additionalDiscription;
           Navigator.push(
               ctxt,
               MaterialPageRoute(
                 // builder: (context) => ListInServices()
-                  builder: (context) => DetailsPage(name: service.name, imageUrl: service.image, description: service.description,
-                      price: service.price,colName: 'hospital',serviceId: service.id, hospitalId: hospitalId, role: role
-                  )
+                  builder: (context) => DetailsPage(name: service.name,
+                      imageUrl: service.image, description: service.description,
+                      price: service.price,colName: 'hospital',serviceId: service.id,
+                      editDetailContext: ctxt,
+                      editPageContext: widget.editPageContext,
+                      hospitalId: hospitalId, role: role )
               ));
         },
         child: Card(
@@ -223,10 +228,16 @@ class DetailsForService extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(150.0),
                     child: Image.network(
-                      service.image,
-                      fit: BoxFit.fitHeight,
-                      height: 70.0,
-                      width: 70.0,
+                        service.image,
+                        fit: BoxFit.fitHeight,
+                        height: 70.0,
+                        width: 70.0,
+                        errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                          return Image.asset("assets/images/hos1.jpg",
+                            width: 70,
+                            height: 70,
+                            fit: BoxFit.cover,);
+                        }
                     ),
                   ),
                 ),

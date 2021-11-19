@@ -1,3 +1,4 @@
+import 'package:alen/providers/EmergencyMS.dart';
 import 'package:alen/providers/HomeCare.dart';
 import 'package:alen/providers/ads.dart';
 import 'package:alen/providers/auth.dart';
@@ -89,8 +90,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => DrugProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => HomeCareProvider()),
+        ChangeNotifierProvider(create: (_) => EmergencyMSProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
-        ChangeNotifierProvider(create: (_) => CompanyProvider())
+        ChangeNotifierProvider(create: (_) => CompanyProvider()),
       ],
       child: MaterialApp(
 

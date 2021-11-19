@@ -350,16 +350,15 @@ class LabDetail extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          width: screenWidth * 0.2,
-                                          child: Text(
-                                            snapshot.data.locationName ?? "",
-                                            // "${snapshot.data.longitude.toStringAsFixed(2)} - ${snapshot.data.latitude.toStringAsFixed(2)}"??"-",
-                                            maxLines: 3,
-                                            textAlign: TextAlign.left,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        )
+                                    Container(
+                                      width: screenWidth * 0.2,
+                                      child: Text(
+                                        locationName ?? "",
+                                        // "${snapshot.data.longitude.toStringAsFixed(2)} - ${snapshot.data.latitude.toStringAsFixed(2)}"??"-",
+                                        maxLines: 3,
+                                        textAlign: TextAlign.left,
+                                        overflow: TextOverflow.ellipsis,
+                                      ))
                                       ],
                                     ),
                                     // child: Text(
@@ -398,6 +397,7 @@ class LabDetail extends StatelessWidget {
                     services: [],
                     id: hospitalServices.id,
                     role: Roles.Lab,
+                    editPageContext: ctxt,
                   )));
         },
         child: Card(

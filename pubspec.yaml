@@ -35,6 +35,7 @@ dependencies:
   firestore_search: ^0.1.6
   flutter_slidable: ^0.6.0
   loader_overlay: ^2.0.2+1
+  mailto: ^2.0.0
   connectivity_plus: ^2.0.2
   geolocator: ^7.7.1
   url_launcher:
