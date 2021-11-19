@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:alen/models/cart.dart';
 import 'package:alen/models/drugs.dart';
@@ -8,6 +9,10 @@ import 'package:alen/models/pharmacy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class CartProvider with ChangeNotifier {
   List<Drugs> drugs = [];
@@ -15,6 +20,8 @@ class CartProvider with ChangeNotifier {
   List<CartDrug> localPharmacyCartDrugs = [];
   List<Cart> cartItems = [];
   // List<Category> categoriesList = [];
+  firebase_storage.UploadTask uploadTask;
+
 
   bool isLoading = false;
 
@@ -82,9 +89,55 @@ class CartProvider with ChangeNotifier {
       "pharmacy_drug_id": drug.itemId,
       "user_id": userId,
       "amount": amount,
+
     };
     print("This is the pharma_drug id to be added, :${drug.itemId}");
     FirebaseFirestore.instance.collection('pharma_cart').add(data);
+  }
+
+  Future<void> addPrescriptionToCart(File file) async {
+    var prefs =
+    await SharedPreferences.getInstance();
+    String userId = prefs.getString('user_id');
+    var profile;
+    if (file != null) {
+      await uploadImage(file).then((res) {
+        print('imageuriimageuriimageuri$res');
+        if (res != null) {
+          profile = res;
+        }
+      });
+    } else {
+      return null;
+    }
+    Map<String, dynamic> data = <String, dynamic>{
+      "prescription": profile,
+      "user_id": userId,
+      "timeStamp": DateTime.now(),
+      'delivered':false,
+      "amount": 0,
+    };
+    print("This is the prescription  image to be added,");
+    FirebaseFirestore.instance.collection('pharma_cart').add(data);
+  }
+
+  Future<String> uploadImage(File back, {String path}) async {
+    // final mimetypeData = lookupMimeType(image.path).split('/');
+    firebase_storage.FirebaseStorage storage =
+        firebase_storage.FirebaseStorage.instance;
+    String fileName = basename(back.path);
+    firebase_storage.Reference storageReference = firebase_storage
+        .FirebaseStorage.instance
+        .ref()
+        .child("prescription_images/$fileName");
+
+    uploadTask = storageReference.putFile(back);
+
+// Cancel your subscription when done.
+    firebase_storage.TaskSnapshot snapshot = await uploadTask;
+    var imageUrl = await snapshot.ref.getDownloadURL();
+    notifyListeners();
+    return imageUrl;
   }
 
 
