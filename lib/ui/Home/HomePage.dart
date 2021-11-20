@@ -31,6 +31,7 @@ import 'package:alen/ui/mainPages/EmergencyMSesPage.dart';
 import 'package:alen/ui/mainPages/HomeCaresPage.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:alen/utils/Detail.dart';
+// import 'package:alen/utils/image.dart';
 import 'package:alen/utils/DetailsPage.dart';
 import 'package:alen/utils/languageData.dart';
 import 'package:flutter/material.dart';
@@ -68,11 +69,9 @@ class _HomePageState extends State<HomePage> {
   List<MainAd> mainAds = MainAd.mainAds;
   List<Services> services = Services.services;
   List<Trending> trendings = Trending.trendings;
-  List<HealthArticle> healthArticles = HealthArticle.healthArticles;
   String status = 'add';
-
+  List<HealthArticle> healthArticles = HealthArticle.healthArticles;
   ScrollController _scrollController = ScrollController();
-
   String _lang;
 
   // //
@@ -106,7 +105,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   _launchURL(String url) async {
-    const _url = 'https://helenair.com/news/state-and-regional/govt-and-politics/montanans-find-insurance-alternative-pitfalls-with-health-care-sharing-ministries/article_802af5a3-fc97-56da-8d29-c09d3b1a9ea5.html?campaignid=14250156906&adgroupid=127482060924&adid=538696984263&gclid=CjwKCAjwhOyJBhA4EiwAEcJdcVeRfY_e9Osp3IkQ9ch5lLStx6f46yvNaRMqoEMfmrsNknQrcgxJthoCBFgQAvD_BwE';
+    // const _url = 'https://helenair.com/news/state-and-regional/govt-and-politics/montanans-find-insurance-alternative-pitfalls-with-health-care-sharing-ministries/article_802af5a3-fc97-56da-8d29-c09d3b1a9ea5.html?campaignid=14250156906&adgroupid=127482060924&adid=538696984263&gclid=CjwKCAjwhOyJBhA4EiwAEcJdcVeRfY_e9Osp3IkQ9ch5lLStx6f46yvNaRMqoEMfmrsNknQrcgxJthoCBFgQAvD_BwE';
+    const _url =
+        'https://helenair.com/news/state-and-regional/govt-and-politics/montanans-find-insurance-alternative-pitfalls-with-health-care-sharing-ministries/article_802af5a3-fc97-56da-8d29-c09d3b1a9ea5.html?campaignid=14250156906&adgroupid=127482060924&adid=538696984263&gclid=CjwKCAjwhOyJBhA4EiwAEcJdcVeRfY_e9Osp3IkQ9ch5lLStx6f46yvNaRMqoEMfmrsNknQrcgxJthoCBFgQAvD_BwE';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -116,13 +117,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   static const myCustomColors = AppColors();
-
   File _image;
   final picker = ImagePicker();
 
   Future getImage(BuildContext ctxt) async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
@@ -171,7 +170,6 @@ class _HomePageState extends State<HomePage> {
     });
     await Provider.of<DiagnosticProvider>(context, listen: false)
         .fetchNearByDiagnostic(location);
-
     print("Done for Diagnostic");
     DiagnosticProvider.nearby.forEach((element) {
       print(element.name);
@@ -245,10 +243,8 @@ class _HomePageState extends State<HomePage> {
     //       curve: Curves.fastOutSlowIn,
     //     )
     // );
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
     var healthProvider =
         Provider.of<HealthArticleProvider>(context, listen: true);
     var adsProvider = Provider.of<AdsProvider>(context, listen: true);
@@ -316,7 +312,6 @@ class _HomePageState extends State<HomePage> {
                                 //             );
                                 //       }
                                 //     });
-
                                 List<HospitalsLabsDiagnostics> hld =
                                     await searchInitializer();
                                 showSearch<HospitalsLabsDiagnostics>(
@@ -397,7 +392,6 @@ class _HomePageState extends State<HomePage> {
                                                 child:
                                                     CircularProgressIndicator()));
                                       } else {
-
                                         WidgetsBinding.instance
                                             .addPostFrameCallback(
                                                 (_) => _scrollToBottom());
@@ -405,11 +399,10 @@ class _HomePageState extends State<HomePage> {
                                                     .getString('email') ==
                                                 null
                                             ? Text(
-                                                "alenUser@gmail.com",
+                                                "9484alen@gmail.com",
                                               )
                                             : Text(snapshot.data
                                                 .getString('email'));
-
                                       }
                                     }),
                                 currentAccountPicture: CircleAvatar(
@@ -562,23 +555,32 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             IconButton(
-
-                              onPressed: (){
+                              onPressed: () {
                                 launch("http://t.me/alen9484");
                               },
-                              icon: Icon(MdiIcons.telegram,color: myCustomColors.loginBackgroud,),
+                              icon: Icon(
+                                MdiIcons.telegram,
+                                color: myCustomColors.loginBackgroud,
+                              ),
                             ),
                             IconButton(
-                              onPressed: (){
+                              onPressed: () {
                                 launchMailto();
                               },
-                              icon: Icon(MdiIcons.gmail,color: myCustomColors.loginBackgroud,),
+                              icon: Icon(
+                                MdiIcons.gmail,
+                                color: myCustomColors.loginBackgroud,
+                              ),
                             ),
                             IconButton(
-                              onPressed: (){
-                                launch("https://m.facebook.com/Alen%E1%8A%A0%E1%88%88%E1%8A%95-112161981273464/?refid=46&tsid=0.21078368701843675&source=result");
+                              onPressed: () {
+                                launch(
+                                    "https://m.facebook.com/Alen%E1%8A%A0%E1%88%88%E1%8A%95-112161981273464/?refid=46&tsid=0.21078368701843675&source=result");
                               },
-                              icon: Icon(Icons.facebook_outlined,color: myCustomColors.loginBackgroud,),
+                              icon: Icon(
+                                Icons.facebook_outlined,
+                                color: myCustomColors.loginBackgroud,
+                              ),
                             ),
                           ],
                         )
@@ -637,139 +639,143 @@ class _HomePageState extends State<HomePage> {
                                               pagination: SwiperPagination(),
                                               itemBuilder: (context, index) {
                                                 return _buildMainAdsListItem(
-                                                snapshot.data[index],
-                                                context);
-                                                }
-                                            ));
-                                      }
-                                    }),
-
-
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(
-                                      MediaQuery.of(context).size.width * 0.05,
-                                      0,
-                                      MediaQuery.of(context).size.width * 0.05,
-                                      0),
-                                  child: Text(
-                                    languageData[languageProvider.langOPT]['Services'] ?? "Services",
-                                    textAlign: TextAlign.left,
-                                    textScaleFactor: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-
-                                (screenWidth>400)?
-                                Column(
-                                  children: [
-                                    Container (
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: MediaQuery.of(context).size.width * 0.04),
-                                        height: 120.0,
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => PharmaciesPage()));
+                                                    snapshot.data[index],
+                                                    context);
                                               },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/pharmacy.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Pharmacies'] ?? "Pharmacies",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
+                                              itemHeight: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.38,
+                                              itemWidth: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
                                             ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => DiagnosisesPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/diagnostic.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Imaging'] ?? "Imaging",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => HomeCaresPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  // width: MediaQuery.of(context).size.width*0.15,
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    textBaseline: TextBaseline.ideographic,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/homecare.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Container(
-                                                        width: MediaQuery.of(context).size.width*0.18,
-                                                        child: Text(
-                                                          languageData[languageProvider.langOPT]['HomeCare'] ?? "Home Care",
-                                                          maxLines: 3,
-                                                          overflow: TextOverflow.visible,
+                                    );
+                                  }
+                                }),
+                            FutureBuilder<List<Ads>>(
+                                future: adsProvider.fetchSmallAds(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                          ConnectionState.none &&
+                                      snapshot.hasData == null) {
+                                    return Container(
+                                        height: 90,
+                                        child: Center(
+                                            child:
+                                                CircularProgressIndicator()));
+                                  }
+                                  print(
+                                      'project snapshot data is: ${snapshot.data}');
+                                  if (snapshot.data == null) {
+                                    return Container(
+                                        height: 90,
+                                        child: Center(
+                                            child:
+                                                CircularProgressIndicator()));
+                                  } else {
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback(
+                                            (_) => _scrollToBottom());
+                                    return Container(
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 7.0),
+                                        height: 90.0,
+                                        child: snapshot.data.length == 0
+                                            ? Center(
+                                                child: Text(languageData[
+                                                            languageProvider
+                                                                .langOPT][
+                                                        'No small Ads Available'] ??
+                                                    "No small Ads Available"),
+                                              )
+                                            : ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                controller: _scrollController,
+                                                // reverse: true,
+                                                shrinkWrap: true,
+                                                itemBuilder: (BuildContext ctxt,
+                                                    int index) {
+                                                  return _buildSmallAdsListItem(
+                                                      snapshot.data[index],
+                                                      ctxt);
+                                                },
+                                                itemCount: snapshot.data.length,
+                                              ));
+                                  }
+                                }),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(
+                                  MediaQuery.of(context).size.width * 0.05,
+                                  0,
+                                  MediaQuery.of(context).size.width * 0.05,
+                                  0),
+                              child: Text(
+                                languageData[languageProvider.langOPT]
+                                        ['Services'] ??
+                                    "Services",
+                                textAlign: TextAlign.left,
+                                textScaleFactor: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            (screenWidth > 450)
+                                ? Column(
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.04),
+                                          height: 120.0,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              PharmaciesPage()));
+                                                },
+                                                child: Container(
+                                                    margin: EdgeInsets.symmetric(
+                                                        horizontal:
+                                                            MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.02),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: <Widget>[
+                                                        Image.asset(
+                                                          "assets/images/pharmacy.png",
+                                                          width: 60,
+                                                          height: 60,
+                                                          color: myCustomColors
+                                                              .loginBackgroud,
+                                                        ),
+                                                        Text(
+                                                          languageData[languageProvider
+                                                                      .langOPT][
+                                                                  'Pharmacies'] ??
+                                                              "Pharmacies",
                                                           style: const TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold),
                                                         )
-    )
                                                       ],
                                                     )),
                                               ),
@@ -804,313 +810,12 @@ class _HomePageState extends State<HomePage> {
                                                               .loginBackgroud,
                                                         ),
                                                         Text(
-                                                          languageData[languageProvider
-                                                                      .langOPT][
-                                                                  'Diagnostics'] ??
-                                                              "Diagnostics",
-
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-                                          ],
-                                          // scrollDirection: Axis.horizontal,
-                                        )),
-                                    Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: MediaQuery.of(context).size.width * 0.04),
-                                        height: 120.0,
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => HospitalsPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/hospital.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Health Facilities'] ?? "Health Facilities",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => ImportersPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/importer.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Importers'] ?? "Importers",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => CompaniesPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/company.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Companies'] ?? "Companies",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => EmergencyMSesPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/emergencyMS.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Container(
-                                                        width: MediaQuery.of(context).size.width*0.18,
-                                                        child: Text(
-                                                          languageData[languageProvider.langOPT]['EmergencyMS'] ?? "Emergency",
-                                                          maxLines: 2,
-                                                          textAlign: TextAlign.center,
-                                                          overflow: TextOverflow.visible,
-                                                          style: const TextStyle(
-                                                              fontWeight: FontWeight.bold),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-                                          ],
-                                          // scrollDirection: Axis.horizontal,
-                                        )),
-                                  ],
-                                ):
-                                (screenWidth>250)?Column(
-                                  children: [
-                                    Container (
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: MediaQuery.of(context).size.width * 0.04),
-                                        height: 100.0,
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => PharmaciesPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/pharmacy.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Pharmacies'] ?? "Pharmacies",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => DiagnosisesPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/diagnostic.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Diagnostics'] ?? "Diagnostics",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => LabsPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/lab.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Labs'] ?? "Labs",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-
-                                          ],
-                                          // scrollDirection: Axis.horizontal,
-                                        )),
-                                    Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: MediaQuery.of(context).size.width * 0.1),
-                                        height: 120.0,
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => HomeCaresPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  // width: MediaQuery.of(context).size.width*0.15,
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    textBaseline: TextBaseline.ideographic,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/homecare.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Container(
-                                                        width: MediaQuery.of(context).size.width*0.18,
-                                                        child: Text(
-                                                          languageData[languageProvider.langOPT]['HomeCare'] ?? "Home Care",
-                                                          maxLines: 3,
-                                                          overflow: TextOverflow.visible,
-
+                                                          languageData[languageProvider.langOPT]['Imaging'] ?? "Imaging",
                                                           style: const TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold),
                                                         )
-    )
                                                       ],
                                                     )),
                                               ),
@@ -1149,309 +854,11 @@ class _HomePageState extends State<HomePage> {
                                                                       .langOPT]
                                                                   ['Labs'] ??
                                                               "Labs",
-
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => HospitalsPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/hospital.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Hospitals'] ?? "Hospitals",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => ImportersPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/importer.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Importers'] ?? "Importers",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-
-                                          ],
-                                          // scrollDirection: Axis.horizontal,
-                                        )),
-                                    Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: MediaQuery.of(context).size.width * 0.1),
-                                        height: 120.0,
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => CompaniesPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/company.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Companies'] ?? "Companies",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => EmergencyMSesPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/emergencyMS.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Container(
-                                                        width: MediaQuery.of(context).size.width*0.18,
-                                                        child: Text(
-                                                          languageData[languageProvider.langOPT]['EmergencyMS'] ?? "Emergency",
-                                                          maxLines: 2,
-                                                          textAlign: TextAlign.center,
-                                                          overflow: TextOverflow.visible,
-                                                          style: const TextStyle(
-                                                              fontWeight: FontWeight.bold),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  )),
-                                            )
-
-                                          ],
-                                          // scrollDirection: Axis.horizontal,
-                                        )),
-                                  ],
-                                ):
-                                Column(
-                                  children: [
-                                    Container (
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: MediaQuery.of(context).size.width * 0.04),
-                                        height: 100.0,
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => PharmaciesPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/pharmacy.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Pharmacies'] ?? "Pharmacies",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => DiagnosisesPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/diagnostic.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Diagnostics'] ?? "Diagnostics",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-                                          ],
-                                          // scrollDirection: Axis.horizontal,
-                                        )),
-                                    Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: MediaQuery.of(context).size.width * 0.1),
-                                        height: 120.0,
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => LabsPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/lab.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Labs'] ?? "Labs",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => HomeCaresPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  // width: MediaQuery.of(context).size.width*0.15,
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    textBaseline: TextBaseline.ideographic,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/homecare.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Container(
-                                                        width: MediaQuery.of(context).size.width*0.18,
-                                                        child: Text(
-                                                          languageData[languageProvider.langOPT]['HomeCare'] ?? "Home Care",
-                                                          maxLines: 3,
-                                                          overflow: TextOverflow.visible,
-
                                                           style: const TextStyle(
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold),
                                                         )
-    )
                                                       ],
                                                     )),
                                               ),
@@ -1475,6 +882,8 @@ class _HomePageState extends State<HomePage> {
                                                     child: Column(
                                                       mainAxisSize:
                                                           MainAxisSize.max,
+                                                      textBaseline: TextBaseline
+                                                          .ideographic,
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .spaceEvenly,
@@ -1493,12 +902,8 @@ class _HomePageState extends State<HomePage> {
                                                                   .width *
                                                               0.18,
                                                           child: Text(
-                                                            languageData[languageProvider
-                                                                        .langOPT]
-                                                                    [
-                                                                    'Home Care'] ??
-                                                                "Home Care",
-                                                            maxLines: 1,
+                                                            languageData[languageProvider.langOPT]['HomeCare'] ?? "Home Care",
+                                                            maxLines: 3,
                                                             overflow:
                                                                 TextOverflow
                                                                     .visible,
@@ -1519,238 +924,19 @@ class _HomePageState extends State<HomePage> {
                                               horizontal: MediaQuery.of(context)
                                                       .size
                                                       .width *
-                                                  0.1),
-                                          height: 100.0,
+                                                  0.04),
+                                          height: 120.0,
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
                                               GestureDetector(
                                                 onTap: () {
-    Navigator.push(
-    context,
-    MaterialPageRoute(
-    builder: (context) =>
-    HospitalsPage()));
-    }
-                                                      )
-                                                    ],
-                                                  )),
-                                                      ]
-                                            )
-                                          ],
-                                          // scrollDirection: Axis.horizontal,
-                                        )),
-                                    Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: MediaQuery.of(context).size.width * 0.1),
-                                        height: 100.0,
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => HospitalsPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/hospital.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Hospitals'] ?? "Hospitals",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => ImportersPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/importer.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Importers'] ?? "Importers",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-
-                                          ],
-                                          // scrollDirection: Axis.horizontal,
-                                        )),
-                                    Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: MediaQuery.of(context).size.width * 0.1),
-                                        height: 120.0,
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => CompaniesPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/company.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Text(
-                                                        languageData[languageProvider.langOPT]['Companies'] ?? "Companies",
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.bold),
-                                                      )
-                                                    ],
-                                                  )),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) => EmergencyMSesPage()));
-                                              },
-                                              child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                      MediaQuery.of(context).size.width *
-                                                          0.02),
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
-                                                    children: <Widget>[
-                                                      Image.asset(
-                                                        "assets/images/emergencyMS.png",
-                                                        width: 60,
-                                                        height: 60,
-                                                        color: myCustomColors.loginBackgroud,
-                                                      ),
-                                                      Container(
-                                                        width: MediaQuery.of(context).size.width*0.18,
-                                                        child: Text(
-                                                          languageData[languageProvider.langOPT]['EmergencyMS'] ?? "Emergency",
-                                                          maxLines: 2,
-                                                          textAlign: TextAlign.center,
-                                                          overflow: TextOverflow.visible,
-                                                          style: const TextStyle(
-                                                              fontWeight: FontWeight.bold),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  )),
-                                            )
-                                          ],
-                                          // scrollDirection: Axis.horizontal,
-                                        )),
-
-
-                                Container(
-                                    margin: EdgeInsets.fromLTRB(
-                                        MediaQuery.of(context).size.width * 0.05,
-                                        0,
-                                        MediaQuery.of(context).size.width * 0.05,
-                                        0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          languageData[languageProvider.langOPT]['Trending'] ?? "Trending",
-                                          textAlign: TextAlign.left,
-                                          textScaleFactor: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    )),
-                                Container(
-                                  // height: 180.0,
-                                    child: FutureBuilder<List<Drugs>>(
-                                        future: pharmacyProvider.fetchTrendingDrugs(),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.none &&
-                                              snapshot.hasData == null) {
-                                            return CircularProgressIndicator();
-                                          }
-                                          print('Trendings: ${snapshot.data}');
-                                          if (snapshot.data == null) {
-                                            return Container(
-                                                child: Center(
-                                                    child: CircularProgressIndicator()));
-                                          } else {
-                                            return Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                                              child: GridView.builder(
-                                                gridDelegate:
-                                                SliverGridDelegateWithFixedCrossAxisCount(
-                                                    // maxCrossAxisExtent: 160,
-                                                  crossAxisCount: 3,
-                                                    childAspectRatio:
-                                                    (MediaQuery.of(context)
-                                                        .orientation ==
-                                                        Orientation.portrait)
-                                                        ? 2 / 3
-                                                        : 2 / 2.2,
-                                                    crossAxisSpacing: 10,
-                                                    mainAxisSpacing: 10),
-                                                shrinkWrap: true,
-                                                physics: NeverScrollableScrollPhysics(),
-                                                scrollDirection: Axis.vertical,
-                                                itemBuilder:
-                                                    (BuildContext ctxt, int index) {
-                                                  return _buildTrendingsListItem(
-                                                      snapshot.data[index], ctxt);
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              HospitalsPage()));
                                                 },
                                                 child: Container(
                                                     margin: EdgeInsets.symmetric(
@@ -1775,10 +961,7 @@ class _HomePageState extends State<HomePage> {
                                                               .loginBackgroud,
                                                         ),
                                                         Text(
-                                                          languageData[languageProvider
-                                                                      .langOPT][
-                                                                  'Hospitals'] ??
-                                                              "Hospitals",
+                                                          languageData[languageProvider.langOPT]['Health Facilities'] ?? "Health Facilities",
                                                           style: const TextStyle(
                                                               fontWeight:
                                                                   FontWeight
@@ -1873,12 +1056,69 @@ class _HomePageState extends State<HomePage> {
                                                       ],
                                                     )),
                                               ),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              EmergencyMSesPage()));
+                                                },
+                                                child: Container(
+                                                    margin: EdgeInsets.symmetric(
+                                                        horizontal:
+                                                            MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.02),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: <Widget>[
+                                                        Image.asset(
+                                                          "assets/images/emergencyMS.png",
+                                                          width: 60,
+                                                          height: 60,
+                                                          color: myCustomColors
+                                                              .loginBackgroud,
+                                                        ),
+                                                        Container(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.18,
+                                                          child: Text(
+                                                            languageData[languageProvider
+                                                                        .langOPT]
+                                                                    [
+                                                                    'EmergencyMS'] ??
+                                                                "Emergency",
+                                                            maxLines: 2,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .visible,
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    )),
+                                              ),
                                             ],
                                             // scrollDirection: Axis.horizontal,
                                           )),
                                     ],
                                   )
-                                : (screenWidth > 250)
+                                : (screenWidth > 350)
                                     ? Column(
                                         children: [
                                           Container(
@@ -1969,11 +1209,7 @@ class _HomePageState extends State<HomePage> {
                                                                   .loginBackgroud,
                                                             ),
                                                             Text(
-                                                              languageData[languageProvider
-                                                                          .langOPT]
-                                                                      [
-                                                                      'Diagnostics'] ??
-                                                                  "Diagnostics",
+                                                              languageData[languageProvider.langOPT]['Imaging'] ?? "Imaging",
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -2036,7 +1272,7 @@ class _HomePageState extends State<HomePage> {
                                                               .size
                                                               .width *
                                                           0.1),
-                                              height: 100.0,
+                                              height: 120.0,
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -2062,6 +1298,9 @@ class _HomePageState extends State<HomePage> {
                                                         child: Column(
                                                           mainAxisSize:
                                                               MainAxisSize.max,
+                                                          textBaseline:
+                                                              TextBaseline
+                                                                  .ideographic,
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .spaceEvenly,
@@ -2080,12 +1319,8 @@ class _HomePageState extends State<HomePage> {
                                                                       .width *
                                                                   0.18,
                                                               child: Text(
-                                                                languageData[languageProvider
-                                                                            .langOPT]
-                                                                        [
-                                                                        'Home Care'] ??
-                                                                    "Home Care",
-                                                                maxLines: 1,
+                                                                languageData[languageProvider.langOPT]['HomeCare'] ?? "Home Care",
+                                                                maxLines: 3,
                                                                 overflow:
                                                                     TextOverflow
                                                                         .visible,
@@ -2129,11 +1364,7 @@ class _HomePageState extends State<HomePage> {
                                                                   .loginBackgroud,
                                                             ),
                                                             Text(
-                                                              languageData[languageProvider
-                                                                          .langOPT]
-                                                                      [
-                                                                      'Hospitals'] ??
-                                                                  "Hospitals",
+                                                              languageData[languageProvider.langOPT]['Health Facilities'] ?? "Health Facilities",
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -2196,7 +1427,7 @@ class _HomePageState extends State<HomePage> {
                                                               .size
                                                               .width *
                                                           0.1),
-                                              height: 100.0,
+                                              height: 120.0,
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -2246,6 +1477,64 @@ class _HomePageState extends State<HomePage> {
                                                           ],
                                                         )),
                                                   ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  EmergencyMSesPage()));
+                                                    },
+                                                    child: Container(
+                                                        margin: EdgeInsets.symmetric(
+                                                            horizontal:
+                                                                MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.02),
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: <Widget>[
+                                                            Image.asset(
+                                                              "assets/images/emergencyMS.png",
+                                                              width: 60,
+                                                              height: 60,
+                                                              color: myCustomColors
+                                                                  .loginBackgroud,
+                                                            ),
+                                                            Container(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.18,
+                                                              child: Text(
+                                                                languageData[languageProvider
+                                                                            .langOPT]
+                                                                        [
+                                                                        'EmergencyMS'] ??
+                                                                    "Emergency",
+                                                                maxLines: 2,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .visible,
+                                                                style: const TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        )),
+                                                  )
                                                 ],
                                                 // scrollDirection: Axis.horizontal,
                                               )),
@@ -2341,11 +1630,7 @@ class _HomePageState extends State<HomePage> {
                                                                   .loginBackgroud,
                                                             ),
                                                             Text(
-                                                              languageData[languageProvider
-                                                                          .langOPT]
-                                                                      [
-                                                                      'Diagnostics'] ??
-                                                                  "Diagnostics",
+                                                              languageData[languageProvider.langOPT]['Imaging'] ?? "Imaging",
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -2364,7 +1649,7 @@ class _HomePageState extends State<HomePage> {
                                                               .size
                                                               .width *
                                                           0.1),
-                                              height: 100.0,
+                                              height: 120.0,
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -2434,6 +1719,9 @@ class _HomePageState extends State<HomePage> {
                                                         child: Column(
                                                           mainAxisSize:
                                                               MainAxisSize.max,
+                                                          textBaseline:
+                                                              TextBaseline
+                                                                  .ideographic,
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .spaceEvenly,
@@ -2452,12 +1740,8 @@ class _HomePageState extends State<HomePage> {
                                                                       .width *
                                                                   0.18,
                                                               child: Text(
-                                                                languageData[languageProvider
-                                                                            .langOPT]
-                                                                        [
-                                                                        'Home Care'] ??
-                                                                    "Home Care",
-                                                                maxLines: 1,
+                                                                languageData[languageProvider.langOPT]['HomeCare'] ?? "Home Care",
+                                                                maxLines: 3,
                                                                 overflow:
                                                                     TextOverflow
                                                                         .visible,
@@ -2517,11 +1801,7 @@ class _HomePageState extends State<HomePage> {
                                                                   .loginBackgroud,
                                                             ),
                                                             Text(
-                                                              languageData[languageProvider
-                                                                          .langOPT]
-                                                                      [
-                                                                      'Hospitals'] ??
-                                                                  "Hospitals",
+                                                              languageData[languageProvider.langOPT]['Health Facilities'] ?? "Health Facilities",
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -2584,7 +1864,7 @@ class _HomePageState extends State<HomePage> {
                                                               .size
                                                               .width *
                                                           0.1),
-                                              height: 100.0,
+                                              height: 120.0,
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -2634,6 +1914,64 @@ class _HomePageState extends State<HomePage> {
                                                           ],
                                                         )),
                                                   ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  EmergencyMSesPage()));
+                                                    },
+                                                    child: Container(
+                                                        margin: EdgeInsets.symmetric(
+                                                            horizontal:
+                                                                MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.02),
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: <Widget>[
+                                                            Image.asset(
+                                                              "assets/images/emergencyMS.png",
+                                                              width: 60,
+                                                              height: 60,
+                                                              color: myCustomColors
+                                                                  .loginBackgroud,
+                                                            ),
+                                                            Container(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.18,
+                                                              child: Text(
+                                                                languageData[languageProvider
+                                                                            .langOPT]
+                                                                        [
+                                                                        'EmergencyMS'] ??
+                                                                    "Emergency",
+                                                                maxLines: 2,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .visible,
+                                                                style: const TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        )),
+                                                  )
                                                 ],
                                                 // scrollDirection: Axis.horizontal,
                                               )),
@@ -2822,7 +2160,6 @@ class _HomePageState extends State<HomePage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text("Add image of your prescription from your Gallery."),
-                // ImageInput(_setImage),
                 Flexible(
                   child: Container(
                       padding: EdgeInsets.only(top: 30),
@@ -2854,11 +2191,12 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             width: 10,
                           ),
-                          Text(status == 'add' ? 'Add Prescription' : 'Save Prescription')
+                              Text(status == 'add' ? 'Add Prescription' : 'Save Prescription')
                         ])),
                   ),
                   onPressed: () {
                     Navigator.pop(context);
+                    getImage(ctxt);
                     if (status == 'add') {
                       getImage(ctxt);
                     } else {
@@ -2889,12 +2227,12 @@ class _HomePageState extends State<HomePage> {
           ),
           clipBehavior: Clip.hardEdge,
           child: SizedBox(
-            height: MediaQuery.of(ctxt).size.width * 0.38,
-            width: MediaQuery.of(ctxt).size.width,
+            height: MediaQuery.of(context).size.width * 0.38,
+            width: MediaQuery.of(context).size.width,
             child: Image.network(
               mainAd.image,
-              width: MediaQuery.of(ctxt).size.width,
-              height: MediaQuery.of(ctxt).size.width * 0.38,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width * 0.38,
               fit: BoxFit.fill,
               errorBuilder: (BuildContext context, Object exception,
                   StackTrace stackTrace) {
