@@ -150,10 +150,10 @@ class _ImportCartState extends State<ImportCart> {
                                                     backgroundColor: myCustomColors.loginBackgroud,
                                                   ):result==2?snackBar = SnackBar(
                                                     content: const Text('Your order has already been registered.'),
-                                                    backgroundColor: myCustomColors.loginBackgroud,
+                                                    backgroundColor: myCustomColors.loginButton,
                                                   ):snackBar = SnackBar(
                                                     content: const Text('Order Failed! Please check your internet connection.'),
-                                                    backgroundColor: myCustomColors.loginBackgroud,
+                                                    backgroundColor: myCustomColors.loginButton,
                                                   );
 
                                                   ScaffoldMessenger.of(coontext).showSnackBar(snackBar);

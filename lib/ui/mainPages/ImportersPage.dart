@@ -1,3 +1,4 @@
+import 'package:alen/models/hospital.dart';
 import 'package:alen/models/importer.dart';
 import 'package:alen/models/user_location.dart';
 import 'package:alen/providers/importer.dart';
@@ -7,7 +8,7 @@ import 'package:alen/ui/Cart/ImportCart.dart';
 import 'package:alen/ui/Cart/PharmacyCart.dart';
 import 'package:alen/ui/Details/ImporterDetail.dart';
 import 'package:alen/ui/Details/PharmacyDetail.dart';
-import 'package:alen/ui/SearchDelegates/searchImporters.dart';
+import 'package:alen/ui/SearchDelegates/searchTrending.dart';
 import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllCategories.dart';
 import 'package:alen/ui/SeeAllPages/SecondPage/SeeAllPharmacies.dart';
 import 'package:alen/ui/Services/PharmacistsServices.dart';
@@ -16,7 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:alen/ui/Models/Trending.dart';
 import 'package:alen/ui/Pages/Pharmacy.dart';
-import 'package:alen/ui/SearchDelegates/searchPharmacies.dart';
 import 'package:provider/provider.dart';
 import 'package:alen/providers/pharmacy.dart';
 import 'package:alen/models/pharmacy.dart';
@@ -97,9 +97,14 @@ class ImportersPage extends StatelessWidget {
                           children: <Widget>[
                             GestureDetector(
                                 onTap: () {
-                                  showSearch<Importers>(
+                                  List<HospitalsLabsDiagnostics> hld = [];
+                                  hld += ImporterProvider.nearby;
+                                  showSearch<HospitalsLabsDiagnostics>(
                                       context: context,
-                                      delegate: ImporterSearch(importers: ImporterProvider.nearby));
+                                      delegate: TrendingSearch(trendings: hld, searchFor: "Search Importers"));
+                                  // showSearch<Importers>(
+                                  //     context: context,
+                                  //     delegate: ImporterSearch(importers: ImporterProvider.nearby));
                                 },
                                 child: Container(
                                     margin: EdgeInsets.fromLTRB(0, 60, 0, 50),

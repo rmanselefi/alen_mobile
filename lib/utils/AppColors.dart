@@ -5,7 +5,7 @@ class AppColors {
   final loginBackgroud=const Color(0xFF1DB9A3);
   final loginButtonBorder =
       const Color(0xFF0A0A99); //login page and confirmaion page
-  // final loginButton = const Color(0xFF9516B6);
+  final loginButton = const Color(0xFF9516B6);
   final textIconColors = const Color(0x4AAAA5);
   // const Color(0xFF2929C7)
   final mainBackground = const Color(0xFFEBEBEB);

@@ -9,7 +9,7 @@ import 'package:alen/providers/language.dart';
 import 'package:alen/ui/Details/DiagnosticDetail.dart';
 import 'package:alen/ui/Details/HospitalDetail.dart';
 import 'package:alen/ui/Details/LabDetail.dart';
-import 'package:alen/ui/SearchDelegates/searchDiagnosises.dart';
+import 'package:alen/ui/SearchDelegates/searchTrending.dart';
 import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllServices.dart';
 import 'package:alen/ui/SeeAllPages/SecondPage/SeeAllHospitals.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
@@ -18,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:alen/ui/Models/Trending.dart';
 import 'package:alen/ui/Pages/Hospital.dart';
-import 'package:alen/ui/SearchDelegates/searchHospitals.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -94,9 +93,14 @@ class _HospitalPageState extends State<DiagnosisesPage> {
                           children: <Widget>[
                             GestureDetector(
                                 onTap: () {
-                                  showSearch<Diagnostics>(
+                                  List<HospitalsLabsDiagnostics> hld = [];
+                                  hld += DiagnosticProvider.nearby;
+                                  showSearch<HospitalsLabsDiagnostics>(
                                       context: context,
-                                      delegate: DiagnosisSearch(diagnosises: DiagnosticProvider.nearby));
+                                      delegate: TrendingSearch(trendings: hld, searchFor: "Search Imaging"));
+                                  // showSearch<Diagnostics>(
+                                  //     context: context,
+                                  //     delegate: DiagnosisSearch(diagnosises: DiagnosticProvider.nearby));
                                 },
                                 child: Container(
                                     margin: EdgeInsets.fromLTRB(0, 60, 0, 50),

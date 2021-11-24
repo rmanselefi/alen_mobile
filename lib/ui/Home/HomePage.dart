@@ -249,7 +249,7 @@ class _HomePageState extends State<HomePage> {
         Provider.of<HealthArticleProvider>(context, listen: true);
     var adsProvider = Provider.of<AdsProvider>(context, listen: true);
     var pharmacyProvider = Provider.of<PharmacyProvider>(context, listen: true);
-    search();
+    // search();
     return LoaderOverlay(
         overlayOpacity: 0.8,
         child: FutureBuilder<dynamic>(
@@ -316,7 +316,7 @@ class _HomePageState extends State<HomePage> {
                                     await searchInitializer();
                                 showSearch<HospitalsLabsDiagnostics>(
                                     context: context,
-                                    delegate: TrendingSearch(trendings: hld));
+                                    delegate: TrendingSearch(trendings: hld, searchFor: "Search Everything"));
                               },
                               icon: Icon(
                                 Icons.search,

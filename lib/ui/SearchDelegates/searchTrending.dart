@@ -17,12 +17,13 @@ class TrendingSearch extends SearchDelegate<HospitalsLabsDiagnostics> {
   static const myCustomColors = AppColors();
   HospitalsLabsDiagnostics result;
   final List<HospitalsLabsDiagnostics> trendings;
+  final String searchFor;
 
-  TrendingSearch({this.trendings});
+  TrendingSearch({this.trendings, this.searchFor});
 
 
   @override
-  String get searchFieldLabel => 'Search Everything...';
+  String get searchFieldLabel => searchFor;
 
   ThemeData appBarTheme(BuildContext context) {
     assert(context != null);

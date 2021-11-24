@@ -3,6 +3,7 @@ import 'package:alen/models/user_location.dart';
 import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/language.dart';
 import 'package:alen/ui/Details/HospitalDetail.dart';
+import 'package:alen/ui/SearchDelegates/searchTrending.dart';
 import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllServices.dart';
 import 'package:alen/ui/SeeAllPages/SecondPage/SeeAllHospitals.dart';
 import 'package:firestore_search/firestore_search.dart';
@@ -12,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:alen/ui/Models/Trending.dart';
 import 'package:alen/ui/Pages/Hospital.dart';
-import 'package:alen/ui/SearchDelegates/searchHospitals.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -156,9 +156,14 @@ class _HospitalPageState extends State<HospitalsPage> {
                           children: <Widget>[
                             GestureDetector(
                                 onTap: () {
-                                  showSearch<Hospitals>(
+                                  List<HospitalsLabsDiagnostics> hld = [];
+                                  hld += HospitalProvider.nearby;
+                                  showSearch<HospitalsLabsDiagnostics>(
                                       context: context,
-                                      delegate: HospitalSearch(hospitals: HospitalProvider.nearby));
+                                      delegate: TrendingSearch(trendings: hld, searchFor: "Search Health Facilities"));
+                                  // showSearch<Hospitals>(
+                                  //     context: context,
+                                  //     delegate: HospitalSearch(hospitals: HospitalProvider.nearby));
                                 },
                                 // onTap: buttn,
                                 child: Container(
