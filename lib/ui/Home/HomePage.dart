@@ -34,6 +34,7 @@ import 'package:alen/utils/Detail.dart';
 // import 'package:alen/utils/image.dart';
 import 'package:alen/utils/DetailsPage.dart';
 import 'package:alen/utils/languageData.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -84,6 +85,15 @@ class _HomePageState extends State<HomePage> {
   //   );
   // }
   _scrollToBottom() {
+    var duration = (20 / 7.0) * _scrollController.position.maxScrollExtent / 10;
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(seconds: duration.toInt()),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  _scrollToEdge() {
     var duration = (20 / 7.0) * _scrollController.position.maxScrollExtent / 10;
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
@@ -245,6 +255,7 @@ class _HomePageState extends State<HomePage> {
     // );
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    var fontSize = 15;
     var healthProvider =
         Provider.of<HealthArticleProvider>(context, listen: true);
     var adsProvider = Provider.of<AdsProvider>(context, listen: true);
@@ -513,14 +524,14 @@ class _HomePageState extends State<HomePage> {
                                         child: Text("አማርኛ"),
                                         value: 'am',
                                       ),
-                                      PopupMenuItem(
-                                        child: Text("Afaan Oromo"),
-                                        value: 'or',
-                                      ),
-                                      PopupMenuItem(
-                                        child: Text("ትግርኛ"),
-                                        value: 'tg',
-                                      )
+                                      // PopupMenuItem(
+                                      //   child: Text("Afaan Oromo"),
+                                      //   value: 'or',
+                                      // ),
+                                      // PopupMenuItem(
+                                      //   child: Text("ትግርኛ"),
+                                      //   value: 'tg',
+                                      // )
                                     ],
                                     initialValue: _lang,
                                     child: Container(
@@ -583,6 +594,17 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ],
+                        ),
+                        Container(
+                          // width: 70,
+                          margin: EdgeInsets.symmetric(horizontal:10, vertical:5),
+                          child: Text.rich(
+                              TextSpan(
+                                text: 'Qemer Software Technology PLC.',
+                                recognizer: TapGestureRecognizer()..onTap = () => launch("https://www.qemertech.com/"),
+                                style: TextStyle(color: const Color(0xFF00C6db)),
+                              )
+                          ),
                         )
                       ],
                     ),
@@ -772,6 +794,7 @@ class _HomePageState extends State<HomePage> {
                                                                   'Pharmacies'] ??
                                                               "Pharmacies",
                                                           style: const TextStyle(
+                                                              fontSize: 15,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold),
@@ -1171,9 +1194,11 @@ class _HomePageState extends State<HomePage> {
                                                                       'Pharmacies'] ??
                                                                   "Pharmacies",
                                                               style: const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
+                                                                  fontSize: 10,
+                                                                  // fontWeight:
+                                                                  //     FontWeight
+                                                                  //         .bold
+                                                              ),
                                                             )
                                                           ],
                                                         )),
@@ -1211,9 +1236,11 @@ class _HomePageState extends State<HomePage> {
                                                             Text(
                                                               languageData[languageProvider.langOPT]['Imaging'] ?? "Imaging",
                                                               style: const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
+                                                                  fontSize: 10,
+                                                                  // fontWeight:
+                                                                  //     FontWeight
+                                                                  //         .bold
+                                                              ),
                                                             )
                                                           ],
                                                         )),
@@ -1255,9 +1282,11 @@ class _HomePageState extends State<HomePage> {
                                                                       'Labs'] ??
                                                                   "Labs",
                                                               style: const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
+                                                                  fontSize: 10,
+                                                                  // fontWeight:
+                                                                  //     FontWeight
+                                                                  //         .bold
+                                                              ),
                                                             )
                                                           ],
                                                         )),
@@ -1325,9 +1354,11 @@ class _HomePageState extends State<HomePage> {
                                                                     TextOverflow
                                                                         .visible,
                                                                 style: const TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
+                                                                    fontSize: 10,
+                                                                    // fontWeight:
+                                                                    //     FontWeight
+                                                                    //         .bold
+                                                                ),
                                                               ),
                                                             )
                                                           ],
@@ -1366,9 +1397,11 @@ class _HomePageState extends State<HomePage> {
                                                             Text(
                                                               languageData[languageProvider.langOPT]['Health Facilities'] ?? "Health Facilities",
                                                               style: const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
+                                                                  fontSize: 10,
+                                                                  // fontWeight:
+                                                                  //     FontWeight
+                                                                  //         .bold
+                                                              ),
                                                             )
                                                           ],
                                                         )),
@@ -1410,9 +1443,11 @@ class _HomePageState extends State<HomePage> {
                                                                       'Importers'] ??
                                                                   "Importers",
                                                               style: const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
+                                                                  fontSize: 10,
+                                                                  // fontWeight:
+                                                                  //     FontWeight
+                                                                  //         .bold
+                                                                          ),
                                                             )
                                                           ],
                                                         )),
@@ -1470,9 +1505,11 @@ class _HomePageState extends State<HomePage> {
                                                                       'Companies'] ??
                                                                   "Companies",
                                                               style: const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
+                                                                  fontSize: 10,
+                                                                  // fontWeight:
+                                                                  //     FontWeight
+                                                                  //         .bold
+                                                              ),
                                                             )
                                                           ],
                                                         )),
@@ -1527,9 +1564,11 @@ class _HomePageState extends State<HomePage> {
                                                                     TextOverflow
                                                                         .visible,
                                                                 style: const TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
+                                                                    fontSize: 10,
+                                                                    // fontWeight:
+                                                                    //     FontWeight
+                                                                    //         .bold
+                                                                ),
                                                               ),
                                                             )
                                                           ],
@@ -1592,6 +1631,7 @@ class _HomePageState extends State<HomePage> {
                                                                       'Pharmacies'] ??
                                                                   "Pharmacies",
                                                               style: const TextStyle(
+                                                                  fontSize: 5,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold),
@@ -1632,6 +1672,7 @@ class _HomePageState extends State<HomePage> {
                                                             Text(
                                                               languageData[languageProvider.langOPT]['Imaging'] ?? "Imaging",
                                                               style: const TextStyle(
+                                                                  fontSize: 5,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold),
@@ -1692,6 +1733,7 @@ class _HomePageState extends State<HomePage> {
                                                                       'Labs'] ??
                                                                   "Labs",
                                                               style: const TextStyle(
+                                                                  fontSize: 5,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold),
@@ -1746,6 +1788,7 @@ class _HomePageState extends State<HomePage> {
                                                                     TextOverflow
                                                                         .visible,
                                                                 style: const TextStyle(
+                                                                    fontSize: 5,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold),
@@ -1803,6 +1846,7 @@ class _HomePageState extends State<HomePage> {
                                                             Text(
                                                               languageData[languageProvider.langOPT]['Health Facilities'] ?? "Health Facilities",
                                                               style: const TextStyle(
+                                                                  fontSize: 5,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold),
@@ -1847,6 +1891,7 @@ class _HomePageState extends State<HomePage> {
                                                                       'Importers'] ??
                                                                   "Importers",
                                                               style: const TextStyle(
+                                                                  fontSize: 5,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold),
@@ -1907,6 +1952,7 @@ class _HomePageState extends State<HomePage> {
                                                                       'Companies'] ??
                                                                   "Companies",
                                                               style: const TextStyle(
+                                                                  fontSize: 5,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold),
@@ -1964,6 +2010,7 @@ class _HomePageState extends State<HomePage> {
                                                                     TextOverflow
                                                                         .visible,
                                                                 style: const TextStyle(
+                                                                    fontSize: 5,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold),
@@ -2086,6 +2133,9 @@ class _HomePageState extends State<HomePage> {
                                             child:
                                                 CircularProgressIndicator()));
                                   } else {
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback(
+                                            (_) => _scrollToEdge());
                                     return Container(
                                       height: 158.5,
                                       child: ListView.builder(
@@ -2181,6 +2231,16 @@ class _HomePageState extends State<HomePage> {
             ),
             actions: <Widget>[
               new ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          myCustomColors.loginBackgroud),
+                      shape:
+                      MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              side: BorderSide(
+                                  color:
+                                  myCustomColors.loginBackgroud)))),
                   child: new Center(
                     child: Container(
                         child: Row(

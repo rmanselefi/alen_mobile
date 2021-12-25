@@ -393,8 +393,8 @@ class _HospitalPageState extends State<HospitalsPage> {
                     child: SizedBox(
                       height: 120,
                       width: 120,
-                      child: hospital.images != null
-                          ? Image.network(hospital.images.first,
+                      child: hospital.image != null
+                          ? Image.network(hospital.image,
                               width: 120, height: 120, fit: BoxFit.fill,
                           errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
                             return Image.asset("assets/images/hos1.jpg",

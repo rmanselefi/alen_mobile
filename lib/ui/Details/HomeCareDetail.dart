@@ -116,7 +116,15 @@ class HomeCareDetail extends StatelessWidget {
                                       ),
                                     );
                                   } else {
-                                    return Swiper(
+                                    return imageSnapshot.data==null||imageSnapshot.data.length==0?
+                                    Container(
+                                      height: MediaQuery.of(context).size.width * 0.40,
+                                      child: Center(
+                                        child: Text(
+                                            "Home care has no images."
+                                        ),
+                                      ),
+                                    ):Swiper(
                                       itemCount: imageSnapshot.data.length ?? 0,
                                       layout: SwiperLayout.STACK,
                                       scrollDirection: Axis.horizontal,
@@ -125,14 +133,17 @@ class HomeCareDetail extends StatelessWidget {
                                         alignment: Alignment.bottomCenter,
                                       ),
                                       itemBuilder: (context, index) {
-                                        return Image.network(
-                                          imageSnapshot.data[index],
-                                          fit: BoxFit.cover,
-                                            errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                                              return Image.asset("assets/images/hos1.jpg",
-                                                fit: BoxFit.cover,);
-                                            }
-                                        );
+                                        return _buildMainAdsListItem(
+                                            imageSnapshot.data[index],
+                                            context);
+                                        // return Image.network(
+                                        //   imageSnapshot.data[index],
+                                        //   fit: BoxFit.cover,
+                                        //     errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                                        //       return Image.asset("assets/images/hos1.jpg",
+                                        //         fit: BoxFit.cover,);
+                                        //     }
+                                        // );
                                       },
                                       itemHeight:
                                       MediaQuery.of(context).size.width * 0.40,
@@ -322,7 +333,34 @@ class HomeCareDetail extends StatelessWidget {
         });
   }
 
-
+  _buildMainAdsListItem(var pharmacyImage, BuildContext ctxt) {
+    return Card(
+      elevation: 15,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      clipBehavior: Clip.hardEdge,
+      child: SizedBox(
+        height: MediaQuery.of(ctxt).size.width * 0.38,
+        width: MediaQuery.of(ctxt).size.width,
+        child: Image.network(
+          pharmacyImage,
+          width: MediaQuery.of(ctxt).size.width,
+          height: MediaQuery.of(ctxt).size.width * 0.38,
+          fit: BoxFit.fill,
+          errorBuilder: (BuildContext context, Object exception,
+              StackTrace stackTrace) {
+            return Image.asset(
+              "assets/images/hos1.png",
+              width: MediaQuery.of(ctxt).size.width,
+              height: MediaQuery.of(ctxt).size.width * 0.38,
+              fit: BoxFit.cover,
+            );
+          },
+        ),
+      ),
+    );
+  }
 
   _buildHopitalServicesListItem(var hospitalServices, BuildContext ctxt) {
     return GestureDetector(

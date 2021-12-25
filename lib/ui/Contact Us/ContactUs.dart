@@ -1,5 +1,6 @@
 import 'package:alen/providers/language.dart';
 import 'package:alen/utils/AppColors.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -65,10 +66,17 @@ class ContactUs extends StatelessWidget {
                                     margin: EdgeInsets.only(top: 40, bottom: 30),
                                   ),
                                   Container(
-                                    child: Text(
-                                      "Alen is created and Owned by alen call center and mobile application and developed by Qemer Software Technology.",
-                                      textAlign: TextAlign.center,
-                                      maxLines: 4,
+                                    child: Text.rich(
+                                        TextSpan(
+                                            text: 'Alen is created and Owned by alen call center and mobile application and developed by ',
+                                            children: <InlineSpan>[
+                                              TextSpan(
+                                                text: 'Qemer Software Technology PLC.',
+                                                recognizer: TapGestureRecognizer()..onTap = () => launch("https://www.qemertech.com/"),
+                                                style: TextStyle(color: const Color(0xFF00C6db)),
+                                              )
+                                            ]
+                                        )
                                     ),
                                     margin: EdgeInsets.fromLTRB(30, 0, 30, 70),
                                   )

@@ -324,8 +324,8 @@ class PharmaciesPage extends StatelessWidget {
                     child: SizedBox(
                       height: 120,
                       width: 120,
-                      child: pharmacy.images != null
-                          ? Image.network(pharmacy.images.first,
+                      child: pharmacy.image != null
+                          ? Image.network(pharmacy.image,
                           width: 120, height: 120, fit: BoxFit.fill,
                           errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
                             return Image.asset("assets/images/hos1.jpg",

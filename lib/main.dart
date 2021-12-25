@@ -98,7 +98,7 @@ class _MyAppState extends State<MyApp> {
 
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
-            fontFamily: 'hind',
+            fontFamily: 'roboto',
             appBarTheme: AppBarTheme(
               color: AppColors().loginBackgroud
             ),

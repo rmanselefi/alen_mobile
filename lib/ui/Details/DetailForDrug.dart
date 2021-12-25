@@ -93,7 +93,15 @@ class _DetailForDrugState extends State<DetailForDrug> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            SizedBox(
+                            (widget.drug.image=="")?Container(
+                              padding: EdgeInsets.only(top:70),
+                              height: 200,
+                              child: Center(
+                                child:Text(
+                                  "Drug has no image."
+                                )
+                              ),
+                            ):SizedBox(
                               height: 200,
                               width: 350,
                               child: Image.network(widget.drug.image,
@@ -185,65 +193,72 @@ class _DetailForDrugState extends State<DetailForDrug> {
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(fontWeight: FontWeight.bold),
                                     ))),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(left: 20),
-                                  child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.only(left: 30, top: 10),
-                                          child: Text(
-                                            'Dosage',
-                                            textScaleFactor: 1.7,
-                                            textAlign: TextAlign.left,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.only(left: 30, top: 15),
-                                          child: Text(
-                                            widget.drug.dosage,
-                                            textAlign: TextAlign.left,
-                                            maxLines: 3,
-                                            textScaleFactor: 1.7,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ]),
-                                ),
-                                Container(
-                                    padding: EdgeInsets.only(right: 30),
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(left: 20),
                                     child: Column(
                                         mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Container(
-                                            padding: EdgeInsets.only(right: 30, top: 10),
+                                            padding: EdgeInsets.only(left: 30, top: 10),
                                             child: Text(
-                                              'Madein',
+                                              'Dosage',
                                               textScaleFactor: 1.7,
                                               textAlign: TextAlign.left,
+                                              maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
                                           Container(
-                                            padding: EdgeInsets.only(right: 30, top: 15),
+                                            padding: EdgeInsets.only(left: 30, top: 15),
+                                            width: MediaQuery.of(context).size.width*0.5,
                                             child: Text(
-                                              widget.drug.madein,
+                                              widget.drug.dosage,
                                               textAlign: TextAlign.left,
                                               maxLines: 3,
-                                              textScaleFactor: 1.7,
+                                              textScaleFactor: 1.4,
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
-                                        ]))
-                              ],
+                                        ]),
+                                  ),
+                                  Container(
+                                      padding: EdgeInsets.only(right: 30),
+                                      child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              padding: EdgeInsets.only(right: 30, top: 10),
+                                              child: Text(
+                                                'Madein',
+                                                textScaleFactor: 1.7,
+                                                textAlign: TextAlign.left,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.only(right: 30, top: 15),
+                                              child: Text(
+                                                widget.drug.madein,
+                                                textAlign: TextAlign.left,
+                                                maxLines: 3,
+                                                textScaleFactor: 1.4,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ]))
+                                ],
+                              ),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -270,7 +285,7 @@ class _DetailForDrugState extends State<DetailForDrug> {
                                             widget.drug.quantity,
                                             textAlign: TextAlign.left,
                                             maxLines: 3,
-                                            textScaleFactor: 1.7,
+                                            textScaleFactor: 1.4,
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
@@ -298,89 +313,92 @@ class _DetailForDrugState extends State<DetailForDrug> {
                                               widget.drug.root,
                                               textAlign: TextAlign.left,
                                               maxLines: 3,
-                                              textScaleFactor: 1.7,
+                                              textScaleFactor: 1.4,
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
                                         ]))
                               ],
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(left: 20),
-                                  child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.only(left: 30, top: 10),
-                                          child: Text(
-                                            'Price',
-                                            textScaleFactor: 1.7,
-                                            textAlign: TextAlign.left,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.only(left: 35, top: 15),
-                                          child: Text(
-                                            widget.drug.price.toString(),
-                                            textAlign: TextAlign.left,
-                                            maxLines: 3,
-                                            textScaleFactor: 1.7,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ]),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.only(right: 35),
-                                  child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.only(right: 20, top: 10),
-                                          child: Text(
-                                            'Trending',
-                                            textScaleFactor: 1.7,
-                                            textAlign: TextAlign.left,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Container(
-                                              padding: EdgeInsets.only(right: 20, top: 15),
-                                              child: Text(
-                                                (widget.drug.trending) ? "Yes" : "No",
-                                                textAlign: TextAlign.left,
-                                                maxLines: 3,
-                                                textScaleFactor: 1.7,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(left: 20),
+                                    child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.only(left: 30, top: 10),
+                                            child: Text(
+                                              'Price',
+                                              textScaleFactor: 1.7,
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
                                             ),
-                                            Container(
-                                              padding: EdgeInsets.only(right: 20, top: 15),
-                                              child: Checkbox(
-                                                value: widget.drug.trending,
-                                                onChanged: (bool value) {
-                                                  setState(() {
-                                                    // widget.drug.trending = value;
-                                                  });
-                                                },
-                                              ),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.only(left: 35, top: 15),
+                                            child: Text(
+                                              widget.drug.price.toString(),
+                                              textAlign: TextAlign.left,
+                                              maxLines: 3,
+                                              textScaleFactor: 1.4,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                          ],
-                                        )
-                                      ]),
-                                ),
-                              ],
+                                          ),
+                                        ]),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(right: 35),
+                                    child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.only(right: 20, top: 10),
+                                            child: Text(
+                                              'Trending',
+                                              textScaleFactor: 1.7,
+                                              textAlign: TextAlign.left,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.only(right: 20, top: 15),
+                                                child: Text(
+                                                  (widget.drug.trending) ? "Yes" : "No",
+                                                  textAlign: TextAlign.left,
+                                                  maxLines: 3,
+                                                  textScaleFactor: 1.4,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.only(right: 20, top: 15),
+                                                child: Checkbox(
+                                                  value: widget.drug.trending,
+                                                  onChanged: (bool value) {
+                                                    setState(() {
+                                                      // widget.drug.trending = value;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ]),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 30,
@@ -514,6 +532,16 @@ class _DetailForDrugState extends State<DetailForDrug> {
               ),
               actions: <Widget>[
                 new ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            myCustomColors.loginBackgroud),
+                        shape:
+                        MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                                side: BorderSide(
+                                    color:
+                                    myCustomColors.loginBackgroud)))),
                     child: new Center(
                       child: Container(
                           child: Row(
