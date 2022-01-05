@@ -8,6 +8,7 @@ import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllCategories.dart';
 import 'package:alen/ui/SeeAllPages/SecondPage/SeeAllPharmacies.dart';
 import 'package:alen/ui/Services/PharmacistsServices.dart';
 import 'package:alen/utils/DetailsPage.dart';
+import 'package:alen/utils/languageData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:alen/ui/Models/Trending.dart';
@@ -63,7 +64,11 @@ class PharmaciesPage extends StatelessWidget {
                   icon: Icon(Icons.arrow_back),
                   onPressed: () => Navigator.pop(context, false),
                 ),
-                title: Text("Pharmacies", textAlign: TextAlign.center),
+                title: Text(languageData[languageProvider
+                    .langOPT]
+                [
+                'Pharmacies'] ??
+                    "Pharmacies", textAlign: TextAlign.center),
                 actions: [
                   IconButton(
                     padding: EdgeInsets.only(right: 15),
@@ -128,7 +133,11 @@ class PharmaciesPage extends StatelessWidget {
                                                               .loginBackgroud,
                                                         ),
                                                         title: Text(
-                                                          'Search',
+                                                            languageData[languageProvider
+                                                                .langOPT]
+                                                            [
+                                                            'Search'] ??
+                                                                "Search",
                                                           style: TextStyle(
                                                             color: myCustomColors
                                                                 .loginBackgroud,
@@ -149,7 +158,11 @@ class PharmaciesPage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Top Pharmacies",
+                                      languageData[languageProvider
+                                          .langOPT]
+                                      [
+                                      'Top Pharmacies'] ??
+                                          "Top Pharmacies",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,
@@ -205,7 +218,11 @@ class PharmaciesPage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Nearby Pharmacies",
+                                      languageData[languageProvider
+                                          .langOPT]
+                                      [
+                                      'Nearby Pharmacies'] ??
+                                          "Nearby Pharmacies",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,

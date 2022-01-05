@@ -99,6 +99,8 @@ class CartProvider with ChangeNotifier {
     var prefs =
     await SharedPreferences.getInstance();
     String userId = prefs.getString('user_id');
+    String userName = prefs.getString('first_name')??""+prefs.getString('lastName')??"";
+    String userPhone = prefs.getString('phone');
     var profile;
     if (file != null) {
       await uploadImage(file).then((res) {
@@ -113,12 +115,13 @@ class CartProvider with ChangeNotifier {
     Map<String, dynamic> data = <String, dynamic>{
       "prescription": profile,
       "user_id": userId,
+      "user_name": userName,
+      "user_phone": userPhone,
       "timeStamp": DateTime.now(),
-      'delivered':false,
-      "amount": 0,
+      'addressed':false,
     };
     print("This is the prescription  image to be added,");
-    FirebaseFirestore.instance.collection('pharma_cart').add(data);
+    FirebaseFirestore.instance.collection('prescriptions').add(data);
   }
 
   Future<String> uploadImage(File back, {String path}) async {

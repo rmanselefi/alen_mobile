@@ -11,6 +11,7 @@ import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllServices.dart';
 import 'package:alen/ui/SeeAllPages/SecondPage/SeeAllHospitals.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
 import 'package:alen/utils/DetailsPage.dart';
+import 'package:alen/utils/languageData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:alen/ui/Models/Trending.dart';
@@ -79,7 +80,11 @@ class _HospitalPageState extends State<LabsPage> {
                     icon: Icon(Icons.arrow_back),
                     onPressed: () => Navigator.pop(context, false),
                   ),
-                  title: Text("Laboratories", textAlign: TextAlign.center)),
+                  title: Text(languageData[languageProvider
+                      .langOPT]
+                  [
+                  'Labs'] ??
+                      "Laboratories", textAlign: TextAlign.center)),
               body: SingleChildScrollView(
                   child: Stack(
                     children: [
@@ -130,7 +135,11 @@ class _HospitalPageState extends State<LabsPage> {
                                                               .loginBackgroud,
                                                         ),
                                                         title: Text(
-                                                          'Search',
+                                                          languageData[languageProvider
+                                                              .langOPT]
+                                                          [
+                                                          'Search'] ??
+                                                              "Search",
                                                           style: TextStyle(
                                                             color: myCustomColors
                                                                 .loginBackgroud,
@@ -151,7 +160,11 @@ class _HospitalPageState extends State<LabsPage> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Top Laboratories",
+                                      languageData[languageProvider
+                                          .langOPT]
+                                      [
+                                      'Top Laboratories'] ??
+                                          "Top Laboratories",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,
@@ -206,7 +219,11 @@ class _HospitalPageState extends State<LabsPage> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Nearby Laboratories",
+                                      languageData[languageProvider
+                                          .langOPT]
+                                      [
+                                      'Nearby Laboratories'] ??
+                                          "Nearby Laboratories",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,

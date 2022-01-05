@@ -94,7 +94,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                         TextInputType.emailAddress,
                                         validator: (String value) {
                                           if (value == null) {
-                                            return 'First name is required!';
+                                            return 'Email is required!';
                                           }
                                           if (value == '') {
                                             return null;

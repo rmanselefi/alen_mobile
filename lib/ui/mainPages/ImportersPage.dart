@@ -13,6 +13,7 @@ import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllCategories.dart';
 import 'package:alen/ui/SeeAllPages/SecondPage/SeeAllPharmacies.dart';
 import 'package:alen/ui/Services/PharmacistsServices.dart';
 import 'package:alen/utils/DetailsPage.dart';
+import 'package:alen/utils/languageData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:alen/ui/Models/Trending.dart';
@@ -68,7 +69,11 @@ class ImportersPage extends StatelessWidget {
                   icon: Icon(Icons.arrow_back),
                   onPressed: () => Navigator.pop(context, false),
                 ),
-                title: Text("Importers", textAlign: TextAlign.center),
+                title: Text(languageData[languageProvider
+                    .langOPT]
+                [
+                'Importers'] ??
+                    "Importers", textAlign: TextAlign.center),
                 actions: [
                   IconButton(
                     padding: EdgeInsets.only(right: 15),
@@ -136,7 +141,11 @@ class ImportersPage extends StatelessWidget {
                                                               .loginBackgroud,
                                                         ),
                                                         title: Text(
-                                                          'Search',
+                                                          languageData[languageProvider
+                                                              .langOPT]
+                                                          [
+                                                          'Search'] ??
+                                                              "Search",
                                                           style: TextStyle(
                                                             color: myCustomColors
                                                                 .loginBackgroud,
@@ -157,7 +166,11 @@ class ImportersPage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Top Importers",
+                                      languageData[languageProvider
+                                          .langOPT]
+                                      [
+                                      'Top Importers'] ??
+                                          "Top Importers",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,
@@ -214,7 +227,11 @@ class ImportersPage extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Nearby Importers",
+                                      languageData[languageProvider
+                                          .langOPT]
+                                      [
+                                      'Nearby Importers'] ??
+                                          "Nearby Importers",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,

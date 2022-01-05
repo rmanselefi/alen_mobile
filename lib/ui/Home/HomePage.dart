@@ -451,7 +451,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 title: Text(
                                     languageData[languageProvider.langOPT]
-                                        ['Rate us']),
+                                        ['Rate us']??["Rate Us"]),
                                 onTap: () {
                                   Navigator.pop(context);
                                 },
@@ -2255,12 +2255,16 @@ class _HomePageState extends State<HomePage> {
                         ])),
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
-                    getImage(ctxt);
+                    // Navigator.pop(context);
+                    // getImage(ctxt);
                     if (status == 'add') {
+                      Navigator.pop(context);
                       getImage(ctxt);
                     } else {
                       CartProvider().addPrescriptionToCart(_image);
+                      // _image=null;
+                      // status='add';
+                      Navigator.pop(context);
                     }
                   })
             ],

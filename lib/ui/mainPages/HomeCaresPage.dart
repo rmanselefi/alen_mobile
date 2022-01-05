@@ -11,6 +11,7 @@ import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllServices.dart';
 import 'package:alen/ui/SeeAllPages/SecondPage/SeeAllHospitals.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
 import 'package:alen/utils/DetailsPage.dart';
+import 'package:alen/utils/languageData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:alen/ui/Models/Trending.dart';
@@ -74,7 +75,11 @@ class _HomeCaresPageState extends State<HomeCaresPage> {
                     icon: Icon(Icons.arrow_back),
                     onPressed: () => Navigator.pop(context, false),
                   ),
-                  title: Text("Home Cares", textAlign: TextAlign.center)),
+                  title: Text(languageData[languageProvider
+                      .langOPT]
+                  [
+                  'HomeCare'] ??
+                      "HomeCare", textAlign: TextAlign.center)),
               body: SingleChildScrollView(
                   child: Stack(
                     children: [
@@ -125,7 +130,11 @@ class _HomeCaresPageState extends State<HomeCaresPage> {
                                                               .loginBackgroud,
                                                         ),
                                                         title: Text(
-                                                          'Search',
+                                                          languageData[languageProvider
+                                                              .langOPT]
+                                                          [
+                                                          'Search'] ??
+                                                              "Search",
                                                           style: TextStyle(
                                                             color: myCustomColors
                                                                 .loginBackgroud,
@@ -145,12 +154,19 @@ class _HomeCaresPageState extends State<HomeCaresPage> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      "Top Home Cares",
-                                      textAlign: TextAlign.left,
-                                      textScaleFactor: 1.7,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width*0.8,
+                                      child: Text(
+                                        languageData[languageProvider
+                                            .langOPT]
+                                        [
+                                        'Top Home Cares'] ??
+                                            "Top Home Cares",
+                                        textAlign: TextAlign.left,
+                                        textScaleFactor: 1.7,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                      ),
                                     ),
 
                                   ],
@@ -200,12 +216,19 @@ class _HomeCaresPageState extends State<HomeCaresPage> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      "Nearby Home Cares",
-                                      textAlign: TextAlign.left,
-                                      textScaleFactor: 1.7,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width*0.8,
+                                      child: Text(
+                                        languageData[languageProvider
+                                            .langOPT]
+                                        [
+                                        'Nearby Home Cares'] ??
+                                            "Nearby Home Cares",
+                                        textAlign: TextAlign.left,
+                                        textScaleFactor: 1.7,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                   ],
                                 )),

@@ -116,7 +116,7 @@ class _MyAppState extends State<MyApp> {
                   if (snapshot.hasError)
                     return Text('Error: ${snapshot.error}');
                   else if (snapshot.data == null)
-                    return HomePage();
+                    return SignUp();
                     // return SignUp();
                   else
                     HomePage();

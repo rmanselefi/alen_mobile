@@ -6,6 +6,7 @@ import 'package:alen/ui/Details/HospitalDetail.dart';
 import 'package:alen/ui/SearchDelegates/searchTrending.dart';
 import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllServices.dart';
 import 'package:alen/ui/SeeAllPages/SecondPage/SeeAllHospitals.dart';
+import 'package:alen/utils/languageData.dart';
 import 'package:firestore_search/firestore_search.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
 import 'package:alen/utils/DetailsPage.dart';
@@ -144,7 +145,11 @@ class _HospitalPageState extends State<HospitalsPage> {
                     icon: Icon(Icons.arrow_back),
                     onPressed: () => Navigator.pop(context, false),
                   ),
-                  title: Text("Health Facilities", textAlign: TextAlign.center)),
+                  title: Text(languageData[languageProvider
+                      .langOPT]
+                  [
+                  'Health Facilities'] ??
+                      "Health Facilities", textAlign: TextAlign.center)),
               body: SingleChildScrollView(
                   child: Stack(
                     children: [
@@ -196,7 +201,11 @@ class _HospitalPageState extends State<HospitalsPage> {
                                                               .loginBackgroud,
                                                         ),
                                                         title: Text(
-                                                          'Search',
+                                                          languageData[languageProvider
+                                                              .langOPT]
+                                                          [
+                                                          'Search'] ??
+                                                              "Search",
                                                           style: TextStyle(
                                                             color: myCustomColors
                                                                 .loginBackgroud,
@@ -217,7 +226,11 @@ class _HospitalPageState extends State<HospitalsPage> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Top Health Facilities",
+                                      languageData[languageProvider
+                                          .langOPT]
+                                      [
+                                      'Top Hospitals'] ??
+                                          "Top Hospitals",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,
@@ -272,7 +285,11 @@ class _HospitalPageState extends State<HospitalsPage> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Nearby Health Facilities",
+                                      languageData[languageProvider
+                                          .langOPT]
+                                      [
+                                      'Nearby Hospitals'] ??
+                                          "Nearby Hospitals",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,

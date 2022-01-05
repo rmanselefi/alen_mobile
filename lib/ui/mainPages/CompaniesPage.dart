@@ -11,6 +11,7 @@ import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllServices.dart';
 import 'package:alen/ui/SeeAllPages/SecondPage/SeeAllHospitals.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
 import 'package:alen/utils/DetailsPage.dart';
+import 'package:alen/utils/languageData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:alen/ui/Models/Trending.dart';
@@ -74,7 +75,11 @@ class _CompaniesPageState extends State<CompaniesPage> {
                     icon: Icon(Icons.arrow_back),
                     onPressed: () => Navigator.pop(context, false),
                   ),
-                  title: Text("CompaniesPage", textAlign: TextAlign.center)),
+                  title: Text(languageData[languageProvider
+                      .langOPT]
+                  [
+                  'Companies'] ??
+                      "Companies", textAlign: TextAlign.center)),
               body: SingleChildScrollView(
                   child: Stack(
                     children: [
@@ -125,7 +130,11 @@ class _CompaniesPageState extends State<CompaniesPage> {
                                                               .loginBackgroud,
                                                         ),
                                                         title: Text(
-                                                          'Search',
+                                                          languageData[languageProvider
+                                                              .langOPT]
+                                                          [
+                                                          'Search'] ??
+                                                              "Search",
                                                           style: TextStyle(
                                                             color: myCustomColors
                                                                 .loginBackgroud,
@@ -146,7 +155,11 @@ class _CompaniesPageState extends State<CompaniesPage> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Top Companies",
+                                      languageData[languageProvider
+                                          .langOPT]
+                                      [
+                                      'Top Companies'] ??
+                                          "Top Companies",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,
@@ -201,7 +214,11 @@ class _CompaniesPageState extends State<CompaniesPage> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Nearby Companies",
+                                      languageData[languageProvider
+                                          .langOPT]
+                                      [
+                                      'Nearby Companies'] ??
+                                          "Nearby Companies",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,

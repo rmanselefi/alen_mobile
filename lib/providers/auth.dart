@@ -69,6 +69,7 @@ class AuthProvider with ChangeNotifier {
       hasError = false;
       var prefs = await SharedPreferences.getInstance();
       prefs.setString('user_id', user['userid']);
+      prefs.setString('phone', user['phone']);
       prefs.setString('first_name', user['firstName']);
       prefs.setString('middleName', user['middleName']);
       prefs.setString('lastName', user['lastName']);
