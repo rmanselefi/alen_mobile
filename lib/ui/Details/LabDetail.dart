@@ -177,6 +177,7 @@ class LabDetail extends StatelessWidget {
                                 future: labProvider
                                     .getLabServicesByHospitalId(hospitalId),
                                 builder: (context, hospServSnapshot) {
+
                                   if (hospServSnapshot.connectionState ==
                                       ConnectionState.none &&
                                       hospServSnapshot.hasData == null) {
@@ -211,7 +212,7 @@ class LabDetail extends StatelessWidget {
                                           itemBuilder:
                                               (BuildContext ctxt, int index) {
                                             return _buildHopitalServicesListItem(
-                                                hospServSnapshot.data[index], ctxt);
+                                                hospServSnapshot.data[index],hospitalId, ctxt);
                                           },
                                           itemCount: hospServSnapshot.data.length,
                                         ));
@@ -236,7 +237,7 @@ class LabDetail extends StatelessWidget {
                                   child: Text(
                                     description,
                                     textDirection: TextDirection.ltr,
-                                    maxLines: 10,
+                                    // maxLines: 10,
                                   ),
                                 )),
 
@@ -428,7 +429,7 @@ class LabDetail extends StatelessWidget {
     );
   }
 
-  _buildHopitalServicesListItem(var hospitalServices, BuildContext ctxt) {
+  _buildHopitalServicesListItem(var hospitalServices,String Id, BuildContext ctxt) {
     return GestureDetector(
         onTap: () {
           Navigator.push(
@@ -441,6 +442,7 @@ class LabDetail extends StatelessWidget {
                     services: [],
                     id: hospitalServices.id,
                     role: Roles.Lab,
+                    Hospid: Id,
                     editPageContext: ctxt,
                   )));
         },

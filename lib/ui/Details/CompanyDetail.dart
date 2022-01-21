@@ -242,7 +242,7 @@ class CompanyDetail extends StatelessWidget {
                                   child: Text(
                                     description,
                                     textDirection: TextDirection.ltr,
-                                    maxLines: 10,
+                                    // maxLines: 10,
                                   ),
                                 )),
 

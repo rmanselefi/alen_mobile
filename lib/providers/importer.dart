@@ -38,6 +38,7 @@ class ImporterProvider with ChangeNotifier {
         var data = docs.data();
         final Importers importers = Importers(
             name: data['name'],
+            Id: docs.id,
             phone: data['phone'],
             image: data['image'],
             isPharma: false,
@@ -56,42 +57,40 @@ class ImporterProvider with ChangeNotifier {
     }
   }
 
-  Future<Importers> fetchImporters(String id) async {
-    isLoading = true;
-    importers.clear();
-    nearImporter.clear();
-    var curr;
-    try {
-      var docs = await FirebaseFirestore.instance.collection('importers').where('id', isEqualTo: id ).get();
-      if (docs.docs.isNotEmpty) {
-        if (importers.length == 0) {
-          for (var i = 0; i < docs.docs.length; i++) {
-            var data = docs.docs[i].data();
-            final Importers hos = Importers(
-              type: Type.Importer,
-                Id: docs.docs[i].id,
-                name: data['name'],
-                phone: data['phone'],
-                image: data['image'],
-                latitude: data['location'].latitude,
-                longitude: data['location'].longitude,
-                email: data['email'],
-                isPharma: false,
-                locationName: data['location_name'],
-                images: data['images'],
-                officehours: data['officehours'],
-                description: data['description']);
-            return hos;
-
-          }
-        }
-      }
-    } catch (error) {
-      isLoading = false;
-      print("mjkhjjhbjhvjhvhjvjhgv $error");
-      return null;
-    }
-  }
+  // Future<Importers> fetchImporters(String id) async {
+  //   isLoading = true;
+  //   importers.clear();
+  //   nearImporter.clear();
+  //   var curr;
+  //   try {
+  //     var docs = await FirebaseFirestore.instance.collection('importers').doc(id).get();
+  //       if (importers.length == 0) {
+  //         for (var i = 0; i < docs.docs.length; i++) {
+  //           var data = docs.docs[i].data();
+  //           final Importers hos = Importers(
+  //             type: Type.Importer,
+  //               Id: docs.docs[i].id,
+  //               name: data['name'],
+  //               phone: data['phone'],
+  //               image: data['image'],
+  //               latitude: data['location'].latitude,
+  //               longitude: data['location'].longitude,
+  //               email: data['email'],
+  //               isPharma: false,
+  //               locationName: data['location_name'],
+  //               images: data['images'],
+  //               officehours: data['officehours'],
+  //               description: data['description']);
+  //           return hos;
+  //
+  //         }
+  //       }
+  //   } catch (error) {
+  //     isLoading = false;
+  //     print("mjkhjjhbjhvjhvhjvjhgv $error");
+  //     return null;
+  //   }
+  // }
 
   Future<List<Category>> getDrugsCategoryByImporterId(String Id) async {
     FirebaseFirestore fire = FirebaseFirestore.instance;
@@ -109,10 +108,8 @@ class ImporterProvider with ChangeNotifier {
           String servicesData = await servicesList[i]['drug_id'];
           // print("This is my id: ${servicesData}");
           var document = await fire
-              .collection('all_drugs')
-              .where('id', isEqualTo: servicesData)
-              .get();
-          var serviceType = document.docs.first.data()['category'];
+              .collection('all_drugs').doc(servicesData).get();
+          var serviceType = document.data()['category'];
           // print("This is my Try: ${document.docs.first.data()['service_id']}");
           // DocumentSnapshot variable = await Firestore.instance.collection('COLLECTION NAME').document('DOCUMENT ID').get();
           final Category category = new Category(

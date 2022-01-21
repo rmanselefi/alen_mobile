@@ -116,10 +116,10 @@ class PharmacyProvider with ChangeNotifier {
           String importer = await servicesList[i]['importer_id'];
           ImportersPharmacies impoters = await getImporterById(importer);
           var document = await fire
-              .collection('all_drugs')
-              .where('id', isEqualTo: servicesData)
-              .get();
-          var serviceType = document.docs.first.data();
+              .collection('all_drugs').doc(servicesData).get();
+              // .where('id', isEqualTo: servicesData)
+              // .get();
+          var serviceType = document.data();
 
           print("Service type:"+serviceType.toString());
             final Drugs drug = Drugs(
@@ -178,10 +178,10 @@ class PharmacyProvider with ChangeNotifier {
           String pharmacy = await servicesList[i]['pharmacy_id'];
           ImportersPharmacies phar = await getPharmacyById(pharmacy);
           var document = await fire
-              .collection('all_drugs')
-              .where('id', isEqualTo: servicesData)
-              .get();
-          var serviceType = document.docs.first.data();
+              .collection('all_drugs').doc(servicesData).get();
+              // .where('id', isEqualTo: servicesData)
+              // .get();
+          var serviceType = document.data();
 
           print("Service type:"+serviceType.toString());
           final Drugs drug = Drugs(

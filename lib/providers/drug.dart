@@ -74,13 +74,16 @@ class DrugProvider with ChangeNotifier {
         // var data = docs.docs.first.data();
         var servicesList =docs.docs?? [];
         for (var i = 0; i < servicesList.length; i++) {
+          print("fffffffffffffffffff");
+          print("Drugs amount ${servicesList.length}");
+          print("fffffffffffffffffff");
           String servicesData = await servicesList[i]['drug_id'];
           // print("This is my id: ${servicesData}");
           var document = await fire
-              .collection('all_drugs')
-              .where('id', isEqualTo: servicesData)
-              .get();
-          var serviceType = document.docs.first.data()['category'];
+              .collection('all_drugs').doc(servicesData).get();
+              // .where('id', isEqualTo: servicesData)
+              // .get();
+          var serviceType = document.data()['category'];
           // print("This is my Try: ${document.docs.first.data()['service_id']}");
           // DocumentSnapshot variable = await Firestore.instance.collection('COLLECTION NAME').document('DOCUMENT ID').get();
           final Category category = new Category(
@@ -89,15 +92,16 @@ class DrugProvider with ChangeNotifier {
             serviceType['id'],
           );
           int temp=0;
-          (categoriesList.isEmpty)?
-            categoriesList.add(category):
-          categoriesList.forEach((element) {
-            print('--------------temp : ($temp)--------------');
-            if(element.id==category.id){
-              temp++;
-              print('--------------temp : ($temp)--------------');
-            }
-          });
+          categoriesList.add(category);
+          // (categoriesList.isEmpty)?
+          //   categoriesList.add(category):
+          // categoriesList.forEach((element) {
+          //   print('--------------temp : ($temp)--------------');
+          //   if(element.id==category.id){
+          //     temp++;
+          //     print('--------------temp : ($temp)--------------');
+          //   }
+          // });
           print("Also here$i");
         }
         print("none here either");
@@ -127,10 +131,10 @@ class DrugProvider with ChangeNotifier {
           // print("This is my id: ${servicesData}");
           print('-----------here---------------');
           var document = await fire
-              .collection('all_drugs')
-              .where('id', isEqualTo: servicesData)
-              .get();
-          var serviceType = document.docs.first.data()['category'];
+              .collection('all_drugs').doc(servicesData).get();
+              // .where('id', isEqualTo: servicesData)
+              // .get();
+          var serviceType = document.data()['category'];
           // print("This is my Try: ${document.docs.first.data()['service_id']}");
           // DocumentSnapshot variable = await Firestore.instance.collection('COLLECTION NAME').document('DOCUMENT ID').get();
           final Category category = new Category(
@@ -138,19 +142,20 @@ class DrugProvider with ChangeNotifier {
             serviceType['image'],
             serviceType['id'],
           );
-          int temp=0;
-          (categoriesList.isEmpty)?
-          categoriesList.add(category):
-          categoriesList.forEach((element) {
-            print('--------------temp : ($temp)--------------');
-            if(element.id==category.id){
-              temp++;
-              print('--------------temp : ($temp)--------------');
-            }
-          });
-          if(temp==0 && categoriesList.length>1){
-            categoriesList.add(category);
-          }
+          categoriesList.add(category);
+          // int temp=0;
+          // (categoriesList.isEmpty)?
+          // categoriesList.add(category):
+          // categoriesList.forEach((element) {
+          //   print('--------------temp : ($temp)--------------');
+          //   if(element.id==category.id){
+          //     temp++;
+          //     print('--------------temp : ($temp)--------------');
+          //   }
+          // });
+          // if(temp==0 && categoriesList.length>1){
+          //   categoriesList.add(category);
+          // }
           print("------------------------------Also here$i");
         }
         print("----------------------------------none here either");
@@ -163,57 +168,57 @@ class DrugProvider with ChangeNotifier {
     }
   }
 
-  Future<List<Drugs>> getDrugByCategoryAndId(String Id,Category category) async {
-    isLoading = true;
-    drugs.clear();
-    var curr;
-    try {
-      var docs = await FirebaseFirestore.instance
-          .collection('new_drugs')
-          .where('pharmacy_id', isEqualTo: Id)
-          .get();
-      if (docs.docs.isNotEmpty) {
-        for (var i = 0; i < docs.docs.length; i++) {
-          var data = docs.docs[i].data();
-          final Drugs drug = Drugs(
-              id: docs.docs[i].id,
-              name: data['name'],
-              quantity: data['quantity'],
-              dosage: data['dosage'],
-              madein: data['madein'],
-              root: data['root'],
-              image: data.containsKey('image') ? data['image'] : '',
-              category:
-              data.containsKey('category') ? data['category']['name'] : '',
-              category_image:
-              data.containsKey('category') ? data['category']['image'] : '',
-              trending: data['trending']);
-          if(drug.category==category.name) {
-            int temp2 = 0;
-            if(drugs.length==0){
-              drugs.add(drug);
-            }else{
-              drugs.forEach((element) {
-                if(drug.id==element.id)
-                {
-                  temp2++;
-                }
-              });
-              if(temp2==0){
-                drugs.add(drug);
-              }
-            }
-          }
-        }
-      }
-      // drugs.toSet();
-      return drugs;
-    } catch (error) {
-      isLoading = false;
-      print("mjkhjjhbjhvjhvhjvjhgv $error");
-      return null;
-    }
-  }
+  // Future<List<Drugs>> getDrugByCategoryAndId(String Id,Category category) async {
+  //   isLoading = true;
+  //   drugs.clear();
+  //   var curr;
+  //   try {
+  //     var docs = await FirebaseFirestore.instance
+  //         .collection('new_drugs')
+  //         .where('pharmacy_id', isEqualTo: Id)
+  //         .get();
+  //     if (docs.docs.isNotEmpty) {
+  //       for (var i = 0; i < docs.docs.length; i++) {
+  //         var data = docs.docs[i].data();
+  //         final Drugs drug = Drugs(
+  //             id: docs.docs[i].id,
+  //             name: data['name'],
+  //             quantity: data['quantity'],
+  //             dosage: data['dosage'],
+  //             madein: data['madein'],
+  //             root: data['root'],
+  //             image: data.containsKey('image') ? data['image'] : '',
+  //             category:
+  //             data.containsKey('category') ? data['category']['name'] : '',
+  //             category_image:
+  //             data.containsKey('category') ? data['category']['image'] : '',
+  //             trending: data['trending']);
+  //         if(drug.category==category.name) {
+  //           int temp2 = 0;
+  //           if(drugs.length==0){
+  //             drugs.add(drug);
+  //           }else{
+  //             drugs.forEach((element) {
+  //               if(drug.id==element.id)
+  //               {
+  //                 temp2++;
+  //               }
+  //             });
+  //             if(temp2==0){
+  //               drugs.add(drug);
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //     // drugs.toSet();
+  //     return drugs;
+  //   } catch (error) {
+  //     isLoading = false;
+  //     print("mjkhjjhbjhvjhvhjvjhgv $error");
+  //     return null;
+  //   }
+  // }
 
   Future<List<Drugs>> getDrugByCategoryAndPharmacyId(
       String Id, Category category) async {
@@ -238,16 +243,16 @@ class DrugProvider with ChangeNotifier {
           ImportersPharmacies phar = await getPharmacyById(pharmacy);
           // print("This is my id: ${servicesData}");
           var document = await fire
-              .collection('all_drugs')
-              .where('id', isEqualTo: servicesData)
-              .get();
-          var serviceType = document.docs.first.data();
+              .collection('all_drugs').doc(servicesData).get();
+              // .where('id', isEqualTo: servicesData)
+              // .get();
+          var serviceType = document.data();
           // print("This is my Try: ${document.docs.first.data()['service_id']}");
           // DocumentSnapshot variable = await Firestore.instance.collection('COLLECTION NAME').document('DOCUMENT ID').get();
 
           if (serviceType['category']['id'] == category.id) {
             final Drugs drug = Drugs(
-                id: serviceType['id'],
+                id: document.id,
                 itemId: pharmaDrugId,
                 name: serviceType['name'],
                 quantity: quantity,
@@ -381,14 +386,14 @@ class DrugProvider with ChangeNotifier {
           print("Trending : ($trending)");
           // print("This is my id: ${servicesData}");
           var document = await fire
-              .collection('all_drugs')
-              .where('id', isEqualTo: servicesData)
-              .get();
-          var serviceType = document.docs.first.data();
+              .collection('all_drugs').doc(servicesData).get();
+              // .where('id', isEqualTo: servicesData)
+              // .get();
+          var serviceType = document.data();
 
           if (serviceType['category']['id'] == category.id) {
             final Drugs drug = Drugs(
-                id: serviceType['id'],
+                id: document.id,
                 name: serviceType['name'],
                 itemId: importerDrugId,
                 quantity: quantity,

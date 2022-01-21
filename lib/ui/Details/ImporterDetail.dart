@@ -240,7 +240,7 @@ class ImporterDetail extends StatelessWidget {
                                   child: Text(
                                     description??"Description",
                                     textDirection: TextDirection.ltr,
-                                    maxLines: 10,
+                                    // maxLines: 10,
                                   ),
                                 )),
                             Row(

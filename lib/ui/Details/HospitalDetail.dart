@@ -205,7 +205,7 @@ class HospitalDetail extends StatelessWidget {
                                           itemBuilder:
                                               (BuildContext ctxt, int index) {
                                             return _buildHopitalServicesListItem(
-                                                hospServSnapshot.data[index], ctxt);
+                                                hospServSnapshot.data[index], hospitalId, ctxt);
                                           },
                                           itemCount: hospServSnapshot.data.length,
                                         ));
@@ -230,7 +230,7 @@ class HospitalDetail extends StatelessWidget {
                                   child: Text(
                                     description,
                                     textDirection: TextDirection.ltr,
-                                    maxLines: 10,
+                                    // maxLines: 10,
                                   ),
                                 )),
 
@@ -422,7 +422,7 @@ class HospitalDetail extends StatelessWidget {
     );
   }
 
-  _buildHopitalServicesListItem(var hospitalServices, BuildContext ctxt) {
+  _buildHopitalServicesListItem(var hospitalServices,String Id, BuildContext ctxt) {
     return GestureDetector(
         onTap: () {
           Navigator.push(
@@ -433,6 +433,7 @@ class HospitalDetail extends StatelessWidget {
                     imageUrl: hospitalServices.image,
                     description: hospitalServices.detail,
                     services: [],
+                    Hospid: Id,
                     id: hospitalServices.id,
                     role: Roles.Hospital,
                     editPageContext: ctxt,

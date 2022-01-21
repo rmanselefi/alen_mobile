@@ -23,29 +23,29 @@ class DiagnosticProvider with ChangeNotifier {
     var curr;
     try {
       var docs = await FirebaseFirestore.instance
-          .collection('diagnostics')
-          .where('id', isEqualTo: hospitalId)
-          .get();
-      if (docs.docs.isNotEmpty) {
-        var data = docs.docs[0].data();
+          .collection('diagnostics').doc(hospitalId).get();
+          // .where('id', isEqualTo: hospitalId)
+          // .get();
+      // if (docs.docs.isNotEmpty) {
+        var data = docs.data();
         var servicesList = data.containsKey('services') ? data['services'] : [];
         for (var i = 0; i < servicesList.length; i++) {
           String servicesData = await servicesList[i]['service_id'];
           print("ServiceTypeId:$servicesData");
           var document = await FirebaseFirestore.instance
-              .collection('diagnosis_services_type')
-              .where('id', isEqualTo: servicesData)
-              .get();
-          var serviceType = document.docs.first.data();
+              .collection('diagnosis_services_type').doc(servicesData).get();
+              // .where('id', isEqualTo: servicesData)
+              // .get();
+          var serviceType = document.data();
           print("ServiceType:$serviceType");
           final HLDServiceTypes category = new HLDServiceTypes(
-              serviceType['id'],
+              document.id,
               serviceType['description'],
               serviceType['additional_detail'],
               serviceType['name'],
               serviceType['image'],
               await servicesList[i]['price'],
-              serviceType['service_id']);
+              serviceType['service']);
           if (category.serviceId == Id) {
             int temp = 0;
             if(labServiceTypes.length==0){
@@ -71,7 +71,7 @@ class DiagnosticProvider with ChangeNotifier {
                 element.id);
           });
         }
-      }
+      // }
       diagnosisServices.toSet();
       return labServiceTypes;
     } catch (error) {
@@ -228,65 +228,63 @@ class DiagnosticProvider with ChangeNotifier {
     return currentLocation;
   }
 
-  Future<List<HLDServices>> getAllDiagnosisServiceByTypeId(String id) async {
-    isLoading = true;
-    diagnosisServices.clear();
-    var curr;
-    try {
-      var docs = await FirebaseFirestore.instance
-          .collection('diagnostics')
-          .where('id', isEqualTo: id)
-          .get();
-      if (docs.docs.isNotEmpty) {
-        for (var i = 0; i < docs.docs.length; i++) {
-          var data = docs.docs[i].data();
-          List<dynamic> list = await data['services'];
-          print('Printing list ..........');
-          print(list);
-          print("Done");
-          for (var i = 0; i < list.length; i++) {
-            final HLDServices hos = HLDServices(
-              list[i]['id'],
-              list[i]['description'],
-              list[i]['name'],
-              list[i]['image'],
-            );
-            if (hos.id == id) {
-              int temp = 0;
-              if(diagnosisServices.length==0){
-                diagnosisServices.add(hos);
-              }else{
-                diagnosisServices.forEach((element) {
-                  if(hos.id==element.id)
-                  {
-                    temp++;
-                  }
-                });
-                if(temp==0){
-                  diagnosisServices.add(hos);
-                }
-              }
-            }
-          }
-        }
-        diagnosisServices.forEach((element) {
-          print("Name : " +
-              element.name +
-              '\nImage : ' +
-              element.image +
-              "\nId : " +
-              element.id);
-        });
-      }
-
-      diagnosisServices.toSet();
-      return diagnosisServices;
-    } catch (error) {
-      isLoading = false;
-      print("Category . . . . . . :$error");
-      return null;
-    }
-  }
+  // Future<List<HLDServices>> getAllDiagnosisServiceByTypeId(String id) async {
+  //   isLoading = true;
+  //   diagnosisServices.clear();
+  //   var curr;
+  //   try {
+  //     var docs = await FirebaseFirestore.instance
+  //         .collection('diagnostics').doc(id).get();
+  //         // .where('id', isEqualTo: id)
+  //         // .get();
+  //       for (var i = 0; i < docs.docs.length; i++) {
+  //         var data = docs.docs[i].data();
+  //         List<dynamic> list = await data['services'];
+  //         print('Printing list ..........');
+  //         print(list);
+  //         print("Done");
+  //         for (var i = 0; i < list.length; i++) {
+  //           final HLDServices hos = HLDServices(
+  //             list[i]['id'],
+  //             list[i]['description'],
+  //             list[i]['name'],
+  //             list[i]['image'],
+  //           );
+  //           if (hos.id == id) {
+  //             int temp = 0;
+  //             if(diagnosisServices.length==0){
+  //               diagnosisServices.add(hos);
+  //             }else{
+  //               diagnosisServices.forEach((element) {
+  //                 if(hos.id==element.id)
+  //                 {
+  //                   temp++;
+  //                 }
+  //               });
+  //               if(temp==0){
+  //                 diagnosisServices.add(hos);
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //       diagnosisServices.forEach((element) {
+  //         print("Name : " +
+  //             element.name +
+  //             '\nImage : ' +
+  //             element.image +
+  //             "\nId : " +
+  //             element.id);
+  //       });
+  //
+  //     diagnosisServices.toSet();
+  //     return diagnosisServices;
+  //   } catch (error) {
+  //     isLoading = false;
+  //     print("Category . . . . . . :$error");
+  //     return null;
+  //   }
+  // }
 
   Future<List<dynamic>> fetchImages(String id) async {
     isLoading = true;
@@ -311,31 +309,29 @@ class DiagnosticProvider with ChangeNotifier {
     diagnosisServices.clear();
     try {
       var docs =
-      await fire.collection('diagnostics').where('id', isEqualTo: Id).get();
-      if (docs.docs.isNotEmpty) {
-        var data = docs.docs.first.data();
+      await fire.collection('diagnostics').doc(Id).get();
+        var data = docs.data();
         var servicesList = data.containsKey('services') ? data['services'] : [];
         for (var i = 0; i < servicesList.length; i++) {
           String servicesData = await servicesList[i]['service_id'];
           // print("This is my id: ${servicesData}");
           var document = await fire
-              .collection('diagnosis_services_type')
-              .where('id', isEqualTo: servicesData)
-              .get();
-          var serviceType = document.docs.first.data()['service_id'];
+              .collection('diagnosis_services_type').doc(servicesData).get();
+              // .where('id', isEqualTo: servicesData)
+              // .get();
+          var serviceType = document.data()['service'];
           var serviceDocument = await fire
-              .collection('diagnosis_services')
-              .where('id', isEqualTo: serviceType)
-              .get();
-          var service = serviceDocument.docs.first.data();
+              .collection('diagnosis_services').doc(serviceType).get();
+              // .where('id', isEqualTo: serviceType)
+              // .get();
+          var service = serviceDocument.data();
           final HLDServices category = new HLDServices(service['description'],
-              service['id'], service['image'], service['name']);
+              serviceDocument.id, service['image'], service['name']);
           diagnosisServices.add(category);
           return diagnosisServices;
           print("Also here$i");
         }
         print("none here either");
-      }
       return diagnosisServices;
     } catch (error) {
       isLoading = false;

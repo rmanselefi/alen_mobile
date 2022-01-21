@@ -68,12 +68,32 @@ class ContactUs extends StatelessWidget {
                                   Container(
                                     child: Text.rich(
                                         TextSpan(
-                                            text: 'Alen is created and Owned by alen call center and mobile application and developed by ',
+                                            text: 'Alen',
+                                            style: TextStyle(color: myCustomColors.loginBackgroud),
                                             children: <InlineSpan>[
                                               TextSpan(
-                                                text: 'Qemer Software Technology PLC.',
-                                                recognizer: TapGestureRecognizer()..onTap = () => launch("https://www.qemertech.com/"),
-                                                style: TextStyle(color: const Color(0xFF00C6db)),
+                                                  text: ' is created and Owned by ',
+                                                  style: TextStyle(color: Colors.black),
+                                                  children: <InlineSpan>[
+                                                    TextSpan(
+                                                        text: 'Alen Call Center and Mobile Application',
+                                                        recognizer: TapGestureRecognizer()..onTap = () => launch("https://www.hyssoppharma.com/"),
+                                                        style: TextStyle(color: myCustomColors.loginBackgroud),
+                                                        children: <InlineSpan>[
+                                                          TextSpan(
+                                                              text: ' and developed by ',
+                                                              style: TextStyle(color: Colors.black),
+                                                            children: <InlineSpan>[
+                                                              TextSpan(
+                                                                text: 'Qemer Software Technology PLC.',
+                                                                recognizer: TapGestureRecognizer()..onTap = () => launch("https://www.qemertech.com/"),
+                                                                style: TextStyle(color: const Color(0xFF00C6db)),
+                                                              )
+                                                            ]
+                                                          )
+                                                        ]
+                                                    )
+                                                  ]
                                               )
                                             ]
                                         )
@@ -130,6 +150,18 @@ class ContactUs extends StatelessWidget {
                                               ),
                                             ),
                                             Text("Telegram")
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            IconButton(
+                                              onPressed: () {
+                                                launch("https://m.facebook.com/Alen%E1%8A%A0%E1%88%88%E1%8A%95-112161981273464/?refid=46&tsid=0.21078368701843675&source=result");
+                                              },
+                                              icon: Icon(Icons.facebook_outlined,
+                                                  color: myCustomColors.loginBackgroud),
+                                            ),
+                                            Text("Facebook")
                                           ],
                                         ),
                                         Column(

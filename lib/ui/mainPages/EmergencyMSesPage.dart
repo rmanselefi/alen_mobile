@@ -80,8 +80,8 @@ class _EmergencyMSesPageState extends State<EmergencyMSesPage> {
                   title: Text(languageData[languageProvider
                       .langOPT]
                   [
-                  'HomeCare'] ??
-                      "HomeCare", textAlign: TextAlign.center)),
+                  'EmergencyMS'] ??
+                      "EmergencyMS", textAlign: TextAlign.center)),
               body: SingleChildScrollView(
                   child: Stack(
                     children: [
@@ -162,8 +162,8 @@ class _EmergencyMSesPageState extends State<EmergencyMSesPage> {
                                       languageData[languageProvider
                                           .langOPT]
                                       [
-                                      'Top Home Cares'] ??
-                                          "Top Home Cares",
+                                      'Top EmergencyMS'] ??
+                                          "Top Emergency Services",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,
@@ -222,8 +222,8 @@ class _EmergencyMSesPageState extends State<EmergencyMSesPage> {
                                       languageData[languageProvider
                                           .langOPT]
                                       [
-                                      'Nearby Home Cares'] ??
-                                          "Nearby Home Cares",
+                                      'Nearby EmergencyMS'] ??
+                                          "Nearby Emergency Services",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 1.7,
                                       overflow: TextOverflow.ellipsis,
