@@ -6,6 +6,7 @@ import 'package:alen/ui/ListInCategoryService/ListInService.dart';
 import 'package:alen/ui/Models/Services.dart';
 import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllServices.dart';
 import 'package:alen/ui/Services/HospitalServices.dart';
+import 'package:alen/utils/languageData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
@@ -164,7 +165,9 @@ class LabDetail extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Service',
+                                    languageData[languageProvider.langOPT]
+                                    ['Services'] ??
+                                        "Services",
                                     textScaleFactor: 1.5,
                                     textAlign: TextAlign.left,
                                     overflow: TextOverflow.ellipsis,
@@ -249,7 +252,9 @@ class LabDetail extends StatelessWidget {
                                     padding: EdgeInsets.only(left: screenWidth*0.05, top: 10),
                                     width: screenWidth*0.4,
                                     child: Text(
-                                      'Office Hours',
+                                      languageData[languageProvider.langOPT]
+                                      ['Office Hours'] ??
+                                          "Office Hours",
                                       textScaleFactor: 1.5,
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,
@@ -276,7 +281,9 @@ class LabDetail extends StatelessWidget {
                                         padding: EdgeInsets.only(right: screenWidth*0.05, top: 10),
                                         width: screenWidth*0.4,
                                         child: Text(
-                                          'Phone Number',
+                                          languageData[languageProvider.langOPT]
+                                          ['Phone Number'] ??
+                                              "Phone Number",
                                           textScaleFactor: 1.5,
                                           textAlign: TextAlign.left,
                                           overflow: TextOverflow.ellipsis,
@@ -305,7 +312,9 @@ class LabDetail extends StatelessWidget {
                                     padding: EdgeInsets.only(left: screenWidth*0.05, top: 10),
                                     width: screenWidth*0.4,
                                     child: Text(
-                                      'Email',
+                                      languageData[languageProvider.langOPT]
+                                      ['Email'] ??
+                                          "Email",
                                       textScaleFactor: 1.5,
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,
@@ -329,7 +338,9 @@ class LabDetail extends StatelessWidget {
                                     padding: EdgeInsets.only(right: screenWidth*0.05, top: 10),
                                     width: screenWidth*0.4,
                                     child: Text(
-                                      'Our Location',
+                                      languageData[languageProvider.langOPT]
+                                      ['Our Location'] ??
+                                          "Our Location",
                                       textScaleFactor: 1.5,
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,

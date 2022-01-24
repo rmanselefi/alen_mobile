@@ -296,8 +296,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                                         width: 2),
                                                   ),
                                                   hintStyle: TextStyle(
-                                                      color: const Color(
-                                                          0xFF9516B6)),
+                                                      color: const Color(0xFF1DB9A3)),
                                                   filled: true,
                                                   fillColor: Colors.white,
                                                   contentPadding:
@@ -305,12 +304,11 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                                   labelText: 'Sex',
                                                   hintText: 'Sex',
                                                   labelStyle: TextStyle(
-                                                      color: const Color(
-                                                          0xFF9516B6)),
+                                                      color: const Color(0xFF1DB9A3)),
                                                   prefixIcon: Icon(
                                                     Icons.wc,
                                                     color:
-                                                    const Color(0xFF9516B6),
+                                                    const Color(0xFF1DB9A3)
                                                   ),
                                                 ),
                                                 child:

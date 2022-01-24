@@ -6,6 +6,7 @@ import 'package:alen/providers/drug.dart';
 import 'package:alen/ui/ListInCategoryService/ListInCategory.dart';
 import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllCategories.dart';
 import 'package:alen/ui/Services/PharmacistsServices.dart';
+import 'package:alen/utils/languageData.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -175,7 +176,9 @@ class PharamacyDetail extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Categories',
+                                      languageData[languageProvider.langOPT]
+                                      ['Categories'] ??
+                                          "Categories",
                                       textScaleFactor: 1.5,
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,
@@ -250,7 +253,9 @@ class PharamacyDetail extends StatelessWidget {
                                     padding: EdgeInsets.only(left: screenWidth*0.05, top: 10),
                                     width: screenWidth*0.4,
                                     child: Text(
-                                      'Office Hours',
+                                      languageData[languageProvider.langOPT]
+                                      ['Office Hours'] ??
+                                          "Office Hours",
                                       textScaleFactor: 1.5,
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,
@@ -277,7 +282,9 @@ class PharamacyDetail extends StatelessWidget {
                                         padding: EdgeInsets.only(right: screenWidth*0.05, top: 10),
                                         width: screenWidth*0.4,
                                         child: Text(
-                                          'Phone Number',
+                                          languageData[languageProvider.langOPT]
+                                          ['Phone Number'] ??
+                                              "Phone Number",
                                           textScaleFactor: 1.5,
                                           textAlign: TextAlign.left,
                                           overflow: TextOverflow.ellipsis,
@@ -306,7 +313,9 @@ class PharamacyDetail extends StatelessWidget {
                                     padding: EdgeInsets.only(left: screenWidth*0.05, top: 10),
                                     width: screenWidth*0.4,
                                     child: Text(
-                                      'Email',
+                                      languageData[languageProvider.langOPT]
+                                      ['Email'] ??
+                                          "Email",
                                       textScaleFactor: 1.5,
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,
@@ -330,7 +339,9 @@ class PharamacyDetail extends StatelessWidget {
                                     padding: EdgeInsets.only(right: screenWidth*0.05, top: 10),
                                     width: screenWidth*0.4,
                                     child: Text(
-                                      'Our Location',
+                                      languageData[languageProvider.langOPT]
+                                      ['Our Location'] ??
+                                          "Our Location",
                                       textScaleFactor: 1.5,
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,

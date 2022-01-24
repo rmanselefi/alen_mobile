@@ -13,63 +13,67 @@ class HospitalProvider with ChangeNotifier {
   UserLocation currentLocation;
   List<HLDServices> hospServices = [];
   List<HLDServiceTypes> hospServicestypes = [];
+  FirebaseFirestore fire = FirebaseFirestore.instance;
 
   Future<List<HLDServiceTypes>> getHospServiceTypesByHospitalId(String Id, String hospitalId) async {
     isLoading = true;
     hospServicestypes.clear();
     var curr;
     try {
-      var docs = await FirebaseFirestore.instance
-          .collection('hospital')
-          .where('id', isEqualTo: hospitalId)
-          .get();
-      if (docs.docs.isNotEmpty) {
-        var data = docs.docs[0].data();
-        var servicesList = data.containsKey('services') ? data['services'] : [];
-        for (var i = 0; i < servicesList.length; i++) {
-          String servicesData = await servicesList[i]['service_id'];
-          print("ServiceTypeId:$servicesData");
-          var document = await FirebaseFirestore.instance
-              .collection('hospital_services_type')
-              .where('id', isEqualTo: servicesData)
-              .get();
-          var serviceType = document.docs.first.data();
-          print("ServiceType:$serviceType");
-          final HLDServiceTypes category = new HLDServiceTypes(
-              serviceType['id'],
-              serviceType['description'],
-              serviceType['additional_detail'],
-              serviceType['name'],
-              serviceType['image'],
-              await servicesList[i]['price'],
-              serviceType['service']);
-          if (category.serviceId == Id) {
-            int temp = 0;
-            if(hospServicestypes.length==0){
-              hospServicestypes.add(category);
-            }else{
-              hospServicestypes.forEach((element) {
-                if(category.id==element.id)
-                {
-                  temp++;
-                }
-              });
-              if(temp==0){
-                hospServicestypes.add(category);
+      var docs =
+      await fire.collection('seleted_hospital_services').where('hospital_id', isEqualTo: hospitalId).get();
+      // if (docs.docs.isNotEmpty) {
+      var data2 = docs.docs.toList();
+      // var data = docs.docs.first.data();
+      var servicesList =docs.docs?? [];
+      for (var i = 0; i < servicesList.length; i++) {
+        String servicesData = await servicesList[i]['service_id'];
+        print("ServiceTypeId:$servicesData");
+        // var document = await FirebaseFirestore.instance
+        //     .collection('laboratory_services').doc(servicesData).get();
+        //     // .where('id', isEqualTo: servicesData)
+        // .get();
+        // var serviceType = document.data();
+        print("ServiceType:${servicesList[i]}");
+        final HLDServiceTypes category = new HLDServiceTypes(
+          servicesList[i]['service_type_id'],
+          servicesList[i]['description'],
+          servicesList[i]['service_name'],
+          servicesList[i]['image'],
+          servicesList[i]['price'],
+          servicesList[i]['additional_detail']??"",
+          servicesList[i]['service_id'],
+          serviceDetail: servicesList[i]['serviceDetail'],
+          serviceName: servicesList[i]['serviceName'],
+          serviceImage: servicesList[i]['serviceImage'],
+          selectedItemId: servicesList[i].id,
+        );
+        if (category.serviceId == Id) {
+          int temp = 0;
+          if(hospServicestypes.length==0){
+            hospServicestypes.add(category);
+          }else{
+            hospServicestypes.forEach((element) {
+              if(category.id==element.id)
+              {
+                temp++;
               }
+            });
+            if(temp==0){
+              hospServicestypes.add(category);
             }
           }
-          hospServicestypes.forEach((element) {
-            print("Name : " +
-                element.name +
-                '\nImage : ' +
-                element.image +
-                "\nId : " +
-                element.id);
-          });
         }
+        hospServicestypes.forEach((element) {
+          print("Name : " +
+              element.name +
+              '\nImage : ' +
+              element.image +
+              "\nId : " +
+              element.id);
+        });
       }
-      hospServices.toSet();
+      hospServicestypes.toSet();
       return hospServicestypes;
     } catch (error) {
       isLoading = false;
@@ -296,52 +300,57 @@ class HospitalProvider with ChangeNotifier {
   // }
 
   Future<List<HLDServices>> getHospServicesByHospitalId(String Id) async {
-    FirebaseFirestore fire = FirebaseFirestore.instance;
+
+
     isLoading = true;
     hospServices.clear();
     try {
       var docs =
-      await fire.collection('hospital').doc(Id).get();
-        var data = docs.data();
-        var servicesList = data.containsKey('services') ? data['services'] : [];
-        for (var i = 0; i < servicesList.length; i++) {
-          String servicesData = await servicesList[i]['service_id'];
-          // print("This is my id: ${servicesData}");
-          var document = await fire
-              .collection('hospital_services_type').doc(servicesData).get();
-              // .where('id', isEqualTo: servicesData)
-              // .get();
-          var serviceType = document.data()['service'];
-          // print("This is my Try: ${document.docs.first.data()['service_id']}");
-          // DocumentSnapshot variable = await Firestore.instance.collection('COLLECTION NAME').document('DOCUMENT ID').get();
-          var serviceDocument = await fire
-              .collection('hospital_services').doc(serviceType).get();
-              // .where('id', isEqualTo: serviceType)
-              // .get();
-
-          var service = serviceDocument.data();
-          print('This is my service: $service');
-          print(i);
-          final HLDServices category = new HLDServices(service['description'],
-              serviceDocument.id, service['image'], service['name']);
-          int temp = 0;
-          if(hospServices.length==0){
-            hospServices.add(category);
-          }else{
-            hospServices.forEach((element) {
-              if(category.id==element.id)
-              {
-                temp++;
-              }
-            });
-            if(temp==0){
-              hospServices.add(category);
+      await fire.collection('seleted_hospital_services').where('hospital_id', isEqualTo: Id).get();
+      // if (docs.docs.isNotEmpty) {
+      var data2 = docs.docs.toList();
+      // var data = docs.docs.first.data();
+      var servicesList =docs.docs?? [];
+      for (var i = 0; i < servicesList.length; i++) {
+        String servicesData = await servicesList[i]['service_id'];
+        // print("This is my id: ${servicesData}");
+        // var document = await fire
+        //     .collection('laboratory_service_types').doc(servicesData).get();
+        //     // .where('id', isEqualTo: servicesData)
+        //     // .get();
+        // var serviceType = document.data()['service'];
+        // // print("This is my Try: ${document.docs.first.data()['service_id']}");
+        // // DocumentSnapshot variable = await Firestore.instance.collection('COLLECTION NAME').document('DOCUMENT ID').get();
+        // var serviceDocument = await fire
+        //     .collection('laboratory_services').doc(servicesData).get();
+        //     // .where('id', isEqualTo: serviceType)
+        //     // .get();
+        // var service = serviceDocument.data();
+        // print('This is my service: $service');
+        print(i);
+        final HLDServices category = new HLDServices(
+          servicesList[i]['serviceDetail'],
+          servicesList[i]['service_id'],
+          servicesList[i]['serviceImage'],
+          servicesList[i]['serviceName'],
+        );
+        int temp = 0;
+        if(hospServices.length==0){
+          hospServices.add(category);
+        }else{
+          hospServices.forEach((element) {
+            if(category.id==element.id)
+            {
+              temp++;
             }
+          });
+          if(temp==0){
+            hospServices.add(category);
           }
-          return hospServices;
-          print("Also here$i");
         }
-        print("none here either");
+
+        // print("Also here$i");
+      }
       return hospServices;
     } catch (error) {
       isLoading = false;
@@ -367,7 +376,14 @@ class HLDServiceTypes {
   String serviceId;
   String price;
   String additionalDiscription;
+  String serviceDetail;
+  String serviceImage;
+  String serviceName;
+  String selectedItemId;
 
-  HLDServiceTypes(this.id, this.description, this.additionalDiscription, this.name, this.image,
-      this.price, this.serviceId);
+
+  HLDServiceTypes(this.id, this.description, this.name, this.image,
+      this.price, this.additionalDiscription, this.serviceId,{
+        this.serviceDetail, this.serviceImage, this.serviceName, this.selectedItemId
+      });
 }

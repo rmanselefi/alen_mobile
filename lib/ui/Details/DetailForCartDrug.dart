@@ -104,7 +104,7 @@ class _DetailForCartDrugState extends State<DetailForCartDrug> {
                               height: 200,
                               width: 350,
                               child: Image.network(widget.cart.drug.image,
-                                  width: 200, height: 120, fit: BoxFit.fill,errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                                  width: 200, height: 120, fit: BoxFit.contain,errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
                                     return Image.asset("assets/images/hos1.jpg",
                                       width: 200,
                                       height: 120,

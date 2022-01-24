@@ -345,8 +345,8 @@ class CartProvider with ChangeNotifier {
             String supplierId = await cartItemsList[a]['supplier_id'];
             String importerDrugId = await cartItemsList[a]['drug_id'];
             var document2 = await fire
-                .collection('importer_drug').where('drug_id', isEqualTo: importerDrugId).get();
-            var document = document2.docs.first.data();
+                .collection('importer_drug').doc(importerDrugId).get();
+            var document = document2.data();
             bool trending = await document["trending"]??false;
             String price = await document["price"];
             String quantity = await document["quantity"];
@@ -435,8 +435,8 @@ class CartProvider with ChangeNotifier {
             String supplierId2 = await cartItemsList2[a]['supplier_id'];
             String importerDrugId2 = await cartItemsList2[a]['drug_id'];
             var document4 = await fire
-                .collection('pharmacy_drug').where('drug_id', isEqualTo: importerDrugId2).get();
-            var document3 = document4.docs.first.data();
+                .collection('pharmacy_drug').doc(importerDrugId2).get();
+            var document3 = document4.data();
             bool trending2 = await document3["trending"]??false;
             String price2 = await document3["price"];
             String quantity2 = await document3["quantity"];
@@ -748,13 +748,13 @@ class CartProvider with ChangeNotifier {
       ImportersPharmacies phar = await getPharmacyById(pharmacyId);
       var document = await FirebaseFirestore.instance
           .collection('all_drugs')
-          .where('id', isEqualTo: Id)
+          .doc(Id)
           .get();
-      var serviceType = document.docs.first.data();
+      var serviceType = document.data();
 
       print("Service type:"+serviceType.toString());
       final Drugs drug = Drugs(
-          id: serviceType['id'],
+          id: document.id,
           name: serviceType['name'],
           quantity: quantity,
           dosage: serviceType['dosage'],
@@ -867,7 +867,7 @@ class CartDrug{
 
   Map<String, dynamic> toJson() {
     return {
-      'drug_id': drug.id,
+      'drug_id': drug.itemId,
       'supplier_id': importer.Id,
       'amount': amount};
   }

@@ -2185,8 +2185,8 @@ class _HomePageState extends State<HomePage> {
                 height: 90,
                 width: 160,
                 child: Image.network(smallAd.image,
-                    width: 200,
-                    height: 120,
+                    width: 160,
+                    height: 90,
                     fit: BoxFit.fill, errorBuilder: (BuildContext context,
                         Object exception, StackTrace stackTrace) {
                   return Image.asset(
@@ -2301,7 +2301,7 @@ class _HomePageState extends State<HomePage> {
               errorBuilder: (BuildContext context, Object exception,
                   StackTrace stackTrace) {
                 return Image.asset(
-                  "assets/images/hos1.png",
+                  "assets/images/hos1.jpg",
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.width * 0.38,
                   fit: BoxFit.cover,

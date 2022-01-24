@@ -5,6 +5,7 @@ import 'package:alen/providers/company.dart';
 import 'package:alen/providers/language.dart';
 import 'package:alen/ui/Details/CatalogueSubDetail.dart';
 import 'package:alen/utils/AppColors.dart';
+import 'package:alen/utils/languageData.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -102,7 +103,9 @@ class _CatalogueDetailState extends State<CatalogueDetail> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Sub-Catalogue',
+                                      languageData[languageProvider.langOPT]
+                                      ['Sub-catalogue'] ??
+                                          "Sub-catalogue",
                                       textScaleFactor: 1.5,
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,

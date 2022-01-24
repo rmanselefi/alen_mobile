@@ -36,7 +36,7 @@ class _SignUpState extends State<SignUp> {
         isPressed = true;
       });
       Navigator.of(context).push(_createRoute(this.verId, this.smsCode));
-      // ctxt.loaderOverlay.hide();
+      ctxt.loaderOverlay.hide();
     };
     final PhoneVerificationCompleted verifySuccess = (AuthCredential user) {
       print('VERIFIED');
