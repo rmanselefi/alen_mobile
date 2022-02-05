@@ -61,11 +61,12 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: new ThemeData(
-              fontFamily: 'Ubuntu',
+              fontFamily: 'roboto',
               appBarTheme: AppBarTheme(
                   color: AppColors().loginBackgroud
               ),
-              scaffoldBackgroundColor: myCustomColors.mainBackground),
+              // scaffoldBackgroundColor: const Color(0xFF2929C7)),
+              scaffoldBackgroundColor: AppColors().mainBackground),
           home: FutureBuilder<dynamic>(
       future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
@@ -392,7 +393,6 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                               0.90,
                                           child: TextFormField(
                                             autocorrect: true,
-                                            maxLength: 20,
                                             maxLines: 1,
                                             keyboardType: TextInputType.name,
                                             validator: (String value) {

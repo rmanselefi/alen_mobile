@@ -282,7 +282,7 @@ class _DetailForDrugState extends State<DetailForDrug> {
                                         Container(
                                           padding: EdgeInsets.only(left: 20, top: 15),
                                           child: Text(
-                                            widget.drug.quantity,
+                                            widget.drug.quantity.toString()=="0"?"N/A":widget.drug.quantity.toString(),
                                             textAlign: TextAlign.left,
                                             maxLines: 3,
                                             textScaleFactor: 1.4,
@@ -344,7 +344,7 @@ class _DetailForDrugState extends State<DetailForDrug> {
                                           Container(
                                             padding: EdgeInsets.only(left: 35, top: 15),
                                             child: Text(
-                                              widget.drug.price.toString(),
+                                              widget.drug.price.toString()=="0"?"N/A":widget.drug.price.toString(),
                                               textAlign: TextAlign.left,
                                               maxLines: 3,
                                               textScaleFactor: 1.4,

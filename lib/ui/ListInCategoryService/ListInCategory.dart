@@ -107,11 +107,9 @@ class _ListInCategoriesState extends State<ListInCategories> {
                                 } else {
                                   return GridView.builder(
                                     gridDelegate:
-                                    SliverGridDelegateWithMaxCrossAxisExtent(
-                                        maxCrossAxisExtent: 200,
-                                        childAspectRatio: 2 / 3.4,
-                                        crossAxisSpacing: 0,
-                                        mainAxisSpacing: 0),
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        mainAxisSpacing: 20,
+                                        crossAxisCount: 3),
                                     shrinkWrap: true,
                                     physics: NeverScrollableScrollPhysics(),
                                     scrollDirection: Axis.vertical,
@@ -145,26 +143,23 @@ class _ListInCategoriesState extends State<ListInCategories> {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Card(
-              elevation: 8,
+              elevation: 4,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
+                borderRadius: BorderRadius.circular(150.0),
               ),
-              clipBehavior: Clip.hardEdge,
-              child: Container(
-                width: 150,
-                height: 180,
-                child: SizedBox(
-                  height: 180,
-                  width: 150,
-                  child: Image.network(category.image,
-                      width: 150, height: 180, fit: BoxFit.fill,
-                      errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
-                        return Image.asset("assets/images/hos1.jpg",
-                          width: 120,
-                          height: 150,
-                          fit: BoxFit.cover,);
-                      }
-                  ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(150.0),
+                child: Image.network(
+                    category.image,
+                    fit: BoxFit.fitHeight,
+                    height: 70.0,
+                    width: 70.0,
+                    errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                      return Image.asset("assets/images/hos1.jpg",
+                        width: 70,
+                        height: 70,
+                        fit: BoxFit.cover,);
+                    }
                 ),
               ),
             ),

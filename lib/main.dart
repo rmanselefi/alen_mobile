@@ -103,16 +103,16 @@ class _MyAppState extends State<MyApp> {
               color: AppColors().loginBackgroud
             ),
             // scaffoldBackgroundColor: const Color(0xFF2929C7)),
-          scaffoldBackgroundColor: AppColors().mainBackground),
+          scaffoldBackgroundColor: AppColors().mainBackground
+        ),
         home: FutureBuilder(
             future: UserPreferences().getUser(),
             builder: (context, snapshot) {
-
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
                   return CircularProgressIndicator();
-                default:
+                default://
                   if (snapshot.hasError)
                     return Text('Error: ${snapshot.error}');
                   else if (snapshot.data == null)

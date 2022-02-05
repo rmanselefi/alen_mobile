@@ -236,15 +236,16 @@ class PharmacyProvider with ChangeNotifier {
           for (var i = 0; i < docs.docs.length; i++) {
             var data = docs.docs[i].data();
             final Pharmacies hos = Pharmacies(
+                type: Type.Pharmacy,
                 Id: docs.docs[i].id,
                 name: data['name'],
                 phone: data['phone'],
                 image: data['image'],
                 latitude: data['location'].latitude,
                 longitude: data['location'].longitude,
-                officehours: data['officehours'],
                 email: data['email'],
                 images: data['images'],
+                locationName: data['location_name'],
                 isPharma: true,
                 description: data['description']);
             int temp = 0;

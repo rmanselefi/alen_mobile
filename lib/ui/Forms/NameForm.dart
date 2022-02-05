@@ -63,8 +63,12 @@ class _NameFormScreenState extends State<NameFormScreen> {
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: new ThemeData(
-              fontFamily: 'Ubuntu',
-              scaffoldBackgroundColor: myCustomColors.mainBackground),
+              fontFamily: 'roboto',
+              appBarTheme: AppBarTheme(
+                  color: AppColors().loginBackgroud
+              ),
+              // scaffoldBackgroundColor: const Color(0xFF2929C7)),
+              scaffoldBackgroundColor: AppColors().mainBackground),
           home: LoaderOverlay(
               overlayOpacity: 0.8,
             child: FutureBuilder<dynamic>(

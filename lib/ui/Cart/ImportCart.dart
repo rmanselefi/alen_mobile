@@ -121,7 +121,7 @@ class _ImportCartState extends State<ImportCart> {
                                                       padding: EdgeInsets.symmetric(horizontal: 40),
                                                       child: Center(
                                                           child:Text(
-                                                            "Total price : "+snapshot.data.toStringAsFixed(2),
+                                                            "Total price : "+snapshot.data.toStringAsFixed(2)=="0.00"?"N/A":snapshot.data.toStringAsFixed(2),
                                                             textScaleFactor: 2,
                                                             style: TextStyle(
                                                               fontWeight: FontWeight.bold,

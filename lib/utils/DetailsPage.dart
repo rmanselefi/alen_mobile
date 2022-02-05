@@ -156,7 +156,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                       return Container(
                                         padding: EdgeInsets.symmetric(horizontal: 5,vertical: 20),
                                         child: Text(
-                                          prc??"0",
+                                          prc=="0"?"N/A":prc,
                                           textDirection: TextDirection.ltr,
                                           maxLines: 1,
                                         ),

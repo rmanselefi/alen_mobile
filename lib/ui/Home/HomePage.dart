@@ -8,6 +8,7 @@ import 'package:alen/models/user_location.dart';
 import 'package:alen/providers/EmergencyMS.dart';
 import 'package:alen/providers/HomeCare.dart';
 import 'package:alen/providers/ads.dart';
+import 'package:alen/providers/auth.dart';
 import 'package:alen/providers/cart.dart';
 import 'package:alen/providers/company.dart';
 import 'package:alen/providers/diagnostic.dart';
@@ -22,6 +23,7 @@ import 'package:alen/ui/Details/HospitalDetail.dart';
 import 'package:alen/ui/Details/ImporterDetail.dart';
 import 'package:alen/ui/Details/PharmacyDetail.dart';
 import 'package:alen/ui/Details/TransactionDetail.dart';
+import 'package:alen/ui/Forms/PhoneForm.dart';
 import 'package:alen/ui/Pages/Pharmacy.dart';
 import 'package:alen/ui/Privacy%20Policy/PrivacyPolicy.dart';
 import 'package:alen/ui/SeeAllPages/Home/SeeAllHealthArticles.dart';
@@ -260,6 +262,7 @@ class _HomePageState extends State<HomePage> {
         Provider.of<HealthArticleProvider>(context, listen: true);
     var adsProvider = Provider.of<AdsProvider>(context, listen: true);
     var pharmacyProvider = Provider.of<PharmacyProvider>(context, listen: true);
+    var authProvider = Provider.of<AuthProvider>(context, listen: false);
     // search();
     Future<dynamic> handleExitApp() async{
       final result= await showDialog(
@@ -585,6 +588,24 @@ class _HomePageState extends State<HomePage> {
                                           },
                                         )
                                       ],
+                                    ),
+                                    ListTile(
+                                      leading: Icon(Icons.logout,
+                                          color: myCustomColors.loginBackgroud),
+                                      title: Text(languageData[languageProvider.langOPT]
+                                      ['Log Out'] ??
+                                          "Log Out"),
+                                      onTap: () {
+                                        authProvider.signOut();
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                SignUp(),
+                                          ),
+                                              (route) => false,
+                                        );
+                                      },
                                     ),
                                     Divider(),
                                   ],

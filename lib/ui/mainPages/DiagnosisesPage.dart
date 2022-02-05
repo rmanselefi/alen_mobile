@@ -274,8 +274,8 @@ class _HospitalPageState extends State<DiagnosisesPage> {
                                                     (MediaQuery.of(context)
                                                         .orientation ==
                                                         Orientation.portrait)
-                                                        ? 2 / 3
-                                                        : 2 / 2.2,
+                                                        ? 2 / 3.5
+                                                        : 2 / 2.5,
                                                     crossAxisSpacing: 0,
                                                     mainAxisSpacing: 0),
                                                 shrinkWrap: true,
@@ -371,12 +371,12 @@ class _HospitalPageState extends State<DiagnosisesPage> {
                 ),
                 Text(
                   hospital.name??"",
-                  maxLines: 2,
+                  maxLines: 1,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  hospital.phone??"",
-                  maxLines: 2,
+                  hospital.locationName??"",
+                  maxLines: 1,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],

@@ -371,7 +371,7 @@ class PharmaciesPage extends StatelessWidget {
             Container(
               width: 120,
                 child:Text(
-                  pharmacy.phone,
+                  pharmacy.locationName??"",
                   maxLines: 1,
                   overflow: TextOverflow.fade,
                   style: const TextStyle(fontWeight: FontWeight.bold),

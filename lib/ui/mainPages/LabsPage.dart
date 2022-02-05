@@ -363,12 +363,12 @@ class _HospitalPageState extends State<LabsPage> {
                 ),
                 Text(
                   hospital.name,
-                  maxLines: 2,
+                  maxLines: 1,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  hospital.phone,
-                  maxLines: 2,
+                  hospital.locationName,
+                  maxLines: 1,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],

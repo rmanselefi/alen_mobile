@@ -1,3 +1,4 @@
+import 'package:alen/providers/user_preference.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,6 +48,45 @@ class AuthProvider with ChangeNotifier {
       print(error.message);
     }
     return {'success': !hasError, 'message': errorMessage, 'user': userr};
+  }
+
+  Future<void> signOut() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.signOut();
+    UserPreferences().signOut();
+  }
+
+  Future<bool> checkUserExistence(
+      String userId) async {
+    try {
+      var user =
+      await FirebaseFirestore.instance.collection('users').doc(userId).get();
+      var userData = user.data();
+      print("0000000000000000000000");
+      print(userId);
+      print(userId);
+      print(userId);
+      print(userData);
+      print(userData);
+      print("0000000000000000000000");
+      if (user != null) {
+
+        var prefs = await SharedPreferences.getInstance();
+        prefs.setString('user_id', userId);
+        prefs.setString('phone', userData['phone']);
+        prefs.setString('first_name', userData['firstName']);
+        prefs.setString('middleName', userData['middleName']);
+        prefs.setString('lastName', userData['lastName']);
+        prefs.setString('email', userData['email']);
+        prefs.setString('age', userData['age']);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      hasError = true;
+      print(error.message);
+      return false;
+    }
   }
 
   Future signUp(Map<String, dynamic> user) async {

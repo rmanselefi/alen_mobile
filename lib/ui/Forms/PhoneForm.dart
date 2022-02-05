@@ -100,7 +100,11 @@ class _SignUpState extends State<SignUp> {
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: new ThemeData(
-              fontFamily: 'Ubuntu',
+              fontFamily: 'roboto',
+              appBarTheme: AppBarTheme(
+                  color: AppColors().loginBackgroud
+              ),
+              // scaffoldBackgroundColor: const Color(0xFF2929C7)),
               scaffoldBackgroundColor: AppColors().mainBackground),
           home: LoaderOverlay(
             overlayOpacity: 0.8,

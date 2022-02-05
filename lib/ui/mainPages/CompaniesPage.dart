@@ -358,12 +358,12 @@ class _CompaniesPageState extends State<CompaniesPage> {
                 ),
                 Text(
                   hospital.name,
-                  maxLines: 2,
+                  maxLines: 1,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  hospital.phone,
-                  maxLines: 2,
+                  hospital.locationName,
+                  maxLines: 1,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],

@@ -59,8 +59,12 @@ class _ConfirmationFormState extends State<ConfirmationForm> {
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: new ThemeData(
-              fontFamily: 'Ubuntu',
-              scaffoldBackgroundColor: myCustomColors.mainBackground),
+              fontFamily: 'roboto',
+              appBarTheme: AppBarTheme(
+                  color: AppColors().loginBackgroud
+              ),
+              // scaffoldBackgroundColor: const Color(0xFF2929C7)),
+              scaffoldBackgroundColor: AppColors().mainBackground),
           home: FutureBuilder<dynamic>(
       future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
@@ -202,16 +206,33 @@ class _ConfirmationFormState extends State<ConfirmationForm> {
                                                 this.widget.verId,
                                                 _confirmationCode);
                                             print(successInfo);
+
                                             if (successInfo['success']) {
                                               var user = successInfo['user'];
-                                              Navigator.pushAndRemoveUntil(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (BuildContext context) =>
-                                                      NameFormScreen(user)
-                                                ),
-                                                    (route) => false,
-                                              );
+                                              String userId=successInfo['user']['userid'];
+                                              bool userExists=await auth.checkUserExistence(userId);
+
+                                              if(userExists){
+                                                Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (BuildContext context) =>
+                                                        HomePage(),
+                                                  ),
+                                                      (route) => false,
+                                                );
+                                              }
+                                              else{
+                                                Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (BuildContext context) =>
+                                                          NameFormScreen(user)
+                                                  ),
+                                                      (route) => false,
+                                                );
+                                              }
+
                                             }
                                           }
                                         })),
