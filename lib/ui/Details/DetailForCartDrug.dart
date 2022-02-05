@@ -291,53 +291,6 @@ class _DetailForCartDrugState extends State<DetailForCartDrug> {
                                         ),
                                       ]),
                                 ),
-                                Container(
-                                  padding: EdgeInsets.only(right: 35),
-                                  child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.only(right: 20, top: 10),
-                                          child: Text(
-                                            'Trending',
-                                            textScaleFactor: 1.7,
-                                            textAlign: TextAlign.left,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Container(
-                                              padding:
-                                              EdgeInsets.only(right: 20, top: 15),
-                                              child: Text(
-                                                (widget.cart.drug.trending) ? "Yes" : "No",
-                                                textAlign: TextAlign.left,
-                                                maxLines: 3,
-                                                textScaleFactor: 1.3,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                            Container(
-                                              padding:
-                                              EdgeInsets.only(right: 20, top: 15),
-                                              child: Checkbox(
-                                                value: widget.cart.drug.trending,
-                                                onChanged: (bool value) {
-                                                  setState(() {
-                                                    // widget.drug.trending = value;
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ]),
-                                ),
                               ],
                             ),
                             Row(
