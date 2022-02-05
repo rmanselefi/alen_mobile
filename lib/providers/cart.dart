@@ -42,7 +42,7 @@ class CartProvider with ChangeNotifier {
           String itemId = servicesList[i].id;
           int amount = await servicesList[i]['amount'];
           var document = await fire
-              .collection('pharmacy_drug').doc(servicesData).get();
+              .collection('selected_pharmacy_drugs').doc(servicesData).get();
           String pharmacyId = await document["pharmacy_id"];
           bool trending = await document["trending"];
           String price = await document["price"];
@@ -435,7 +435,7 @@ class CartProvider with ChangeNotifier {
             String supplierId2 = await cartItemsList2[a]['supplier_id'];
             String importerDrugId2 = await cartItemsList2[a]['drug_id'];
             var document4 = await fire
-                .collection('pharmacy_drug').doc(importerDrugId2).get();
+                .collection('selected_pharmacy_drugs').doc(importerDrugId2).get();
             var document3 = document4.data();
             bool trending2 = await document3["trending"]??false;
             String price2 = await document3["price"];

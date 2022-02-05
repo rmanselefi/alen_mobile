@@ -11,6 +11,7 @@ import 'package:alen/ui/Services/HospitalServices.dart';
 import 'package:alen/utils/languageData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:mailto/mailto.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,6 +55,16 @@ class CompanyDetail extends StatelessWidget {
         this.officeHours,this.newservices, this.hospitalId});
 
   double screenWidth;
+
+  launchMailtoWithMyEmail(String email) async {
+    final mailtoLink = Mailto(
+      to: [email],
+      subject: '',
+      body: '',
+    );
+    await launch('$mailtoLink');
+  }
+
   @override
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
@@ -327,14 +338,19 @@ class CompanyDetail extends StatelessWidget {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.only(left: screenWidth*0.05, top: 10),
-                                    width: screenWidth*0.4,
-                                    child: Text(
-                                      email??"Email",
-                                      textAlign: TextAlign.left,
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
+                                  GestureDetector(
+                                    onTap: (){
+                                      launchMailtoWithMyEmail(email??"");
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.only(left: screenWidth*0.05, top: 10),
+                                      width: screenWidth*0.4,
+                                      child: Text(
+                                        email??"Email",
+                                        textAlign: TextAlign.left,
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
                                   ),
                                 ]),

@@ -12,6 +12,7 @@ import 'package:alen/utils/languageData.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:mailto/mailto.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -52,6 +53,15 @@ class ImporterDetail extends StatelessWidget {
         this.officeHours});
 
   double screenWidth;
+  launchMailtoWithMyEmail(String email) async {
+    final mailtoLink = Mailto(
+      to: [email],
+      subject: '',
+      body: '',
+    );
+    await launch('$mailtoLink');
+  }
+
   @override
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
@@ -324,14 +334,19 @@ class ImporterDetail extends StatelessWidget {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.only(left: screenWidth*0.05, top: 10),
-                                    width: screenWidth*0.4,
-                                    child: Text(
-                                      email??"Email",
-                                      textAlign: TextAlign.left,
-                                      maxLines: 3,
-                                      overflow: TextOverflow.ellipsis,
+                                  GestureDetector(
+                                    onTap: (){
+                                      launchMailtoWithMyEmail(email??"");
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.only(left: screenWidth*0.05, top: 10),
+                                      width: screenWidth*0.4,
+                                      child: Text(
+                                        email??"Email",
+                                        textAlign: TextAlign.left,
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
                                   ),
                                 ]),

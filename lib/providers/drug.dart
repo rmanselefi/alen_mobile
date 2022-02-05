@@ -68,44 +68,46 @@ class DrugProvider with ChangeNotifier {
     var curr;
     try {
       var docs =
-      await fire.collection('pharmacy_drug').where('pharmacy_id', isEqualTo: Id).get();
-      if (docs.docs.isNotEmpty) {
-        var data2 = docs.docs.toList();
-        // var data = docs.docs.first.data();
-        var servicesList =docs.docs?? [];
-        for (var i = 0; i < servicesList.length; i++) {
-          print("fffffffffffffffffff");
-          print("Drugs amount ${servicesList.length}");
-          print("fffffffffffffffffff");
-          String servicesData = await servicesList[i]['drug_id'];
-          // print("This is my id: ${servicesData}");
-          var document = await fire
-              .collection('all_drugs').doc(servicesData).get();
-              // .where('id', isEqualTo: servicesData)
-              // .get();
-          var serviceType = document.data()['category'];
-          // print("This is my Try: ${document.docs.first.data()['service_id']}");
-          // DocumentSnapshot variable = await Firestore.instance.collection('COLLECTION NAME').document('DOCUMENT ID').get();
-          final Category category = new Category(
-            serviceType['name'],
-            serviceType['image'],
-            serviceType['id'],
-          );
-          int temp=0;
+      await fire.collection('selected_pharmacy_drugs').where('pharmacy_id', isEqualTo: Id).get();
+      // if (docs.docs.isNotEmpty) {
+      var data2 = docs.docs.toList();
+      // var data = docs.docs.first.data();
+      var servicesList =docs.docs?? [];
+      for (var i = 0; i < servicesList.length; i++) {
+        String servicesData = await servicesList[i]['drug_id'];
+        print("This is my id: ${servicesData}");
+        // var serviceType = document.docs.first.data()['category'];
+        // print("This is my Try: ${document.docs.first.data()['service_id']}");
+        // DocumentSnapshot variable = await Firestore.instance.collection('COLLECTION NAME').document('DOCUMENT ID').get();
+        final Category category = new Category(
+          servicesList[i]['CategoryName'],
+          servicesList[i]['CategoryImage'],
+          servicesList[i]['CategoryId'],
+        );
+        int temp = 0;
+        if(categoriesList.length==0){
           categoriesList.add(category);
-          // (categoriesList.isEmpty)?
-          //   categoriesList.add(category):
-          // categoriesList.forEach((element) {
-          //   print('--------------temp : ($temp)--------------');
-          //   if(element.id==category.id){
-          //     temp++;
-          //     print('--------------temp : ($temp)--------------');
-          //   }
-          // });
+        }else{
+          categoriesList.forEach((element) {
+            if(category.id==element.id)
+            {
+              temp++;
+            }
+          });
+          if(temp==0){
+            categoriesList.add(category);
+          }
           print("Also here$i");
         }
         print("none here either");
       }
+      categoriesList.forEach((element) {
+        print("*****************************");
+        print("Element Id: ${element.id}");
+        print("Element Name: ${element.name}");
+        print("Element Image: ${element.image}");
+        print("*****************************");
+      });
       return categoriesList;
     } catch (error) {
       isLoading = false;
@@ -118,48 +120,52 @@ class DrugProvider with ChangeNotifier {
     FirebaseFirestore fire = FirebaseFirestore.instance;
     isLoading = true;
     categoriesList.clear();
+    print("pppppppppppppppppppppppp");
+    print("-----------------"+Id+"-----------------");
+    print("pppppppppppppppppppppppp");
     var curr;
     try {
       var docs =
-      await fire.collection('importer_drug').where('importer_id', isEqualTo: Id).get();
-      if (docs.docs.isNotEmpty) {
-        var data2 = docs.docs.toList();
-        // var data = docs.docs.first.data();
-        var servicesList =docs.docs?? [];
-        for (var i = 0; i < servicesList.length; i++) {
-          String servicesData = await servicesList[i]['drug_id'];
-          // print("This is my id: ${servicesData}");
-          print('-----------here---------------');
-          var document = await fire
-              .collection('all_drugs').doc(servicesData).get();
-              // .where('id', isEqualTo: servicesData)
-              // .get();
-          var serviceType = document.data()['category'];
-          // print("This is my Try: ${document.docs.first.data()['service_id']}");
-          // DocumentSnapshot variable = await Firestore.instance.collection('COLLECTION NAME').document('DOCUMENT ID').get();
-          final Category category = new Category(
-            serviceType['name'],
-            serviceType['image'],
-            serviceType['id'],
-          );
+      await fire.collection('selected_importer_drugs').where('importer_id', isEqualTo: Id).get();
+      // if (docs.docs.isNotEmpty) {
+      var data2 = docs.docs.toList();
+      // var data = docs.docs.first.data();
+      var servicesList =docs.docs?? [];
+      for (var i = 0; i < servicesList.length; i++) {
+        String servicesData = await servicesList[i]['drug_id'];
+        print("This is my id: ${servicesData}");
+        // var serviceType = document.docs.first.data()['category'];
+        // print("This is my Try: ${document.docs.first.data()['service_id']}");
+        // DocumentSnapshot variable = await Firestore.instance.collection('COLLECTION NAME').document('DOCUMENT ID').get();
+        final Category category = new Category(
+          servicesList[i]['CategoryName'],
+          servicesList[i]['CategoryImage'],
+          servicesList[i]['CategoryId'],
+        );
+        int temp = 0;
+        if(categoriesList.length==0){
           categoriesList.add(category);
-          // int temp=0;
-          // (categoriesList.isEmpty)?
-          // categoriesList.add(category):
-          // categoriesList.forEach((element) {
-          //   print('--------------temp : ($temp)--------------');
-          //   if(element.id==category.id){
-          //     temp++;
-          //     print('--------------temp : ($temp)--------------');
-          //   }
-          // });
-          // if(temp==0 && categoriesList.length>1){
-          //   categoriesList.add(category);
-          // }
-          print("------------------------------Also here$i");
+        }else{
+          categoriesList.forEach((element) {
+            if(category.id==element.id)
+            {
+              temp++;
+            }
+          });
+          if(temp==0){
+            categoriesList.add(category);
+          }
+          print("Also here$i");
         }
-        print("----------------------------------none here either");
+        print("none here either");
       }
+      categoriesList.forEach((element) {
+        print("*****************************");
+        print("Element Id: ${element.id}");
+        print("Element Name: ${element.name}");
+        print("Element Image: ${element.image}");
+        print("*****************************");
+      });
       return categoriesList;
     } catch (error) {
       isLoading = false;
@@ -228,60 +234,43 @@ class DrugProvider with ChangeNotifier {
     var curr;
     try {
       var docs =
-      await fire.collection('pharmacy_drug').where('pharmacy_id', isEqualTo: Id).get();
+      await fire.collection('selected_pharmacy_drugs').where('pharmacy_id', isEqualTo: Id).get();
       if (docs.docs.isNotEmpty) {
         var data2 = docs.docs.toList();
         // var data = docs.docs.first.data();
         var servicesList =docs.docs?? [];
         for (var i = 0; i < servicesList.length; i++) {
           String servicesData = await servicesList[i]['drug_id'];
-          String pharmaDrugId = await servicesList[i].id;
           String price = await servicesList[i]['price'];
           String quantity = await servicesList[i]['quantity'];
           bool trending = await servicesList[i]['trending'];
-          String pharmacy = await servicesList[i]['pharmacy_id'];
-          ImportersPharmacies phar = await getPharmacyById(pharmacy);
-          // print("This is my id: ${servicesData}");
-          var document = await fire
-              .collection('all_drugs').doc(servicesData).get();
-              // .where('id', isEqualTo: servicesData)
-              // .get();
-          var serviceType = document.data();
-          // print("This is my Try: ${document.docs.first.data()['service_id']}");
-          // DocumentSnapshot variable = await Firestore.instance.collection('COLLECTION NAME').document('DOCUMENT ID').get();
-
-          if (serviceType['category']['id'] == category.id) {
+          if (servicesList[i]['CategoryId'] == category.id) {
             final Drugs drug = Drugs(
-                id: document.id,
-                itemId: pharmaDrugId,
-                name: serviceType['name'],
+                itemId: servicesList[i].id,
+                id: servicesList[i]['drug_id'],
+                name: servicesList[i]['drug_name'],
                 quantity: quantity,
-                pharmacies: phar,
-                dosage: serviceType['dosage'],
-                madein: serviceType['madein'],
-                root: serviceType['root'],
-                image: serviceType.containsKey('image')
-                    ? serviceType['image']
-                    : '',
-                category: serviceType.containsKey('category')
-                    ? serviceType['category']['name']
-                    : '',
-                category_image: serviceType.containsKey('category')
-                    ? serviceType['category']['image']
-                    : '',
+                dosage: servicesList[i]['dosage'],
+                madein: servicesList[i]['madein'],
+                root: servicesList[i]['root'],
+                image: servicesList[i]['image']??"",
+                category: servicesList[i]['CategoryName']??"",
+                category_image: servicesList[i]['CategoryImage']??"",
+                category_id: servicesList[i]['CategoryId']??"",
                 price: price ?? "0",
+                pharmacies: await getPharmacyById(Id),
                 trending: trending);
-            int temp2 = 0;
+            int temp = 0;
             if(drugs.length==0){
               drugs.add(drug);
             }else{
               drugs.forEach((element) {
                 if(drug.id==element.id)
                 {
-                  temp2++;
+                  temp++;
                 }
               });
-              if(temp2==0){
+              if(temp==0){
                 drugs.add(drug);
               }
             }
@@ -367,62 +356,43 @@ class DrugProvider with ChangeNotifier {
     var curr;
     try {
       var docs =
-      await fire.collection('importer_drug').where('importer_id', isEqualTo: Id).get();
+      await fire.collection('selected_importer_drugs').where('importer_id', isEqualTo: Id).get();
       if (docs.docs.isNotEmpty) {
         var data2 = docs.docs.toList();
         // var data = docs.docs.first.data();
         var servicesList =docs.docs?? [];
         for (var i = 0; i < servicesList.length; i++) {
-          String importerDrugId = await servicesList[i].id;
           String servicesData = await servicesList[i]['drug_id'];
           String price = await servicesList[i]['price'];
           String quantity = await servicesList[i]['quantity'];
           bool trending = await servicesList[i]['trending'];
-          String importer = await servicesList[i]['importer_id'];
-          ImportersPharmacies phar = await getImporterById(importer);
-          print("Service data : ($servicesData)");
-          print("Price : ($price)");
-          print("Quantity : ($quantity)");
-          print("Trending : ($trending)");
-          // print("This is my id: ${servicesData}");
-          var document = await fire
-              .collection('all_drugs').doc(servicesData).get();
-              // .where('id', isEqualTo: servicesData)
-              // .get();
-          var serviceType = document.data();
-
-          if (serviceType['category']['id'] == category.id) {
+          if (servicesList[i]['CategoryId'] == category.id) {
             final Drugs drug = Drugs(
-                id: document.id,
-                name: serviceType['name'],
-                itemId: importerDrugId,
+                itemId: servicesList[i].id,
+                id: servicesList[i]['drug_id'],
+                name: servicesList[i]['drug_name'],
                 quantity: quantity,
-                dosage: serviceType['dosage'],
-                madein: serviceType['madein'],
-                root: serviceType['root'],
-                image: serviceType.containsKey('image')
-                    ? serviceType['image']
-                    : '',
-                pharmacies: phar,
-                category: serviceType.containsKey('category')
-                    ? serviceType['category']['name']
-                    : '',
-                category_image: serviceType.containsKey('category')
-                    ? serviceType['category']['image']
-                    : '',
+                dosage: servicesList[i]['dosage'],
+                madein: servicesList[i]['madein'],
+                root: servicesList[i]['root'],
+                image: servicesList[i]['image']??"",
+                category: servicesList[i]['CategoryName']??"",
+                category_image: servicesList[i]['CategoryImage']??"",
+                category_id: servicesList[i]['CategoryId']??"",
                 price: price ?? "0",
+                pharmacies: await getImporterById(Id),
                 trending: trending);
-            int temp2 = 0;
+            int temp = 0;
             if(drugs.length==0){
               drugs.add(drug);
             }else{
               drugs.forEach((element) {
                 if(drug.id==element.id)
                 {
-                  temp2++;
+                  temp++;
                 }
               });
-              if(temp2==0){
+              if(temp==0){
                 drugs.add(drug);
               }
             }

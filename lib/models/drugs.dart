@@ -14,6 +14,7 @@ class Drugs implements HospitalsLabsDiagnostics {
   String image;
   String category;
   String category_image;
+  String category_id;
   ImportersPharmacies pharmacies;
   String price;
   Type type;
@@ -33,6 +34,7 @@ class Drugs implements HospitalsLabsDiagnostics {
         this.description,
         this.locationName,
         this.category,
+        this.category_id,
         this.category_image, this.price});
 
   @override

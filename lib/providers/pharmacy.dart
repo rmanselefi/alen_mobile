@@ -103,7 +103,7 @@ class PharmacyProvider with ChangeNotifier {
     var curr;
     try {
       var docs=
-      await fire.collection('importer_drug').where('trending', isEqualTo: true).get();
+      await fire.collection('selected_importer_drugs').where('trending', isEqualTo: true).get();
       if (docs.docs.isNotEmpty) {
         var data2 = docs.docs.toList();
         // var data = docs.docs.first.data();
@@ -115,37 +115,21 @@ class PharmacyProvider with ChangeNotifier {
           bool trending = await servicesList[i]['trending'];
           String importer = await servicesList[i]['importer_id'];
           ImportersPharmacies impoters = await getImporterById(importer);
-          var document = await fire
-              .collection('all_drugs').doc(servicesData).get();
-              // .where('id', isEqualTo: servicesData)
-              // .get();
-          var serviceType = document.data();
-
-          print("Service type:"+serviceType.toString());
-            final Drugs drug = Drugs(
-                type: Type.Importer,
-                id: serviceType['id'],
-                name: serviceType['name'],
-                quantity: quantity,
-                itemId: servicesData,
-                dosage: serviceType['dosage'],
-                madein: serviceType['madein'],
-                root: serviceType['root'],
-                image: serviceType.containsKey('image')
-                    ? serviceType['image']
-                    : '',
-                category: serviceType.containsKey('category')
-                    ? serviceType['category']['name']
-                    : '',
-                description: serviceType.containsKey('category')
-                    ? serviceType['category']['name']
-                    : '',
-                category_image: serviceType.containsKey('category')
-                    ? serviceType['category']['image']
-                    : '',
-                price: price ?? "0",
-                pharmacies: impoters,
-                trending: trending);
+          final Drugs drug = Drugs(
+              itemId: servicesList[i].id,
+              id: servicesList[i]['drug_id'],
+              name: servicesList[i]['drug_name'],
+              quantity: quantity,
+              dosage: servicesList[i]['dosage'],
+              madein: servicesList[i]['madein'],
+              root: servicesList[i]['root'],
+              image: servicesList[i]['image']??"",
+              category: servicesList[i]['CategoryName']??"",
+              category_image: servicesList[i]['CategoryImage']??"",
+              category_id: servicesList[i]['CategoryId']??"",
+              price: price ?? "0",
+              pharmacies: impoters,
+              trending: trending);
           int temp = 0;
           if(trendingDrugs.length==0){
             trendingDrugs.add(drug);
@@ -164,7 +148,7 @@ class PharmacyProvider with ChangeNotifier {
       }
 
       docs =
-      await fire.collection('pharmacy_drug').where('trending', isEqualTo: true).get();
+      await fire.collection('selected_pharmacy_drugs').where('trending', isEqualTo: true).get();
       if (docs.docs.isNotEmpty) {
         var data2 = docs.docs.toList();
         // var data = docs.docs.first.data();
@@ -177,34 +161,18 @@ class PharmacyProvider with ChangeNotifier {
           bool trending = await servicesList[i]['trending'];
           String pharmacy = await servicesList[i]['pharmacy_id'];
           ImportersPharmacies phar = await getPharmacyById(pharmacy);
-          var document = await fire
-              .collection('all_drugs').doc(servicesData).get();
-              // .where('id', isEqualTo: servicesData)
-              // .get();
-          var serviceType = document.data();
-
-          print("Service type:"+serviceType.toString());
           final Drugs drug = Drugs(
-              type: Type.Pharmacy,
-              id: serviceType['id'],
-              itemId: servicesData,
-              name: serviceType['name'],
+              itemId: servicesList[i].id,
+              id: servicesList[i]['drug_id'],
+              name: servicesList[i]['drug_name'],
               quantity: quantity,
-              dosage: serviceType['dosage'],
-              madein: serviceType['madein'],
-              root: serviceType['root'],
-              image: serviceType.containsKey('image')
-                  ? serviceType['image']
-                  : '',
-              category: serviceType.containsKey('category')
-                  ? serviceType['category']['name']
-                  : '',
-              category_image: serviceType.containsKey('category')
-                  ? serviceType['category']['image']
-                  : '',
-              description: serviceType.containsKey('category')
-                  ? serviceType['category']['name']
-                  : '',
+              dosage: servicesList[i]['dosage'],
+              madein: servicesList[i]['madein'],
+              root: servicesList[i]['root'],
+              image: servicesList[i]['image']??"",
+              category: servicesList[i]['CategoryName']??"",
+              category_image: servicesList[i]['CategoryImage']??"",
+              category_id: servicesList[i]['CategoryId']??"",
               price: price ?? "0",
               pharmacies: phar,
               trending: trending);
