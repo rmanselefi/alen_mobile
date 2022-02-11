@@ -2051,28 +2051,6 @@ class _HomePageState extends State<HomePage> {
                                           ],
                                         ),
                                         Container(
-                                            margin: EdgeInsets.fromLTRB(
-                                                MediaQuery.of(context).size.width * 0.05,
-                                                0,
-                                                MediaQuery.of(context).size.width * 0.05,
-                                                0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  languageData[languageProvider.langOPT]
-                                                  ['Trending'] ??
-                                                      "Trending",
-                                                  textAlign: TextAlign.left,
-                                                  textScaleFactor: 2,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: const TextStyle(
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                              ],
-                                            )),
-                                        Container(
                                           // height: 180.0,
                                             child: FutureBuilder<List<Drugs>>(
                                                 future:
@@ -2090,36 +2068,70 @@ class _HomePageState extends State<HomePage> {
                                                             child:
                                                             CircularProgressIndicator()));
                                                   } else {
-                                                    return Padding(
-                                                      padding: const EdgeInsets.symmetric(
-                                                          horizontal: 10),
-                                                      child: GridView.builder(
-                                                        gridDelegate:
-                                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                                          // maxCrossAxisExtent: 160,
-                                                            crossAxisCount: 3,
-                                                            childAspectRatio: (MediaQuery
-                                                                .of(context)
-                                                                .orientation ==
-                                                                Orientation
-                                                                    .portrait)
-                                                                ? 2 / 3
-                                                                : 2 / 2.2,
-                                                            crossAxisSpacing: 10,
-                                                            mainAxisSpacing: 10),
-                                                        shrinkWrap: true,
-                                                        physics:
-                                                        NeverScrollableScrollPhysics(),
-                                                        scrollDirection: Axis.vertical,
-                                                        itemBuilder:
-                                                            (BuildContext ctxt, int index) {
-                                                          return _buildTrendingsListItem(
-                                                              snapshot.data[index], ctxt);
-                                                        },
-                                                        itemCount: snapshot.data.length,
-                                                      ),
-                                                    );
+                                                    if(snapshot.data.isEmpty){
+                                                      return Container(
+                                                        height: 5,
+                                                      );
+                                                    }
+                                                    else{
+                                                      return Column(
+                                                        children: [
+                                                          Container(
+                                                              margin: EdgeInsets.fromLTRB(
+                                                                  MediaQuery.of(context).size.width * 0.05,
+                                                                  0,
+                                                                  MediaQuery.of(context).size.width * 0.05,
+                                                                  0),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  Text(
+                                                                    languageData[languageProvider.langOPT]
+                                                                    ['Trending'] ??
+                                                                        "Trending",
+                                                                    textAlign: TextAlign.left,
+                                                                    textScaleFactor: 2,
+                                                                    overflow: TextOverflow.ellipsis,
+                                                                    style: const TextStyle(
+                                                                        fontWeight: FontWeight.bold),
+                                                                  ),
+                                                                ],
+                                                              )),
+                                                          Padding(
+                                                            padding: const EdgeInsets.symmetric(
+                                                                horizontal: 10),
+                                                            child: GridView.builder(
+                                                              gridDelegate:
+                                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                                                // maxCrossAxisExtent: 160,
+                                                                  crossAxisCount: 3,
+                                                                  childAspectRatio: (MediaQuery
+                                                                      .of(context)
+                                                                      .orientation ==
+                                                                      Orientation
+                                                                          .portrait)
+                                                                      ? 2 / 3
+                                                                      : 2 / 2.2,
+                                                                  crossAxisSpacing: 10,
+                                                                  mainAxisSpacing: 10),
+                                                              shrinkWrap: true,
+                                                              physics:
+                                                              NeverScrollableScrollPhysics(),
+                                                              scrollDirection: Axis.vertical,
+                                                              itemBuilder:
+                                                                  (BuildContext ctxt, int index) {
+                                                                return _buildTrendingsListItem(
+                                                                    snapshot.data[index], ctxt);
+                                                              },
+                                                              itemCount: snapshot.data.length,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    }
                                                   }
+
                                                 })),
                                         Container(
                                             margin: EdgeInsets.fromLTRB(
