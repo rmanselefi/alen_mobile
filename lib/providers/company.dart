@@ -96,6 +96,7 @@ class CompanyProvider with ChangeNotifier {
             final Company hos = Company(
               type: Type.Company,
               Id: docs.docs[i].id,
+              searchType: SearchType.ServiceProvider,
               name: data['name'],
               price: data['price'],
               image: data['image'],
@@ -110,7 +111,21 @@ class CompanyProvider with ChangeNotifier {
               description: data['description'],
               dname: data['dname'],
             );
-            diagnosises.add(hos);
+            hos.hospitalsLabsDiagnostics= hos;
+            int temp = 0;
+            if(diagnosises.length==0){
+              diagnosises.add(hos);
+            }else{
+              diagnosises.forEach((element) {
+                if(hos.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                diagnosises.add(hos);
+              }
+            }
           }
         }
         if (nearHospital.length == 0) {
@@ -136,6 +151,40 @@ class CompanyProvider with ChangeNotifier {
       nearby=nearHospital;
       nearby.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
       return nearHospital;
+    } catch (error) {
+      isLoading = false;
+      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      return null;
+    }
+  }
+
+
+  Future<Company> getCompanyById(String Id) async {
+    isLoading = true;
+    var curr;
+    try {
+      var docs =
+      await FirebaseFirestore.instance.collection('diagnostics').doc(Id).get();
+      if (docs.exists) {
+        var data = docs.data();
+        final Company diagnostics = Company(
+          type: Type.Company,
+          name: data['name'],
+          price: data['price'],
+          image: data['image'],
+          images: data['images'],
+          latitude: data['location'].latitude,
+          longitude: data['location'].longitude,
+          procedureTime: data['procedure_time'],
+          officehours: data['officehours'],
+          phone: data['phone'],
+          locationName: data['location_name'],
+          email: data['email'],
+          description: data['description'],
+          dname: data['dname'],
+        );
+        return diagnostics;
+      }
     } catch (error) {
       isLoading = false;
       print("mjkhjjhbjhvjhvhjvjhgv $error");

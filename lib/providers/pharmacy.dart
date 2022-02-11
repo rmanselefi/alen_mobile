@@ -1,6 +1,7 @@
 import 'package:alen/models/importer.dart';
 import 'package:alen/models/pharmacy.dart';
 import 'package:alen/models/drugs.dart';
+import 'package:alen/providers/hospital.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -27,7 +28,7 @@ class PharmacyProvider with ChangeNotifier {
   static List<Pharmacies> trending=[];
   static List<Drugs> trendingDRGS=[];
 
-  Future<List<Pharmacies>> fetchNearByHospitals(UserLocation location) async {
+  Future<List<Pharmacies>> fetchNearByPharmacies(UserLocation location) async {
     isLoading = true;
     hospitals.clear();
     nearHospital.clear();
@@ -50,8 +51,10 @@ class PharmacyProvider with ChangeNotifier {
                 images: data['images'],
                 locationName: data['location_name'],
                 isPharma: true,
+                searchType: SearchType.ServiceProvider,
                 description: data['description']);
             int temp = 0;
+            hos.hospitalsLabsDiagnostics= hos;
             if(hospitals.length==0){
               hospitals.add(hos);
             }else{

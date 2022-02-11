@@ -104,6 +104,7 @@ class _CatalogueSubDetailState extends State<CatalogueSubDetail> {
                                       widget.name??"Name",
                                       textAlign: TextAlign.left,
                                       textScaleFactor: 2,
+                                      maxLines: 3,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(fontWeight: FontWeight.bold),
                                     )

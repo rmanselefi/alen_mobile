@@ -1,5 +1,6 @@
 import 'package:alen/models/hospital.dart';
 import 'package:alen/models/user_location.dart';
+import 'package:alen/providers/drug.dart';
 import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/language.dart';
 import 'package:alen/ui/Details/HospitalDetail.dart';
@@ -123,6 +124,7 @@ class _HospitalPageState extends State<HospitalsPage> {
   Widget build(BuildContext context) {
     // final PageController controller = PageController(initialPage: 0);
     var hosProvider = Provider.of<HospitalProvider>(context, listen: false);
+    hosProvider.getAllSelectedHospServiceTypes();
     return FutureBuilder<dynamic>(
         future: SharedPreferences.getInstance(),
         builder: (context, snapshot) {
@@ -163,6 +165,7 @@ class _HospitalPageState extends State<HospitalsPage> {
                                 onTap: () {
                                   List<HospitalsLabsDiagnostics> hld = [];
                                   hld += HospitalProvider.nearby;
+                                  hld += HospitalProvider.allHospitalSelectedServiceTypes;
                                   showSearch<HospitalsLabsDiagnostics>(
                                       context: context,
                                       delegate: TrendingSearch(trendings: hld, searchFor: "Search Health Facilities"));

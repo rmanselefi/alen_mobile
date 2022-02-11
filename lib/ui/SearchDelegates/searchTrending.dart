@@ -1,5 +1,6 @@
 import 'package:alen/models/drugs.dart';
 import 'package:alen/models/hospital.dart';
+import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/pharmacy.dart';
 import 'package:alen/ui/Details/CompanyDetail.dart';
 import 'package:alen/ui/Details/DiagnosticDetail.dart';
@@ -89,6 +90,7 @@ class TrendingSearch extends SearchDelegate<HospitalsLabsDiagnostics> {
             ListTile(
                 onTap: () {
                   result = suggestions.elementAt(index);
+                  result.searchType==SearchType.ServiceProvider?
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -202,10 +204,122 @@ class TrendingSearch extends SearchDelegate<HospitalsLabsDiagnostics> {
                             longtude: result.longitude.toString(),
                             officeHours: result.officehours,
                           )
+                      )):
+
+
+                  result.searchType==SearchType.Service?
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                          (result.type==Type.Hospital)
+                              ?
+                          HospitalDetail(
+                            title: result.hospitalsLabsDiagnostics.name,
+                            phone: result.hospitalsLabsDiagnostics.phone,
+                            image: result.hospitalsLabsDiagnostics.image,
+                            name: result.hospitalsLabsDiagnostics.name,
+                            images: result.hospitalsLabsDiagnostics.images,
+                            email: result.hospitalsLabsDiagnostics.email,
+                            locationName: result.hospitalsLabsDiagnostics.locationName,
+                            hospitalId: result.hospitalsLabsDiagnostics.Id,
+                            description: result.hospitalsLabsDiagnostics.description,
+                            latitude: result.hospitalsLabsDiagnostics.latitude.toString(),
+                            longtude: result.hospitalsLabsDiagnostics.longitude.toString(),
+                            officeHours: result.hospitalsLabsDiagnostics.officehours,
+                          )
+                              :(result.type==Type.Lab)
+                              ?
+                          LabDetail(
+                            title: result.hospitalsLabsDiagnostics.name,
+                            phone: result.hospitalsLabsDiagnostics.phone,
+                            image: result.hospitalsLabsDiagnostics.image,
+                            name: result.hospitalsLabsDiagnostics.name,
+                            images: result.hospitalsLabsDiagnostics.images,
+                            email: result.hospitalsLabsDiagnostics.email,
+                            locationName: result.hospitalsLabsDiagnostics.locationName,
+                            hospitalId: result.hospitalsLabsDiagnostics.Id,
+                            description: result.hospitalsLabsDiagnostics.description,
+                            latitude: result.hospitalsLabsDiagnostics.latitude.toString(),
+                            longtude: result.hospitalsLabsDiagnostics.longitude.toString(),
+                            officeHours: result.hospitalsLabsDiagnostics.officehours,
+                          )
+                              :(result.type==Type.Diagnosis)
+                              ?
+                          DiagnosticDetail(
+                            title: result.hospitalsLabsDiagnostics.name,
+                            phone: result.hospitalsLabsDiagnostics.phone,
+                            image: result.hospitalsLabsDiagnostics.image,
+                            name: result.hospitalsLabsDiagnostics.name,
+                            images: result.hospitalsLabsDiagnostics.images,
+                            email: result.hospitalsLabsDiagnostics.email,
+                            locationName: result.hospitalsLabsDiagnostics.locationName,
+                            hospitalId: result.hospitalsLabsDiagnostics.Id,
+                            description: result.hospitalsLabsDiagnostics.description,
+                            latitude: result.hospitalsLabsDiagnostics.latitude.toString(),
+                            longtude: result.hospitalsLabsDiagnostics.longitude.toString(),
+                            officeHours: result.hospitalsLabsDiagnostics.officehours,
+                          )
+                              :CompanyDetail(
+                            title: result.hospitalsLabsDiagnostics.name,
+                            phone: result.hospitalsLabsDiagnostics.phone,
+                            image: result.hospitalsLabsDiagnostics.image,
+                            name: result.hospitalsLabsDiagnostics.name,
+                            images: result.hospitalsLabsDiagnostics.images,
+                            email: result.hospitalsLabsDiagnostics.email,
+                            locationName: result.hospitalsLabsDiagnostics.locationName,
+                            hospitalId: result.hospitalsLabsDiagnostics.Id,
+                            description: result.hospitalsLabsDiagnostics.description,
+                            latitude: result.hospitalsLabsDiagnostics.latitude.toString(),
+                            longtude: result.hospitalsLabsDiagnostics.longitude.toString(),
+                            officeHours: result.hospitalsLabsDiagnostics.officehours,
+                          )
+                      )):
+
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              (result.type==Type.Pharmacy)
+                              ?
+                          PharamacyDetail(
+                            title: result.hospitalsLabsDiagnostics.name,
+                            phone: result.hospitalsLabsDiagnostics.phone,
+                            imagesList: result.hospitalsLabsDiagnostics.image,
+                            name: result.hospitalsLabsDiagnostics.name,
+                            images: result.hospitalsLabsDiagnostics.images,
+                            email: result.hospitalsLabsDiagnostics.email,
+                            id: result.hospitalsLabsDiagnostics.Id,
+                            locationName: result.hospitalsLabsDiagnostics.locationName,
+                            description: result.hospitalsLabsDiagnostics.description,
+                            latitude: result.hospitalsLabsDiagnostics.latitude.toString(),
+                            longtude: result.hospitalsLabsDiagnostics.longitude.toString(),
+                            officeHours: result.hospitalsLabsDiagnostics.officehours,
+                          )
+                              :
+                          ImporterDetail(
+                            title: result.hospitalsLabsDiagnostics.name,
+                            phone: result.hospitalsLabsDiagnostics.phone,
+                            imagesList: result.hospitalsLabsDiagnostics.image,
+                            name: result.hospitalsLabsDiagnostics.name,
+                            images: result.hospitalsLabsDiagnostics.images,
+                            email: result.hospitalsLabsDiagnostics.email,
+                            id: result.hospitalsLabsDiagnostics.Id,
+                            locationName: result.hospitalsLabsDiagnostics.locationName,
+                            description: result.hospitalsLabsDiagnostics.description,
+                            latitude: result.hospitalsLabsDiagnostics.latitude.toString(),
+                            longtude: result.hospitalsLabsDiagnostics.longitude.toString(),
+                            officeHours: result.hospitalsLabsDiagnostics.officehours,
+                          )
                       ));
                 },
                 title: Text(suggestions.elementAt(index).name),
                 subtitle: Text(
+                  (suggestions.elementAt(index).searchType==SearchType.Drug
+                      || suggestions.elementAt(index).searchType==SearchType.Service)?
+                  suggestions.elementAt(index).hospitalsLabsDiagnostics.name??""
+                      :
                   (suggestions.elementAt(index).description!=null)?
                   suggestions.elementAt(index).description:
                   "",
@@ -235,6 +349,7 @@ class TrendingSearch extends SearchDelegate<HospitalsLabsDiagnostics> {
             ListTile(
                 onTap: () {
                   result = suggestions.elementAt(index);
+                  result.searchType==SearchType.ServiceProvider?
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -348,10 +463,122 @@ class TrendingSearch extends SearchDelegate<HospitalsLabsDiagnostics> {
                             longtude: result.longitude.toString(),
                             officeHours: result.officehours,
                           )
+                      )):
+
+
+                  result.searchType==SearchType.Service?
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                          (result.type==Type.Hospital)
+                              ?
+                          HospitalDetail(
+                            title: result.hospitalsLabsDiagnostics.name,
+                            phone: result.hospitalsLabsDiagnostics.phone,
+                            image: result.hospitalsLabsDiagnostics.image,
+                            name: result.hospitalsLabsDiagnostics.name,
+                            images: result.hospitalsLabsDiagnostics.images,
+                            email: result.hospitalsLabsDiagnostics.email,
+                            locationName: result.hospitalsLabsDiagnostics.locationName,
+                            hospitalId: result.hospitalsLabsDiagnostics.Id,
+                            description: result.hospitalsLabsDiagnostics.description,
+                            latitude: result.hospitalsLabsDiagnostics.latitude.toString(),
+                            longtude: result.hospitalsLabsDiagnostics.longitude.toString(),
+                            officeHours: result.hospitalsLabsDiagnostics.officehours,
+                          )
+                              :(result.type==Type.Lab)
+                              ?
+                          LabDetail(
+                            title: result.hospitalsLabsDiagnostics.name,
+                            phone: result.hospitalsLabsDiagnostics.phone,
+                            image: result.hospitalsLabsDiagnostics.image,
+                            name: result.hospitalsLabsDiagnostics.name,
+                            images: result.hospitalsLabsDiagnostics.images,
+                            email: result.hospitalsLabsDiagnostics.email,
+                            locationName: result.hospitalsLabsDiagnostics.locationName,
+                            hospitalId: result.hospitalsLabsDiagnostics.Id,
+                            description: result.hospitalsLabsDiagnostics.description,
+                            latitude: result.hospitalsLabsDiagnostics.latitude.toString(),
+                            longtude: result.hospitalsLabsDiagnostics.longitude.toString(),
+                            officeHours: result.hospitalsLabsDiagnostics.officehours,
+                          )
+                              :(result.type==Type.Diagnosis)
+                              ?
+                          DiagnosticDetail(
+                            title: result.hospitalsLabsDiagnostics.name,
+                            phone: result.hospitalsLabsDiagnostics.phone,
+                            image: result.hospitalsLabsDiagnostics.image,
+                            name: result.hospitalsLabsDiagnostics.name,
+                            images: result.hospitalsLabsDiagnostics.images,
+                            email: result.hospitalsLabsDiagnostics.email,
+                            locationName: result.hospitalsLabsDiagnostics.locationName,
+                            hospitalId: result.hospitalsLabsDiagnostics.Id,
+                            description: result.hospitalsLabsDiagnostics.description,
+                            latitude: result.hospitalsLabsDiagnostics.latitude.toString(),
+                            longtude: result.hospitalsLabsDiagnostics.longitude.toString(),
+                            officeHours: result.hospitalsLabsDiagnostics.officehours,
+                          )
+                              :CompanyDetail(
+                            title: result.hospitalsLabsDiagnostics.name,
+                            phone: result.hospitalsLabsDiagnostics.phone,
+                            image: result.hospitalsLabsDiagnostics.image,
+                            name: result.hospitalsLabsDiagnostics.name,
+                            images: result.hospitalsLabsDiagnostics.images,
+                            email: result.hospitalsLabsDiagnostics.email,
+                            locationName: result.hospitalsLabsDiagnostics.locationName,
+                            hospitalId: result.hospitalsLabsDiagnostics.Id,
+                            description: result.hospitalsLabsDiagnostics.description,
+                            latitude: result.hospitalsLabsDiagnostics.latitude.toString(),
+                            longtude: result.hospitalsLabsDiagnostics.longitude.toString(),
+                            officeHours: result.hospitalsLabsDiagnostics.officehours,
+                          )
+                      )):
+
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                          (result.type==Type.Pharmacy)
+                              ?
+                          PharamacyDetail(
+                            title: result.hospitalsLabsDiagnostics.name,
+                            phone: result.hospitalsLabsDiagnostics.phone,
+                            imagesList: result.hospitalsLabsDiagnostics.image,
+                            name: result.hospitalsLabsDiagnostics.name,
+                            images: result.hospitalsLabsDiagnostics.images,
+                            email: result.hospitalsLabsDiagnostics.email,
+                            id: result.hospitalsLabsDiagnostics.Id,
+                            locationName: result.hospitalsLabsDiagnostics.locationName,
+                            description: result.hospitalsLabsDiagnostics.description,
+                            latitude: result.hospitalsLabsDiagnostics.latitude.toString(),
+                            longtude: result.hospitalsLabsDiagnostics.longitude.toString(),
+                            officeHours: result.hospitalsLabsDiagnostics.officehours,
+                          )
+                              :
+                          ImporterDetail(
+                            title: result.hospitalsLabsDiagnostics.name,
+                            phone: result.hospitalsLabsDiagnostics.phone,
+                            imagesList: result.hospitalsLabsDiagnostics.image,
+                            name: result.hospitalsLabsDiagnostics.name,
+                            images: result.hospitalsLabsDiagnostics.images,
+                            email: result.hospitalsLabsDiagnostics.email,
+                            id: result.hospitalsLabsDiagnostics.Id,
+                            locationName: result.hospitalsLabsDiagnostics.locationName,
+                            description: result.hospitalsLabsDiagnostics.description,
+                            latitude: result.hospitalsLabsDiagnostics.latitude.toString(),
+                            longtude: result.hospitalsLabsDiagnostics.longitude.toString(),
+                            officeHours: result.hospitalsLabsDiagnostics.officehours,
+                          )
                       ));
                 },
                 title: Text(suggestions.elementAt(index).name),
                 subtitle: Text(
+                  (suggestions.elementAt(index).searchType==SearchType.Drug
+                      || suggestions.elementAt(index).searchType==SearchType.Service)?
+                  suggestions.elementAt(index).hospitalsLabsDiagnostics.name??""
+                      :
                   (suggestions.elementAt(index).description!=null)?
                   suggestions.elementAt(index).description:
                   "",

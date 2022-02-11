@@ -1,6 +1,7 @@
 import 'package:alen/models/hospital.dart';
 import 'package:alen/models/importer.dart';
 import 'package:alen/models/user_location.dart';
+import 'package:alen/providers/drug.dart';
 import 'package:alen/providers/importer.dart';
 import 'package:alen/providers/language.dart';
 import 'package:alen/ui/Cart/ImportCart.dart';
@@ -47,6 +48,8 @@ class ImportersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var importerProvider =
     Provider.of<ImporterProvider>(context, listen: false);
+    Provider.of<DrugProvider>(context, listen: false)
+        .getAllImporterSelectedDrugs();
     return FutureBuilder<dynamic>(
         future: SharedPreferences.getInstance(),
         builder: (context, snapshot) {
@@ -104,6 +107,7 @@ class ImportersPage extends StatelessWidget {
                                 onTap: () {
                                   List<HospitalsLabsDiagnostics> hld = [];
                                   hld += ImporterProvider.nearby;
+                                  hld += DrugProvider.allImporterSelectedDrugs;
                                   showSearch<HospitalsLabsDiagnostics>(
                                       context: context,
                                       delegate: TrendingSearch(trendings: hld, searchFor: "Search Importers"));

@@ -43,10 +43,12 @@ class EmergencyMSProvider with ChangeNotifier {
               officehours: data['officehours'],
               phone: data['phone'],
               email: data['email'],
+              searchType: SearchType.ServiceProvider,
               description: data['description'],
               dname: data['dname'],
             );
             int temp = 0;
+            hos.hospitalsLabsDiagnostics= hos;
             if(emergencyMSes.length==0){
               emergencyMSes.add(hos);
             }else{

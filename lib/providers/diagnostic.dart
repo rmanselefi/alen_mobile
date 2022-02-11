@@ -83,6 +83,7 @@ class DiagnosticProvider with ChangeNotifier {
                 name: data['name'],
                 price: data['price'],
                 image: data['image'],
+              searchType: SearchType.ServiceProvider,
               locationName: data['location_name'],
                 images: data['images'],
                 latitude: data['location'].latitude,
@@ -95,6 +96,7 @@ class DiagnosticProvider with ChangeNotifier {
                 dname: data['dname'],
             );
             int temp = 0;
+            hos.hospitalsLabsDiagnostics= hos;
             if(diagnosises.length==0){
               diagnosises.add(hos);
             }else{
@@ -400,4 +402,115 @@ class DiagnosticProvider with ChangeNotifier {
       return null;
     }
   }
+
+
+  Future<Diagnostics> getDiagnosticById(String Id) async {
+    isLoading = true;
+    var curr;
+    try {
+      var docs =
+      await FirebaseFirestore.instance.collection('diagnostics').doc(Id).get();
+      if (docs.exists) {
+        var data = docs.data();
+        final Diagnostics diagnostics = Diagnostics(
+            Id: docs.id,
+            name: data['name'],
+            phone: data['phone'],
+            image: data['image'],
+            locationName: data['location_name'],
+            latitude: data['location'].latitude,
+            longitude: data['location'].longitude,
+            officehours: data['whours'],
+            email: data['email'],
+            images: data['images'],
+            type: Type.Diagnosis,
+            description: data['description']);
+        return diagnostics;
+      }
+    } catch (error) {
+      isLoading = false;
+      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      return null;
+    }
+  }
+
+
+  static List<HLDServiceTypes> allDiagnosisSelectedServiceTypes = [];
+
+  Future<List<HLDServiceTypes>> getAllSelectedDiagnosticsServicesTypes() async {
+    isLoading = true;
+    labServiceTypes.clear();
+    try {
+      var docs =
+      await fire.collection('selected_imaging_services').where("imaging_id", isNull: false).get();
+      var servicesList =docs.docs.toList()?? [];
+      for (var i = 0; i < servicesList.length; i++) {
+        final HLDServiceTypes category = new HLDServiceTypes(
+          servicesList[i]['service_type_id']??"",
+          servicesList[i]['description']??"",
+          servicesList[i]['serviceName']??"",
+          servicesList[i]['serviceImage']??"",
+          servicesList[i]['price']??"",
+          servicesList[i]['additional_detail']??"",
+          servicesList[i]['service_id']??"",
+          serviceDetail: servicesList[i]['serviceDetail']??"",
+          serviceName: servicesList[i]['serviceName']??"",
+          serviceImage: servicesList[i]['serviceImage']??"",
+          selectedItemId: servicesList[i].id??"",
+          searchType: SearchType.Service,
+          hospitalsLabsDiagnostics: await getDiagnosticById(servicesList[i]['imaging_id'])
+        );
+          int temp = 0;
+          if(labServiceTypes.length==0){
+            labServiceTypes.add(category);
+          }else{
+            labServiceTypes.forEach((element) {
+              if(category.id==element.id)
+              {
+                temp++;
+              }
+            });
+            if(temp==0){
+              labServiceTypes.add(category);
+            }
+          }
+        labServiceTypes.forEach((element) {
+          print("Name : " +
+              element.name +
+              '\nImage : ' +
+              element.image +
+              "\nId : " +
+              element.id);
+        });
+      }
+      // labServiceTypes.toSet();
+      allDiagnosisSelectedServiceTypes = labServiceTypes;
+      return labServiceTypes;
+    } catch (error) {
+      isLoading = false;
+      print("Diagnostic all selected services error, . . . . . . :$error");
+      return labServiceTypes;
+    }
+  }
 }
+
+
+// factory User.fromDocument(DocumentSnapshot doc) {
+// return User(
+// id: doc.data()['id'],
+// email: doc.data()['email'],
+// username: doc.data()['username'],
+// photoUrl: doc.data()['photoUrl'],
+// displayName: doc.data()['displayName'],
+// bio: doc.data()['bio'],
+// fullNames: doc.data()['fullNames'],
+// practice: doc.data()['practice'],
+// speciality: doc.data()['speciality'],
+// phone: doc.data()['phone'],
+// mobile: doc.data()['mobile'],
+// emergency: doc.data()['emergency'],
+// address: doc.data()['address'],
+// city: doc.data()['city'],
+// location: doc.data()['location'],
+// );
+// }

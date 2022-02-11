@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../models/user_location.dart';
 import 'auth.dart';
+import 'hospital.dart';
 
 class ImporterProvider with ChangeNotifier {
   List<Importers> importers = [];
@@ -203,9 +204,11 @@ class ImporterProvider with ChangeNotifier {
                 email: data['email'],
                 images: data['images'],
                 isPharma: false,
+                searchType: SearchType.ServiceProvider,
                 officehours: data['officehours'],
                 description: data['description']);
             int temp = 0;
+            hos.hospitalsLabsDiagnostics= hos;
             if(hospitals.length==0){
               hospitals.add(hos);
             }else{

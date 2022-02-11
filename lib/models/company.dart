@@ -1,7 +1,9 @@
+import 'package:alen/providers/hospital.dart';
+
 import 'hospital.dart';
 import 'package:alen/providers/pharmacy.dart';
 
-class Company implements HospitalsLabsDiagnostics{
+class Company implements Search, HospitalsLabsDiagnostics{
 
   String dname;
   String price;
@@ -23,7 +25,9 @@ class Company implements HospitalsLabsDiagnostics{
         this.description,
         this.createdAt,
         this.images,this.phone,
-        this.email
+        this.email,
+        this.searchType,
+        this.hospitalsLabsDiagnostics
       });
 
   @override
@@ -79,6 +83,12 @@ class Company implements HospitalsLabsDiagnostics{
 
   @override
   String locationName;
+
+  @override
+  SearchType searchType;
+
+  @override
+  HospitalsLabsDiagnostics hospitalsLabsDiagnostics;
 }
 class Catalogue {
   String id;

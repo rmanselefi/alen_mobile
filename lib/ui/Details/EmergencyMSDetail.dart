@@ -165,12 +165,13 @@ class EmergencyMSDetail extends StatelessWidget {
                                 }),
                             Container(
                                 padding: EdgeInsets.only(top: 30, bottom: 10),
-                                width: MediaQuery.of(context).size.width,
+                                width: MediaQuery.of(context).size.width*0.8,
                                 child: Center(
                                     child: Text(
-                                      name??"Name",
-                                      textAlign: TextAlign.left,
+                                      name??"",
+                                      textAlign: TextAlign.center,
                                       textScaleFactor: 2,
+                                      maxLines: 3,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(fontWeight: FontWeight.bold),
                                     ))),

@@ -1,12 +1,17 @@
 import 'package:alen/models/drugs.dart';
+import 'package:alen/models/hospital.dart';
 import 'package:alen/models/importer.dart';
 import 'package:alen/models/newDrug.dart';
 import 'package:alen/models/pharmacy.dart';
+import 'package:alen/providers/hospital.dart';
+import 'package:alen/providers/pharmacy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class DrugProvider with ChangeNotifier {
   List<Drugs> drugs = [];
+  static List<Drugs> allPharmacySelectedDrugs = [];
+  static List<Drugs> allImporterSelectedDrugs = [];
   List<Category> categories = [];
   List<Category> categoriesList = [];
   bool isLoading = false;
@@ -288,6 +293,69 @@ class DrugProvider with ChangeNotifier {
     }
   }
 
+  Future<List<Drugs>> getAllPharmacySelectedDrugs() async {
+    FirebaseFirestore fire = FirebaseFirestore.instance;
+    isLoading = true;
+    drugs.clear();
+    var curr;
+    try {
+      var docs =
+      await fire.collection('selected_pharmacy_drugs').where("pharmacy_id", isNull: false).get();
+      if (docs.docs.isNotEmpty) {
+        var data2 = docs.docs.toList();
+        // var data = docs.docs.first.data();
+        var servicesList =docs.docs?? [];
+        for (var i = 0; i < servicesList.length; i++) {
+          String servicesData = await servicesList[i]['drug_id'];
+          String price = await servicesList[i]['price'];
+          String quantity = await servicesList[i]['quantity'];
+          bool trending = await servicesList[i]['trending'];
+          Pharmacies pharmacy = await getPharmacyById(await servicesList[i]['pharmacy_id'],);
+            final Drugs drug = Drugs(
+                itemId: servicesList[i].id,
+                id: servicesList[i]['drug_id'],
+                name: servicesList[i]['drug_name'],
+                quantity: quantity,
+                dosage: servicesList[i]['dosage'],
+                madein: servicesList[i]['madein'],
+                root: servicesList[i]['root'],
+                image: servicesList[i]['image']??"",
+                category: servicesList[i]['CategoryName']??"",
+                category_image: servicesList[i]['CategoryImage']??"",
+                category_id: servicesList[i]['CategoryId']??"",
+                price: price ?? "0",
+                searchType: SearchType.Drug,
+                hospitalsLabsDiagnostics: pharmacy,
+                pharmacies: pharmacy,
+                trending: trending);
+            int temp = 0;
+            if(drugs.length==0){
+              drugs.add(drug);
+            }else{
+              drugs.forEach((element) {
+                if(drug.id==element.id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                drugs.add(drug);
+              }
+            }
+          // return categoriesList;
+          print("Also here$i");
+        }
+        print("none here either");
+      }
+      allPharmacySelectedDrugs = drugs;
+      return drugs;
+    } catch (error) {
+      isLoading = false;
+      print("Problem . . . . . . :$error");
+      return drugs;
+    }
+  }
+
   Future<Pharmacies> getPharmacyById(String Id) async {
     isLoading = true;
     var curr;
@@ -306,6 +374,7 @@ class DrugProvider with ChangeNotifier {
             longitude: data['location'].longitude,
             officehours: data['officehours'],
             email: data['email'],
+            type: Type.Pharmacy,
             images: data['images'],
             isPharma: true,
             description: data['description']);
@@ -313,7 +382,7 @@ class DrugProvider with ChangeNotifier {
       }
     } catch (error) {
       isLoading = false;
-      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      print("Get Pharmacy By Id Problem on drug $error");
       return null;
     }
   }
@@ -338,6 +407,7 @@ class DrugProvider with ChangeNotifier {
             images: data['images'],
             officehours: data['officehours'],
             isPharma: false,
+            type: Type.Importer,
             description: data['description']);
         return hos;
       }
@@ -402,6 +472,69 @@ class DrugProvider with ChangeNotifier {
         }
         print("none here either");
       }
+      return drugs;
+    } catch (error) {
+      isLoading = false;
+      print("Problem . . . . . . :$error");
+      return drugs;
+    }
+  }
+
+  Future<List<Drugs>> getAllImporterSelectedDrugs() async {
+    FirebaseFirestore fire = FirebaseFirestore.instance;
+    isLoading = true;
+    drugs.clear();
+    var curr;
+    try {
+      var docs =
+      await fire.collection('selected_importer_drugs').where("importer_id", isNull: false).get();
+      if (docs.docs.isNotEmpty) {
+        var data2 = docs.docs.toList();
+        // var data = docs.docs.first.data();
+        var servicesList =docs.docs?? [];
+        for (var i = 0; i < servicesList.length; i++) {
+          String servicesData = await servicesList[i]['drug_id'];
+          String price = await servicesList[i]['price'];
+          String quantity = await servicesList[i]['quantity'];
+          bool trending = await servicesList[i]['trending'];
+          Importers importer =  await getImporterById(servicesList[i]['importer_id'],);
+            final Drugs drug = Drugs(
+                itemId: servicesList[i].id,
+                id: servicesList[i]['drug_id'],
+                name: servicesList[i]['drug_name'],
+                quantity: quantity,
+                dosage: servicesList[i]['dosage'],
+                madein: servicesList[i]['madein'],
+                root: servicesList[i]['root'],
+                image: servicesList[i]['image']??"",
+                category: servicesList[i]['CategoryName']??"",
+                category_image: servicesList[i]['CategoryImage']??"",
+                category_id: servicesList[i]['CategoryId']??"",
+                price: price ?? "0",
+                searchType: SearchType.Drug,
+                pharmacies:importer,
+                hospitalsLabsDiagnostics: importer,
+                trending: trending);
+            int temp = 0;
+            if(drugs.length==0){
+              drugs.add(drug);
+            }else{
+              drugs.forEach((element) {
+                if(drug.id==element.id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                drugs.add(drug);
+              }
+            }
+          // return categoriesList;
+          print("Also here$i");
+        }
+        print("none here either");
+      }
+      allImporterSelectedDrugs = drugs;
       return drugs;
     } catch (error) {
       isLoading = false;

@@ -1,8 +1,10 @@
 import 'package:alen/models/hospital.dart';
 import 'package:alen/models/pharmacy.dart';
+import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/pharmacy.dart';
+import 'package:alen/ui/Parents/Interfaces.dart';
 
-class Drugs implements HospitalsLabsDiagnostics {
+class Drugs implements Search, HospitalsLabsDiagnostics {
   String id;
   String itemId;
   String name;
@@ -35,7 +37,12 @@ class Drugs implements HospitalsLabsDiagnostics {
         this.locationName,
         this.category,
         this.category_id,
-        this.category_image, this.price});
+        this.category_image,
+        this.price,
+        this.searchType,
+        this.hospitalsLabsDiagnostics
+      });
+
 
   @override
   String Id;
@@ -78,6 +85,12 @@ class Drugs implements HospitalsLabsDiagnostics {
 
   @override
   String locationName;
+
+  @override
+  SearchType searchType;
+
+  @override
+  HospitalsLabsDiagnostics hospitalsLabsDiagnostics;
 }
 
 abstract class everything{

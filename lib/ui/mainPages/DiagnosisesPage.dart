@@ -60,6 +60,7 @@ class _HospitalPageState extends State<DiagnosisesPage> {
   Widget build(BuildContext context) {
     // final PageController controller = PageController(initialPage: 0);
     var diagnosticsProvider = Provider.of<DiagnosticProvider>(context, listen: false);
+    diagnosticsProvider.getAllSelectedDiagnosticsServicesTypes();
     return FutureBuilder<dynamic>(
         future: SharedPreferences.getInstance(),
         builder: (context, snapshot) {
@@ -100,6 +101,7 @@ class _HospitalPageState extends State<DiagnosisesPage> {
                                 onTap: () {
                                   List<HospitalsLabsDiagnostics> hld = [];
                                   hld += DiagnosticProvider.nearby;
+                                  hld += DiagnosticProvider.allDiagnosisSelectedServiceTypes;
                                   showSearch<HospitalsLabsDiagnostics>(
                                       context: context,
                                       delegate: TrendingSearch(trendings: hld, searchFor: "Search Imaging"));

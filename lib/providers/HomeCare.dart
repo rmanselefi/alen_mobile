@@ -97,6 +97,7 @@ class HomeCareProvider with ChangeNotifier {
               type: Type.HomeCare,
               Id: docs.docs[i].id,
               name: data['name'],
+              searchType: SearchType.ServiceProvider,
               price: data['price'],
               image: data['image'],
               images: data['images'],
@@ -110,6 +111,7 @@ class HomeCareProvider with ChangeNotifier {
               description: data['description'],
               dname: data['dname'],
             );
+            hos.hospitalsLabsDiagnostics= hos;
             int temp = 0;
             if(diagnosises.length==0){
               diagnosises.add(hos);

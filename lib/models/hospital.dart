@@ -1,7 +1,8 @@
+import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/pharmacy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Hospitals implements HospitalsLabsDiagnostics{
+class Hospitals implements Search, HospitalsLabsDiagnostics{
 
   List<Hospitals> dataListFromSnapshot(QuerySnapshot querySnapshot) {
     return querySnapshot.docs.map((snapshot) {
@@ -38,6 +39,8 @@ class Hospitals implements HospitalsLabsDiagnostics{
         this.longitude,
         this.distance,
         this.image,
+        this.searchType,
+        this.hospitalsLabsDiagnostics,
         this.services,this.trending,this.officehours, this.email, this.images,this.creditedDate,this.shopCredit});
 
   @override
@@ -93,9 +96,16 @@ class Hospitals implements HospitalsLabsDiagnostics{
 
   @override
   String locationName;
+
+  @override
+  SearchType searchType;
+
+  @override
+  HospitalsLabsDiagnostics hospitalsLabsDiagnostics;
+
 }
 
-abstract class HospitalsLabsDiagnostics{
+abstract class HospitalsLabsDiagnostics implements Search{
   String email;
   String Id;
   String name;
@@ -133,5 +143,5 @@ abstract class HospitalsLabsDiagnostics{
       this.images,
       this.creditedDate,
       this.type,
-      this.shopCredit);
+      this.shopCredit,);
 }

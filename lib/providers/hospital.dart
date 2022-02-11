@@ -1,4 +1,5 @@
 import 'package:alen/models/hospital.dart';
+import 'package:alen/providers/drug.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -13,6 +14,7 @@ class HospitalProvider with ChangeNotifier {
   UserLocation currentLocation;
   List<HLDServices> hospServices = [];
   List<HLDServiceTypes> hospServicestypes = [];
+  static List<HLDServiceTypes> allHospitalSelectedServiceTypes = [];
   FirebaseFirestore fire = FirebaseFirestore.instance;
 
   Future<List<HLDServiceTypes>> getHospServiceTypesByHospitalId(String Id, String hospitalId) async {
@@ -81,6 +83,75 @@ class HospitalProvider with ChangeNotifier {
       return null;
     }
   }
+
+  Future<List<HLDServiceTypes>> getAllSelectedHospServiceTypes() async {
+    isLoading = true;
+    hospServicestypes.clear();
+    var curr;
+    try {
+      var docs =
+      await fire.collection('seleted_hospital_services').where("hospital_id", isNull: false).get();
+      // if (docs.docs.isNotEmpty) {
+      var data2 = docs.docs.toList();
+      // var data = docs.docs.first.data();
+      var servicesList =docs.docs?? [];
+      for (var i = 0; i < servicesList.length; i++) {
+        String servicesData = await servicesList[i]['service_id'];
+        print("ServiceTypeId:$servicesData");
+        // var document = await FirebaseFirestore.instance
+        //     .collection('laboratory_services').doc(servicesData).get();
+        //     // .where('id', isEqualTo: servicesData)
+        // .get();
+        // var serviceType = document.data();
+        print("ServiceType:${servicesList[i]}");
+        final HLDServiceTypes category = new HLDServiceTypes(
+          servicesList[i]['service_type_id'],
+          servicesList[i]['description'],
+          servicesList[i]['service_name'],
+          servicesList[i]['image'],
+          servicesList[i]['price'],
+          servicesList[i]['additional_detail']??"",
+          servicesList[i]['service_id'],
+          serviceDetail: servicesList[i]['serviceDetail'],
+          serviceName: servicesList[i]['serviceName'],
+          serviceImage: servicesList[i]['serviceImage'],
+          selectedItemId: servicesList[i].id,
+            searchType: SearchType.Service,
+            hospitalsLabsDiagnostics: await getHospitalById(servicesList[i]['hospital_id'])
+        );
+          int temp = 0;
+          if(hospServicestypes.length==0){
+            hospServicestypes.add(category);
+          }else{
+            hospServicestypes.forEach((element) {
+              if(category.id==element.id)
+              {
+                temp++;
+              }
+            });
+            if(temp==0){
+              hospServicestypes.add(category);
+            }
+          }
+        hospServicestypes.forEach((element) {
+          print("Name : " +
+              element.name +
+              '\nImage : ' +
+              element.image +
+              "\nId : " +
+              element.id);
+        });
+      }
+      hospServicestypes.toSet();
+      allHospitalSelectedServiceTypes = hospServicestypes;
+      return hospServicestypes;
+    } catch (error) {
+      isLoading = false;
+      print("Category . . . . . . :$error");
+      return null;
+    }
+  }
+
   static List<Hospitals> nearby=[];
   static List<Hospitals> trending=[];
 
@@ -102,6 +173,7 @@ class HospitalProvider with ChangeNotifier {
                 locationName: data['location_name'],
                 phone: data['phone'],
                 image: data['image'],
+                searchType: SearchType.ServiceProvider,
                 latitude: data['location'].latitude,
                 longitude: data['location'].longitude,
                 description: data['description'],
@@ -111,6 +183,7 @@ class HospitalProvider with ChangeNotifier {
                 images: data['images']
             );
             int temp = 0;
+            hos.hospitalsLabsDiagnostics= hos;
             if(hospitals.length==0){
               hospitals.add(hos);
             }else{
@@ -199,6 +272,39 @@ class HospitalProvider with ChangeNotifier {
       }
       trending= trendingHospital;
       return trendingHospital;
+    } catch (error) {
+      isLoading = false;
+      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      return null;
+    }
+  }
+
+  Future<Hospitals> getHospitalById(String Id) async {
+    isLoading = true;
+    var curr;
+    try {
+      var docs =
+      await FirebaseFirestore.instance.collection('diagnostics').doc(Id).get();
+      if (docs.exists) {
+        var data = docs.data();
+        final Hospitals diagnostics = Hospitals(
+            type: Type.Hospital,
+            Id: docs.id,
+            name: data['name'],
+            locationName: data['location_name'],
+            phone: data['phone'],
+            image: data['image'],
+            searchType: SearchType.ServiceProvider,
+            latitude: data['location'].latitude,
+            longitude: data['location'].longitude,
+            description: data['description'],
+            services: data['services'],
+            officehours: data['officehours'],
+            email: data['email'],
+            images: data['images']
+            );
+        return diagnostics;
+      }
     } catch (error) {
       isLoading = false;
       print("mjkhjjhbjhvjhvhjvjhgv $error");
@@ -368,7 +474,18 @@ class HLDServices {
   HLDServices(this.detail, this.id, this.image, this.name);
 }
 
-class HLDServiceTypes {
+enum SearchType{
+  ServiceProvider,
+  Service,
+  Drug
+}
+abstract class Search{
+  SearchType searchType;
+  HospitalsLabsDiagnostics hospitalsLabsDiagnostics;
+  Search(this.searchType, this.hospitalsLabsDiagnostics);
+}
+
+class HLDServiceTypes implements Search,HospitalsLabsDiagnostics{
   String id;
   String description;
   String name;
@@ -384,6 +501,60 @@ class HLDServiceTypes {
 
   HLDServiceTypes(this.id, this.description, this.name, this.image,
       this.price, this.additionalDiscription, this.serviceId,{
-        this.serviceDetail, this.serviceImage, this.serviceName, this.selectedItemId
+        this.serviceDetail, this.serviceImage, this.serviceName, this.selectedItemId, this.searchType, this.hospitalsLabsDiagnostics,
+        this.creditedDate, this.trending, this.Id, this.email, this.type, this.phone,
+        this.longitude, this.officehours, this.createdAt, this.distance, this.images, this.latitude,
+        this.locationName, this.services, this.shopCredit,
       });
+
+  @override
+  SearchType searchType;
+
+  @override
+  HospitalsLabsDiagnostics hospitalsLabsDiagnostics;
+
+  @override
+  String Id;
+
+  @override
+  DateTime createdAt;
+
+  @override
+  DateTime creditedDate;
+
+  @override
+  double distance;
+
+  @override
+  String email;
+
+  @override
+  List images;
+
+  @override
+  double latitude;
+
+  @override
+  String locationName;
+
+  @override
+  double longitude;
+
+  @override
+  String officehours;
+
+  @override
+  String phone;
+
+  @override
+  List services;
+
+  @override
+  String shopCredit;
+
+  @override
+  bool trending;
+
+  @override
+  Type type;
 }

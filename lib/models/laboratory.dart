@@ -1,7 +1,9 @@
+import 'package:alen/providers/hospital.dart';
+
 import 'hospital.dart';
 import 'package:alen/providers/pharmacy.dart';
 
-class Laboratories implements HospitalsLabsDiagnostics{
+class Laboratories implements Search, HospitalsLabsDiagnostics{
 
 
   Laboratories(
@@ -18,6 +20,8 @@ class Laboratories implements HospitalsLabsDiagnostics{
         this.image,
         this.officehours,
         this.images,
+        this.searchType,
+        this.hospitalsLabsDiagnostics,
         this.email});
 
   @override
@@ -73,4 +77,10 @@ class Laboratories implements HospitalsLabsDiagnostics{
 
   @override
   String locationName;
+
+  @override
+  SearchType searchType;
+
+  @override
+  HospitalsLabsDiagnostics hospitalsLabsDiagnostics;
 }

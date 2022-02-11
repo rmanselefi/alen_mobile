@@ -1,5 +1,6 @@
 import 'package:alen/models/hospital.dart';
 import 'package:alen/models/user_location.dart';
+import 'package:alen/providers/drug.dart';
 import 'package:alen/providers/language.dart';
 import 'package:alen/ui/Cart/PharmacyCart.dart';
 import 'package:alen/ui/Details/PharmacyDetail.dart';
@@ -42,6 +43,8 @@ class PharmaciesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var pharmacyProvider =
         Provider.of<PharmacyProvider>(context, listen: false);
+    Provider.of<DrugProvider>(context, listen: false)
+        .getAllPharmacySelectedDrugs();
     return FutureBuilder<dynamic>(
         future: SharedPreferences.getInstance(),
         builder: (context, snapshot) {
@@ -99,6 +102,7 @@ class PharmaciesPage extends StatelessWidget {
                                 onTap: () {
                                   List<HospitalsLabsDiagnostics> hld = [];
                                   hld += PharmacyProvider.nearby;
+                                  hld += DrugProvider.allPharmacySelectedDrugs;
                                   showSearch<HospitalsLabsDiagnostics>(
                                       context: context,
                                       delegate: TrendingSearch(trendings: hld, searchFor: "Search Pharmacies"));
@@ -244,7 +248,7 @@ class PharmaciesPage extends StatelessWidget {
                                       }
                                       return FutureBuilder<List<Pharmacies>>(
                                           future: pharmacyProvider
-                                              .fetchNearByHospitals(snapshot.data),
+                                              .fetchNearByPharmacies(snapshot.data),
                                           builder: (context, snapshot) {
                                             if (snapshot.connectionState ==
                                                 ConnectionState.none &&

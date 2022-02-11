@@ -84,6 +84,75 @@ class LaboratoryProvider with ChangeNotifier {
     }
   }
 
+  static List<HLDServiceTypes> allLabSelectedServiceTypes = [];
+  Future<List<HLDServiceTypes>> getAllSelectedLabServiceTypes() async {
+    isLoading = true;
+    labServiceTypes.clear();
+    var curr;
+    try {
+      var docs =
+      await FirebaseFirestore.instance.collection('selected_lab_services').where("lab_id", isNull: false).get();
+      // if (docs.docs.isNotEmpty) {
+      var data2 = docs.docs.toList();
+      // var data = docs.docs.first.data();
+      var servicesList =docs.docs?? [];
+      for (var i = 0; i < servicesList.length; i++) {
+        String servicesData = await servicesList[i]['service_id'];
+        print("ServiceTypeId:$servicesData");
+        // var document = await FirebaseFirestore.instance
+        //     .collection('laboratory_services').doc(servicesData).get();
+        //     // .where('id', isEqualTo: servicesData)
+        // .get();
+        // var serviceType = document.data();
+        print("ServiceType:${servicesList[i]}");
+        final HLDServiceTypes category = new HLDServiceTypes(
+          servicesList[i]['service_type_id'],
+          servicesList[i]['description'],
+          servicesList[i]['service_name'],
+          servicesList[i]['image'],
+          servicesList[i]['price'],
+          servicesList[i]['additional_detail']??"",
+          servicesList[i]['service_id'],
+          serviceDetail: servicesList[i]['serviceDetail'],
+          serviceName: servicesList[i]['serviceName'],
+          serviceImage: servicesList[i]['serviceImage'],
+          selectedItemId: servicesList[i].id,
+            searchType: SearchType.Service,
+            hospitalsLabsDiagnostics: await getLaboratoryById(servicesList[i]['lab_id'])
+        );
+          int temp = 0;
+          if(labServiceTypes.length==0){
+            labServiceTypes.add(category);
+          }else{
+            labServiceTypes.forEach((element) {
+              if(category.id==element.id)
+              {
+                temp++;
+              }
+            });
+            if(temp==0){
+              labServiceTypes.add(category);
+            }
+          }
+        labServiceTypes.forEach((element) {
+          print("Name : " +
+              element.name +
+              '\nImage : ' +
+              element.image +
+              "\nId : " +
+              element.id);
+        });
+      }
+      labServiceTypes.toSet();
+      allLabSelectedServiceTypes = labServiceTypes;
+      return labServiceTypes;
+    } catch (error) {
+      isLoading = false;
+      print("Category . . . . . . :$error");
+      return null;
+    }
+  }
+
   Future<List<Laboratories>> fetchNearByLaboratories(UserLocation location) async {
 
     isLoading = true;
@@ -100,6 +169,7 @@ class LaboratoryProvider with ChangeNotifier {
               type: Type.Lab,
                 name: data['name'],
                 image: data['image'],
+              searchType: SearchType.ServiceProvider,
                 images: data['images'],
                 latitude: data['location'].latitude,
                 longitude: data['location'].longitude,
@@ -110,6 +180,7 @@ class LaboratoryProvider with ChangeNotifier {
                 description: data['description'],
                 Id: docs.docs[i].id,);
             int temp = 0;
+            hos.hospitalsLabsDiagnostics= hos;
             if(laboratories.length==0){
               laboratories.add(hos);
             }else{
@@ -154,6 +225,38 @@ class LaboratoryProvider with ChangeNotifier {
       return null;
     }
   }
+
+
+  Future<Laboratories> getLaboratoryById(String Id) async {
+    isLoading = true;
+    var curr;
+    try {
+      var docs =
+      await FirebaseFirestore.instance.collection('laboratory').doc(Id).get();
+      if (docs.exists) {
+        var data = docs.data();
+        final Laboratories diagnostics = Laboratories(
+          type: Type.Lab,
+          name: data['name'],
+          image: data['image'],
+          images: data['images'],
+          latitude: data['location'].latitude,
+          longitude: data['location'].longitude,
+          officehours: data['officehours'],
+          phone: data['phone'],
+          locationName: data['location_name'],
+          email: data['email'],
+          description: data['description'],
+          Id: docs.id,);
+        return diagnostics;
+      }
+    } catch (error) {
+      isLoading = false;
+      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      return null;
+    }
+  }
+
 
   Future<List<Laboratories>> fetchTrendingLaboratories() async {
     isLoading = true;

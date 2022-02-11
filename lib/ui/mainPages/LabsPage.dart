@@ -58,6 +58,7 @@ class _HospitalPageState extends State<LabsPage> {
   Widget build(BuildContext context) {
     // final PageController controller = PageController(initialPage: 0);
     var labProvider = Provider.of<LaboratoryProvider>(context, listen: false);
+    labProvider.getAllSelectedLabServiceTypes();
     return FutureBuilder<dynamic>(
         future: SharedPreferences.getInstance(),
         builder: (context, snapshot) {
@@ -98,6 +99,7 @@ class _HospitalPageState extends State<LabsPage> {
                                 onTap: () {
                                   List<HospitalsLabsDiagnostics> hld = [];
                                   hld += LaboratoryProvider.nearby;
+                                  hld += LaboratoryProvider.allLabSelectedServiceTypes;
                                   showSearch<HospitalsLabsDiagnostics>(
                                       context: context,
                                       delegate: TrendingSearch(trendings: hld, searchFor: "Search Laboratories"));

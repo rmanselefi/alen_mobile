@@ -10,6 +10,7 @@ import 'package:alen/providers/HomeCare.dart';
 import 'package:alen/providers/ads.dart';
 import 'package:alen/providers/auth.dart';
 import 'package:alen/providers/cart.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:alen/providers/company.dart';
 import 'package:alen/providers/diagnostic.dart';
 import 'package:alen/providers/drug.dart';
@@ -145,7 +146,7 @@ class _HomePageState extends State<HomePage> {
     _getPresreption(ctxt);
   }
 
-  Future<List<HospitalsLabsDiagnostics>> searchInitializer(
+  Future<List<Search>> searchInitializer(
       // BuildContext context
       ) async {
     // context.loaderOverlay.show();
@@ -159,72 +160,30 @@ class _HomePageState extends State<HomePage> {
     hld += HomeCareProvider.nearby;
     hld += CompanyProvider.nearby;
     hld += EmergencyMSProvider.nearby;
-    // context.loaderOverlay.hide();
+
+    // //Services
+    hld += LaboratoryProvider.allLabSelectedServiceTypes;
+    hld += DiagnosticProvider.allDiagnosisSelectedServiceTypes;
+    hld += HospitalProvider.allHospitalSelectedServiceTypes;
+    // //drugs
+    hld += DrugProvider.allPharmacySelectedDrugs;
+    hld += DrugProvider.allImporterSelectedDrugs;
+    // // context.loaderOverlay.hide();
     return hld;
   }
 
-  search() async {
-    UserLocation location =
-        await Provider.of<PharmacyProvider>(context, listen: false)
-            .getCurrentLocation();
-    print("Done for Location");
-    await Provider.of<PharmacyProvider>(context, listen: false)
-        .fetchNearByHospitals(location);
-    print("Done for Pharmacy");
-    PharmacyProvider.nearby.forEach((element) {
-      print(element.name);
-    });
-    await Provider.of<HospitalProvider>(context, listen: false)
-        .fetchNearByHospitals(location);
-    print("Done for Hospital");
-    HospitalProvider.nearby.forEach((element) {
-      print(element.name);
-    });
-    await Provider.of<DiagnosticProvider>(context, listen: false)
-        .fetchNearByDiagnostic(location);
-    print("Done for Diagnostic");
-    DiagnosticProvider.nearby.forEach((element) {
-      print(element.name);
-    });
-    await Provider.of<ImporterProvider>(context, listen: false)
-        .fetchNearByImporters(location);
-    print("Done for Importer");
-    ImporterProvider.nearby.forEach((element) {
-      print(element.name);
-    });
-    await Provider.of<LaboratoryProvider>(context, listen: false)
-        .fetchNearByLaboratories(location);
-    print("Done for Lab");
-    LaboratoryProvider.nearby.forEach((element) {
-      print(element.name);
-    });
-    await Provider.of<CompanyProvider>(context, listen: false)
-        .fetchNearByCompanies(location);
-    print("Done for Company");
-    CompanyProvider.nearby.forEach((element) {
-      print(element.name);
-    });
-    await Provider.of<HomeCareProvider>(context, listen: false)
-        .fetchNearByHomeCare(location);
-    print("Done for HomeCare");
-    HomeCareProvider.nearby.forEach((element) {
-      print(element.name);
-    });
-    await Provider.of<EmergencyMSProvider>(context, listen: false)
-        .fetchNearByEmergencyMS(location);
-    print("Done for EmergencyMS");
-    EmergencyMSProvider.nearby.forEach((element) {
-      print(element.name);
-    });
-  }
 
   @override
   void didChangeDependencies() async {
+
+    //Location
     UserLocation location =
         await Provider.of<PharmacyProvider>(context, listen: false)
             .getCurrentLocation();
+
+    //Service Providers
     await Provider.of<PharmacyProvider>(context, listen: false)
-        .fetchNearByHospitals(location);
+        .fetchNearByPharmacies(location);
     await Provider.of<HospitalProvider>(context, listen: false)
         .fetchNearByHospitals(location);
     await Provider.of<DiagnosticProvider>(context, listen: false)
@@ -239,7 +198,23 @@ class _HomePageState extends State<HomePage> {
         .fetchNearByHomeCare(location);
     await Provider.of<EmergencyMSProvider>(context, listen: false)
         .fetchNearByEmergencyMS(location);
-    searchInitializer();
+
+//Services
+    await Provider.of<LaboratoryProvider>(context, listen: false)
+        .getAllSelectedLabServiceTypes();
+    await Provider.of<DiagnosticProvider>(context, listen: false)
+        .getAllSelectedDiagnosticsServicesTypes();
+    await Provider.of<HospitalProvider>(context, listen: false)
+        .getAllSelectedHospServiceTypes();
+
+
+// //Drugs
+    await Provider.of<DrugProvider>(context, listen: false)
+        .getAllPharmacySelectedDrugs();
+    await Provider.of<DrugProvider>(context, listen: false)
+        .getAllImporterSelectedDrugs();
+    //
+    // searchInitializer();
     super.didChangeDependencies();
   }
 
@@ -544,6 +519,24 @@ class _HomePageState extends State<HomePage> {
                                                         userId: userId)));
                                       },
                                     ),
+                                    ListTile(
+                                      leading: Icon(Icons.logout,
+                                          color: myCustomColors.loginBackgroud),
+                                      title: Text(languageData[languageProvider.langOPT]
+                                      ['Log Out'] ??
+                                          "Log Out"),
+                                      onTap: () {
+                                        authProvider.signOut();
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                SignUp(),
+                                          ),
+                                              (route) => false,
+                                        );
+                                      },
+                                    ),
                                     Row(
                                       children: [
                                         PopupMenuButton(
@@ -588,24 +581,6 @@ class _HomePageState extends State<HomePage> {
                                           },
                                         )
                                       ],
-                                    ),
-                                    ListTile(
-                                      leading: Icon(Icons.logout,
-                                          color: myCustomColors.loginBackgroud),
-                                      title: Text(languageData[languageProvider.langOPT]
-                                      ['Log Out'] ??
-                                          "Log Out"),
-                                      onTap: () {
-                                        authProvider.signOut();
-                                        Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                SignUp(),
-                                          ),
-                                              (route) => false,
-                                        );
-                                      },
                                     ),
                                     Divider(),
                                   ],
@@ -2238,18 +2213,18 @@ class _HomePageState extends State<HomePage> {
               child: SizedBox(
                 height: 90,
                 width: 160,
-                child: Image.network(smallAd.image,
+                child: CachedNetworkImage(
+                    imageUrl:smallAd.image,
                     width: 160,
                     height: 90,
-                    fit: BoxFit.fill, errorBuilder: (BuildContext context,
-                        Object exception, StackTrace stackTrace) {
-                  return Image.asset(
-                    "assets/images/hos1.jpg",
-                    width: 200,
-                    height: 120,
-                    fit: BoxFit.cover,
-                  );
-                }),
+                    fit: BoxFit.fill,
+                    errorWidget: (context, url, error) =>
+                        Image.asset(
+                          "assets/images/hos1.jpg",
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.width * 0.38,
+                          fit: BoxFit.cover,
+                        )),
               ),
             )));
   }
@@ -2347,20 +2322,19 @@ class _HomePageState extends State<HomePage> {
           child: SizedBox(
             height: MediaQuery.of(context).size.width * 0.38,
             width: MediaQuery.of(context).size.width,
-            child: Image.network(
-              mainAd.image,
+            child: CachedNetworkImage(
+              imageUrl: mainAd.image,
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.width * 0.38,
               fit: BoxFit.fill,
-              errorBuilder: (BuildContext context, Object exception,
-                  StackTrace stackTrace) {
-                return Image.asset(
+              errorWidget: (context, url, error) =>
+                Image.asset(
                   "assets/images/hos1.jpg",
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.width * 0.38,
                   fit: BoxFit.cover,
-                );
-              },
+                )
+              ,
             ),
           ),
         ));
@@ -2427,13 +2401,15 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Expanded(
                           child: Center(
-                              child: Image.network(drugs.image, errorBuilder:
-                                  (BuildContext context, Object exception,
-                                      StackTrace stackTrace) {
-                            return Image.asset(
-                              "assets/images/hos1.jpg",
-                            );
-                          })),
+                              child: CachedNetworkImage(
+                                  imageUrl:drugs.image,
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                        "assets/images/hos1.jpg",
+                                        width: MediaQuery.of(context).size.width,
+                                        height: MediaQuery.of(context).size.width * 0.38,
+                                        fit: BoxFit.cover,
+                                      ))),
                         ),
                         Divider(
                           color: Colors.black12,
@@ -2561,17 +2537,16 @@ class _HomePageState extends State<HomePage> {
                       child: SizedBox(
                         height: 150,
                         width: 120,
-                        child: Image.network(healthArticle.image,
+                        child: CachedNetworkImage(
+                            imageUrl:healthArticle.image,
                             width: 120, height: 150, fit: BoxFit.fill,
-                            errorBuilder: (BuildContext context,
-                                Object exception, StackTrace stackTrace) {
-                          return Image.asset(
-                            "assets/images/hos1.jpg",
-                            width: 120,
-                            height: 150,
-                            fit: BoxFit.cover,
-                          );
-                        }),
+                            errorWidget: (context, url, error) =>
+                                Image.asset(
+                                  "assets/images/hos1.jpg",
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.width * 0.38,
+                                  fit: BoxFit.cover,
+                                )),
                       ),
                     ),
                   ],

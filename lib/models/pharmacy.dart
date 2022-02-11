@@ -1,7 +1,8 @@
 import 'package:alen/models/hospital.dart';
+import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/pharmacy.dart';
 
-class Pharmacies implements HospitalsLabsDiagnostics , ImportersPharmacies{
+class Pharmacies implements Search, HospitalsLabsDiagnostics , ImportersPharmacies{
   @override
   String Id;
 
@@ -55,7 +56,12 @@ class Pharmacies implements HospitalsLabsDiagnostics , ImportersPharmacies{
         this.longitude,
         this.name,
         this.officehours,
-        this.phone,this.drugs, this.isPharma});
+        this.phone,
+        this.drugs,
+        this.isPharma,
+        this.searchType,
+        this.hospitalsLabsDiagnostics
+      });
 
   @override
   bool isPharma;
@@ -74,6 +80,12 @@ class Pharmacies implements HospitalsLabsDiagnostics , ImportersPharmacies{
 
   @override
   bool trending;
+
+  @override
+  SearchType searchType;
+
+  @override
+  HospitalsLabsDiagnostics hospitalsLabsDiagnostics;
 }
 abstract class ImportersPharmacies{
   Type type;

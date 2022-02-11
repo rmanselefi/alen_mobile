@@ -1,8 +1,9 @@
 import 'package:alen/models/hospital.dart';
 import 'package:alen/models/pharmacy.dart';
+import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/pharmacy.dart';
 
-class Importers implements HospitalsLabsDiagnostics , ImportersPharmacies{
+class Importers implements Search, HospitalsLabsDiagnostics , ImportersPharmacies{
 
   Importers(
       {this.type,
@@ -19,6 +20,8 @@ class Importers implements HospitalsLabsDiagnostics , ImportersPharmacies{
         this.officehours,
         this.images,
         this.email,
+        this.searchType,
+        this.hospitalsLabsDiagnostics,
         this.isPharma
       });
 
@@ -79,4 +82,10 @@ class Importers implements HospitalsLabsDiagnostics , ImportersPharmacies{
 
   @override
   String locationName;
+
+  @override
+  SearchType searchType;
+
+  @override
+  HospitalsLabsDiagnostics hospitalsLabsDiagnostics;
 }
