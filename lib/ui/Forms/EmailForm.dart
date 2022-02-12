@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:alen/providers/auth.dart';
 import 'package:alen/providers/language.dart';
+import 'package:alen/ui/Forms/MultipleImageForPharmacyAndImporter.dart';
 import 'package:alen/ui/Home/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -491,7 +492,7 @@ class _EmailFormScreenState extends State<EmailFormScreen> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (BuildContext context) =>
-                                                  HomePage(),
+                                                  ImageForm(),
                                             ),
                                                 (route) => false,
                                           );

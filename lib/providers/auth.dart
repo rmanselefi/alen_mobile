@@ -1,9 +1,11 @@
+import 'dart:io';
+import 'package:path/path.dart';
 import 'package:alen/providers/user_preference.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 enum Status {
   NotLoggedIn,
   NotRegistered,
@@ -16,6 +18,56 @@ enum Status {
 
 class AuthProvider with ChangeNotifier {
   bool hasError;
+  firebase_storage.UploadTask uploadTask;
+  double progress=0.0;
+
+  Future<String> uploadImage(File back, String path) async {
+    firebase_storage.FirebaseStorage storage =
+        firebase_storage.FirebaseStorage.instance;
+    String fileName = basename(back.path);
+    firebase_storage.Reference storageReference =
+    storage.ref().child("$path/$fileName");
+
+    uploadTask = storageReference.putFile(back);
+
+    uploadTask.snapshotEvents.listen((event) {
+      progress =
+          event.bytesTransferred.toDouble() / event.totalBytes.toDouble();
+      notifyListeners();
+      print('EVENT ${progress}');
+    });
+    firebase_storage.TaskSnapshot snapshot = await uploadTask;
+    var imageUrl = await snapshot.ref.getDownloadURL();
+    notifyListeners();
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString('image', imageUrl);
+    return imageUrl;
+  }
+
+
+  Future<dynamic> uploadFile(File file) async {
+    String id = await UserPreferences().getId()??"";
+    print('token : $id');
+    try {
+      var license;
+      if (file != null) {
+        await AuthProvider().uploadImage(file, "userImages").then((res) {
+          print('imageuriimageuriimageuri$res');
+          if (res != null) {
+            license = res;
+          }
+        });
+      }
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(id)
+          .update({'image': license});
+      return file;
+    } on Exception catch (exception) {
+      print("Failed to upload! : $exception");
+      return null;
+    }
+  }
 
   //Sign in with Phone Number
   Future<Map<String, dynamic>> signInWithPhone(
@@ -69,22 +121,22 @@ class AuthProvider with ChangeNotifier {
       print(userData);
       print(userData);
       print("0000000000000000000000");
-      if (user != null) {
+      if (userData != null) {
 
         var prefs = await SharedPreferences.getInstance();
         prefs.setString('user_id', userId);
-        prefs.setString('phone', userData['phone']);
-        prefs.setString('first_name', userData['firstName']);
-        prefs.setString('middleName', userData['middleName']);
-        prefs.setString('lastName', userData['lastName']);
-        prefs.setString('email', userData['email']);
-        prefs.setString('age', userData['age']);
+        prefs.setString('phone', userData['phone']??"");
+        prefs.setString('first_name', userData['firstName']??"");
+        prefs.setString('middleName', userData['middleName']??"");
+        prefs.setString('lastName', userData['lastName']??"");
+        prefs.setString('email', userData['email']??"");
+        prefs.setString('image', userData['image']??"");
+        prefs.setString('age', userData['age']??"");
         return true;
       }
       return false;
     } catch (error) {
       hasError = true;
-      print(error.message);
       return false;
     }
   }
@@ -106,6 +158,9 @@ class AuthProvider with ChangeNotifier {
         'role':'user',
         'created_at': new DateTime.now()
       });
+
+
+
       hasError = false;
       var prefs = await SharedPreferences.getInstance();
       prefs.setString('user_id', user['userid']);

@@ -422,18 +422,47 @@ class _HomePageState extends State<HomePage> {
                                                   .getString('email'));
                                             }
                                           }),
-                                      currentAccountPicture: CircleAvatar(
-                                        //backgroundColor: myCustomColors.loginButton,
-                                        // child: Text(
-                                        //   "A",
-                                        //   style: TextStyle(
-                                        //       fontSize: 40.0, color: myCustomColors.loginBackgroud),
-                                        // ),
-                                        backgroundColor: Colors.white,
-                                        backgroundImage: AssetImage(
-                                          'assets/images/alen_no_name.png',
-                                        ),
-                                      ),
+                                      currentAccountPicture: FutureBuilder<SharedPreferences>(
+                        future: SharedPreferences.getInstance(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.none &&
+                                snapshot.hasData == null) {
+                              return Container(
+                                  height: 10,
+                                  child: Center(
+                                      child:
+                                      CircularProgressIndicator()));
+                            }
+                            print(
+                                'project snapshot data is: ${snapshot.data}');
+                            if (snapshot.data == null) {
+                              return Container(
+                                  height: 10,
+                                  child: Center(
+                                      child:
+                                      CircularProgressIndicator()));
+                            } else {
+                              WidgetsBinding.instance
+                                  .addPostFrameCallback(
+                                      (_) => _scrollToBottom());
+                              return snapshot.data
+                                  .getString('image') ==
+                                  null || snapshot.data
+                                  .getString('image') ==
+                                  ""
+                                  ? CircleAvatar(
+                                backgroundColor: Colors.white,
+                                    backgroundImage: AssetImage(
+                                    'assets/images/alen_no_name.png'),
+                                  )
+                                  : CircleAvatar(
+                                backgroundColor: Colors.white,
+                                    backgroundImage: NetworkImage(snapshot.data
+                                    .getString('image')),
+                                  );
+                            }
+                          }),
                                     ),
                                     ListTile(
                                       leading: Icon(Icons.contacts,
