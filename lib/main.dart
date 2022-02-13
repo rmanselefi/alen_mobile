@@ -15,6 +15,7 @@ import 'package:alen/providers/language.dart';
 import 'package:alen/providers/pharmacy.dart';
 import 'package:alen/ui/Cart/ImportCart.dart';
 import 'package:alen/ui/Cart/ImportCart.dart';
+import 'package:alen/ui/Forms/MultipleImageForPharmacyAndImporter.dart';
 import 'package:alen/ui/Forms/PhoneForm.dart';
 import 'package:alen/ui/Home/HomePage.dart';
 import 'package:alen/utils/AppColors.dart';
@@ -119,7 +120,7 @@ class _MyAppState extends State<MyApp> {
                     return SignUp();
                     // return HomePage();
                   // else
-                    HomePage();
+                  HomePage();
                   return HomePage();
               }
             }),

@@ -1,0 +1,191 @@
+{
+  "project_info": {
+    "project_number": "355604807599",
+    "firebase_url": "https://alen-38d3f-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "alen-38d3f",
+    "storage_bucket": "alen-38d3f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:355604807599:android:6de5fce977ee40cbecb95a",
+        "android_client_info": {
+          "package_name": "com.example.alen_client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "355604807599-9n2l1qdg3am1his32qkmr8qsojc1bcoo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.alen_client",
+            "certificate_hash": "eb20b53b49fa3a86a4adf831c2d38600a9aab8b3"
+          }
+        },
+        {
+          "client_id": "355604807599-f29q7oq5u1j800jcbej7cf0m00ohi44a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.alen_client",
+            "certificate_hash": "73607fd51080b546ba741fa4329ec641a549e871"
+          }
+        },
+        {
+          "client_id": "355604807599-m7pbn2512sq9dsd9nipk3s9daq4b07uc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOgRuZ9axW3SqYf953s0tROg76EobrRzw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "355604807599-m7pbn2512sq9dsd9nipk3s9daq4b07uc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "355604807599-ijsnhi3blrpeg8u655k7n1mdfifvvkq2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.qemer.alen"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:355604807599:android:0299c7bac8cac556ecb95a",
+        "android_client_info": {
+          "package_name": "com.qemer.alen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "355604807599-29n06nna15o2tj78bfs8tvno2frre5b0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.qemer.alen",
+            "certificate_hash": "73607fd51080b546ba741fa4329ec641a549e871"
+          }
+        },
+        {
+          "client_id": "355604807599-cvoj5gcv58n9p1v01odtrcprea79sjeb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.qemer.alen",
+            "certificate_hash": "5c39154efdb17607412dfa9b4eeb5fd679586fd0"
+          }
+        },
+        {
+          "client_id": "355604807599-drh6sfnjia0m3ccqdj9s11k8s2ka4u0k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.qemer.alen",
+            "certificate_hash": "75a31c11d04a6fef6cba25b09484679069622136"
+          }
+        },
+        {
+          "client_id": "355604807599-mchoevdn367pdq838c2327gpb7sfp30f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.qemer.alen",
+            "certificate_hash": "f41be9dc18e118f9b159f0116c4002156c05e7f5"
+          }
+        },
+        {
+          "client_id": "355604807599-ue5v4pt0245igrfrci1dd90dqtckkcip.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.qemer.alen",
+            "certificate_hash": "f2b89086ff07a0509515c48cdefef2518f194bea"
+          }
+        },
+        {
+          "client_id": "355604807599-m7pbn2512sq9dsd9nipk3s9daq4b07uc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOgRuZ9axW3SqYf953s0tROg76EobrRzw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "355604807599-m7pbn2512sq9dsd9nipk3s9daq4b07uc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "355604807599-ijsnhi3blrpeg8u655k7n1mdfifvvkq2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.qemer.alen"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:355604807599:android:b730d2f1b79914f3ecb95a",
+        "android_client_info": {
+          "package_name": "com.qemer.alen_client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "355604807599-dg5pm488bd4i0e5j5c4fsdmiidkl2e8j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.qemer.alen_client",
+            "certificate_hash": "eb20b53b49fa3a86a4adf831c2d38600a9aab8b3"
+          }
+        },
+        {
+          "client_id": "355604807599-gce2tcneb61mli53fkf4sf0ld7n7pmoc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.qemer.alen_client",
+            "certificate_hash": "73607fd51080b546ba741fa4329ec641a549e871"
+          }
+        },
+        {
+          "client_id": "355604807599-m7pbn2512sq9dsd9nipk3s9daq4b07uc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOgRuZ9axW3SqYf953s0tROg76EobrRzw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "355604807599-m7pbn2512sq9dsd9nipk3s9daq4b07uc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "355604807599-ijsnhi3blrpeg8u655k7n1mdfifvvkq2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.qemer.alen"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
