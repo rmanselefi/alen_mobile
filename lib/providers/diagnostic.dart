@@ -18,6 +18,37 @@ class DiagnosticProvider with ChangeNotifier {
   FirebaseFirestore fire = FirebaseFirestore.instance;
 
 
+
+  Future<Diagnostics> fetchDiagnostics(String id) async {
+    isLoading = true;
+    nearHospital.clear();
+    var curr;
+    try {
+      var docs = await FirebaseFirestore.instance.collection('diagnostics').doc(id).get();
+      if (docs.exists) {
+          var data = docs.data();
+          final Diagnostics hos = Diagnostics(
+              Id: docs.id,
+              name: data['name'],
+              phone: data['phone'],
+              locationName: data['location_name'],
+              image: data['image'],
+              latitude: data['location'].latitude,
+              longitude: data['location'].longitude,
+              email: data['email'],
+              images: data['images'],
+              officehours: data['whours'],
+              description: data['description']);
+          return hos;
+      }
+    } catch (error) {
+      isLoading = false;
+      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      return null;
+    }
+  }
+
+
   Future<List<HLDServices>> getDiagnosticsServicesByDiagnosticsId(String Id) async {
     isLoading = true;
     diagnosisServices.clear();
@@ -465,7 +496,8 @@ class DiagnosticProvider with ChangeNotifier {
             labServiceTypes.add(category);
           }else{
             labServiceTypes.forEach((element) {
-              if(category.id==element.id)
+              if(category.id==element.id &&
+                  category.hospitalsLabsDiagnostics.Id==element.hospitalsLabsDiagnostics.Id)
               {
                 temp++;
               }

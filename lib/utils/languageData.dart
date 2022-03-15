@@ -35,7 +35,7 @@ const Map<String, Map<String, String>> languageData = {
     'Our Location': 'Our Location',
     'Add to Cart': 'Add to Cart',
     'Dosage': 'Dosage',
-    'Made-in': 'Made-in',
+    'Made-in': 'Brand',
     'Quantity': 'Quantity',
     'Root': 'Route',
     'Price': 'Price',

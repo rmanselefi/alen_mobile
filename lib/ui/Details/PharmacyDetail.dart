@@ -65,6 +65,11 @@ class PharamacyDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final PageController controller = PageController(initialPage: 0);
+
+    print(" //////////////////////         ");
+    print(id);
+    print(id);
+    print(" //////////////////////         ");
     screenWidth = MediaQuery.of(context).size.width;
     var drugProvider = Provider.of<DrugProvider>(context);
     var pharmaProvider = Provider.of<PharmacyProvider>(context);

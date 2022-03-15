@@ -15,7 +15,8 @@ enum Type{
   Trending,
   HomeCare,
   Company,
-  Importer
+  Importer,
+  EmergencyMS
 }
 class PharmacyProvider with ChangeNotifier {
   List<Pharmacies> hospitals = [];
@@ -27,6 +28,50 @@ class PharmacyProvider with ChangeNotifier {
   static List<Pharmacies> nearby=[];
   static List<Pharmacies> trending=[];
   static List<Drugs> trendingDRGS=[];
+
+  Future<Pharmacies> fetchPharmacy(String id) async {
+    isLoading = true;
+    hospitals.clear();
+    nearHospital.clear();
+    try {
+      var docs = await FirebaseFirestore.instance
+          .collection('pharmacy').doc(id)
+          .get();
+      if (docs.exists) {
+        print("*****************123123123123*************************");
+
+        print("*****************123123123123*************************");
+          // for (var i = 0; i < docs.length; i++) {
+          var data = docs.data();
+          final Pharmacies hos = Pharmacies(
+              Id: docs.id,
+              name: data['name'],
+              phone: data['phone'],
+              image: data['image'],
+              locationName: data['location_name'],
+              latitude: data['location'].latitude,
+              longitude: data['location'].longitude,
+              email: data['email'],
+              description: data['description'],
+              officehours: data['officehours'],
+              images: data['images'],
+              drugs: data['drugs']);
+          print("*****************Pharmacy*************************");
+          print(hos.name);
+          print(hos.image);
+          print(hos.description);
+          print(hos.latitude);
+          print(hos.Id);
+          print(hos.phone);
+          print("*****************Pharmacy*************************");
+          return hos;
+      }
+    } catch (error) {
+      isLoading = false;
+      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      return null;
+    }
+  }
 
   Future<List<Pharmacies>> fetchNearByPharmacies(UserLocation location) async {
     isLoading = true;
@@ -48,7 +93,7 @@ class PharmacyProvider with ChangeNotifier {
                 latitude: data['location'].latitude,
                 longitude: data['location'].longitude,
                 email: data['email'],
-                images: data['images'],
+                images: data['images']??[],
                 locationName: data['location_name'],
                 isPharma: true,
                 searchType: SearchType.ServiceProvider,

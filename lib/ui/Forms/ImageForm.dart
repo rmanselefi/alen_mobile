@@ -6,10 +6,13 @@ import 'package:alen/providers/user_preference.dart';
 import 'package:alen/ui/Home/HomePage.dart';
 import 'package:alen/utils/AppColors.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ImageForm extends StatefulWidget {
   final user;
@@ -47,6 +50,10 @@ class _ImageFormState
     var pharmacyProvider =
         Provider.of<AuthProvider>(parentContext, listen: false);
 
+    var snackBar = SnackBar(
+      content: const Text('You have sucessfully registered!'),
+      backgroundColor: myCustomColors.loginBackgroud,
+    );
     print("hospitalIdhospitalId $id");
     return FutureBuilder<dynamic>(
         future: SharedPreferences.getInstance(),
@@ -103,7 +110,7 @@ class _ImageFormState
                                       width: MediaQuery.of(context).size.width*0.7,
                                       child: (_image == null)
                                           ? Image.asset(
-                                        'assets/images/addPrescription.jpg',
+                                        'assets/images/profile.png',
                                         fit: BoxFit.fill,
                                       )
                                           : Image.file(
@@ -259,6 +266,39 @@ class _ImageFormState
                               ],
                             ),
                           ),
+
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                            height: 70,
+                            width: MediaQuery.of(context).size.width,
+                            alignment: Alignment.bottomRight,
+                            child: FlatButton(
+                              height: 70,
+                              onPressed:(){
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        HomePage(),
+                                  ),
+                                      (route) => false,
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              } ,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text('Skip',style: TextStyle(color:  myCustomColors.loginBackgroud),),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Icon(
+                                    Icons.arrow_right
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
                         ],
                       )
                     ],

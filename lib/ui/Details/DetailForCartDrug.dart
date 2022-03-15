@@ -176,7 +176,7 @@ class _DetailForCartDrugState extends State<DetailForCartDrug> {
                                             padding:
                                             EdgeInsets.only(right: 30, top: 10),
                                             child: Text(
-                                              'Made In',
+                                              'Brand',
                                               textScaleFactor: 1.7,
                                               textAlign: TextAlign.left,
                                               overflow: TextOverflow.ellipsis,

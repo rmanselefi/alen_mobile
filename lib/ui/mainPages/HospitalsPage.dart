@@ -1,10 +1,13 @@
+import 'package:alen/models/TrendingSearchable.dart';
 import 'package:alen/models/hospital.dart';
 import 'package:alen/models/user_location.dart';
+import 'package:alen/providers/SearchProvider.dart';
 import 'package:alen/providers/drug.dart';
 import 'package:alen/providers/hospital.dart';
 import 'package:alen/providers/language.dart';
 import 'package:alen/ui/Details/HospitalDetail.dart';
 import 'package:alen/ui/SearchDelegates/searchTrending.dart';
+import 'package:alen/ui/SearchDelegates/searchTrending2.dart';
 import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllServices.dart';
 import 'package:alen/ui/SeeAllPages/SecondPage/SeeAllHospitals.dart';
 import 'package:alen/utils/languageData.dart';
@@ -15,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:alen/ui/Models/Trending.dart';
 import 'package:alen/ui/Pages/Hospital.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -120,200 +124,155 @@ class _HospitalPageState extends State<HospitalsPage> {
     );
   }
 
+  Future<void> SearchInitializer() async {
+
+    UserLocation location =
+    await Provider.of<SearchProvider>(context, listen: false)
+        .getCurrentLocation();
+
+    await Provider.of<SearchProvider>(context, listen: false)
+        .fetchAllHospitals2(location);
+
+    await Provider.of<SearchProvider>(context, listen: false)
+        .getAllSelectedHospServiceTypes2();
+  }
   @override
   Widget build(BuildContext context) {
+    if(SearchProvider.hospitals2.isEmpty ){
+      SearchInitializer();
+    }
     // final PageController controller = PageController(initialPage: 0);
     var hosProvider = Provider.of<HospitalProvider>(context, listen: false);
     hosProvider.getAllSelectedHospServiceTypes();
-    return FutureBuilder<dynamic>(
-        future: SharedPreferences.getInstance(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.none &&
-              snapshot.hasData == null) {
-            return CircularProgressIndicator();
-          }
-          print('project snapshot data is: ${snapshot.data}');
-          if (snapshot.data == null) {
-            return Container(
-                child: Center(child: CircularProgressIndicator()));
-          } else {
-            var _myLanguage = snapshot.data.getString("lang");
-            var languageProvider = Provider.of<LanguageProvider>(context, listen: true);
-            languageProvider.langOPT = _myLanguage;
-            return Scaffold(
-              appBar: AppBar(
-                  elevation: 2,
-                  leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () => Navigator.pop(context, false),
-                  ),
-                  title: Text(languageData[languageProvider
-                      .langOPT]
-                  [
-                  'Health Facilities'] ??
-                      "Health Facilities", textAlign: TextAlign.center)),
-              body: SingleChildScrollView(
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            GestureDetector(
-                                onTap: () {
-                                  List<HospitalsLabsDiagnostics> hld = [];
-                                  hld += HospitalProvider.nearby;
-                                  hld += HospitalProvider.allHospitalSelectedServiceTypes;
-                                  showSearch<HospitalsLabsDiagnostics>(
-                                      context: context,
-                                      delegate: TrendingSearch(trendings: hld, searchFor: "Search Health Facilities"));
-                                  // showSearch<Hospitals>(
-                                  //     context: context,
-                                  //     delegate: HospitalSearch(hospitals: HospitalProvider.nearby));
-                                },
-                                // onTap: buttn,
-                                child: Container(
-                                    margin: EdgeInsets.fromLTRB(0, 60, 0, 50),
-                                    child: Center(
-                                        child: Container(
-                                          // padding: EdgeInsets.all(40.0),
-                                            width:
-                                            MediaQuery.of(context).size.width * 0.90,
-                                            child: Theme(
-                                                data: ThemeData(
-                                                  hintColor: Colors.white,
-                                                ),
-                                                child: Card(
-                                                    elevation: 4,
-                                                    shape: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.all(
-                                                          Radius.circular(50.0)),
-                                                      borderSide: BorderSide(
-                                                          color: myCustomColors
-                                                              .loginBackgroud,
-                                                          width: 2),
-                                                    ),
-                                                    child: SizedBox(
-                                                      height: 50,
-                                                      child: ListTile(
-                                                        leading: Icon(
-                                                          Icons.search,
-                                                          color: myCustomColors
-                                                              .loginBackgroud,
-                                                        ),
-                                                        title: Text(
-                                                          languageData[languageProvider
-                                                              .langOPT]
-                                                          [
-                                                          'Search'] ??
-                                                              "Search",
-                                                          style: TextStyle(
-                                                            color: myCustomColors
-                                                                .loginBackgroud,
-                                                          ),
-                                                        ),
+    Future<dynamic> handleExitApp() async{
+      Navigator.pop(context, false);
+    }
+    return WillPopScope(
+      onWillPop:() async => handleExitApp(),
+      child: LoaderOverlay(
+          overlayOpacity: 0.8,
+          child: FutureBuilder<dynamic>(
+              future: SharedPreferences.getInstance(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.none &&
+                    snapshot.hasData == null) {
+                  return CircularProgressIndicator();
+                }
+                print('project snapshot data is: ${snapshot.data}');
+                if (snapshot.data == null) {
+                  return Container(
+                      child: Center(child: CircularProgressIndicator()));
+                } else {
+                  var _myLanguage = snapshot.data.getString("lang");
+                  var languageProvider = Provider.of<LanguageProvider>(context, listen: true);
+                  languageProvider.langOPT = _myLanguage;
+                  return Scaffold(
+                    appBar: AppBar(
+                        elevation: 2,
+                        leading: IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () => Navigator.pop(context, false),
+                        ),
+                        title: Text(languageData[languageProvider
+                            .langOPT]
+                        [
+                        'Health Facilities'] ??
+                            "Health Facilities", textAlign: TextAlign.center)),
+                    body: SingleChildScrollView(
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  GestureDetector(
+                                      onTap: () {
+                                        List<TrendingSearchable> hld = [];
+                                        hld += SearchProvider.hospitals2;
+                                        hld += SearchProvider.hospitalServices2;
+                                        showSearch<TrendingSearchable>(
+                                            context: context,
+                                            delegate: TrendingSearch2(trendings: hld, searchFor: "Search Health Facilities"));
+                                        // showSearch<Hospitals>(
+                                        //     context: context,
+                                        //     delegate: HospitalSearch(hospitals: HospitalProvider.nearby));
+                                      },
+                                      // onTap: buttn,
+                                      child: Container(
+                                          margin: EdgeInsets.fromLTRB(0, 60, 0, 50),
+                                          child: Center(
+                                              child: Container(
+                                                // padding: EdgeInsets.all(40.0),
+                                                  width:
+                                                  MediaQuery.of(context).size.width * 0.90,
+                                                  child: Theme(
+                                                      data: ThemeData(
+                                                        hintColor: Colors.white,
                                                       ),
-                                                    ))))))),
-                            Divider(
-                              color: Colors.black38,
-                            ),
-                            Container(
-                                margin: EdgeInsets.fromLTRB(
-                                    MediaQuery.of(context).size.width * 0.05,
-                                    0,
-                                    MediaQuery.of(context).size.width * 0.05,
-                                    0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      languageData[languageProvider
-                                          .langOPT]
-                                      [
-                                      'Top Hospitals'] ??
-                                          "Top Hospitals",
-                                      textAlign: TextAlign.left,
-                                      textScaleFactor: 1.7,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
-                                    ),
+                                                      child: Card(
+                                                          elevation: 4,
+                                                          shape: OutlineInputBorder(
+                                                            borderRadius: BorderRadius.all(
+                                                                Radius.circular(50.0)),
+                                                            borderSide: BorderSide(
+                                                                color: myCustomColors
+                                                                    .loginBackgroud,
+                                                                width: 2),
+                                                          ),
+                                                          child: SizedBox(
+                                                            height: 50,
+                                                            child: ListTile(
+                                                              leading: Icon(
+                                                                Icons.search,
+                                                                color: myCustomColors
+                                                                    .loginBackgroud,
+                                                              ),
+                                                              title: Text(
+                                                                languageData[languageProvider
+                                                                    .langOPT]
+                                                                [
+                                                                'Search'] ??
+                                                                    "Search",
+                                                                style: TextStyle(
+                                                                  color: myCustomColors
+                                                                      .loginBackgroud,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ))))))),
+                                  Divider(
+                                    color: Colors.black38,
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          MediaQuery.of(context).size.width * 0.05,
+                                          0,
+                                          MediaQuery.of(context).size.width * 0.05,
+                                          0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            languageData[languageProvider
+                                                .langOPT]
+                                            [
+                                            'Top Hospitals'] ??
+                                                "Top Hospitals",
+                                            textAlign: TextAlign.left,
+                                            textScaleFactor: 1.7,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(fontWeight: FontWeight.bold),
+                                          ),
 
-                                  ],
-                                )),
-                            Container(
-                                height: 190.0,
-                                margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
-                                child: FutureBuilder<List<Hospitals>>(
-                                    future: hosProvider.fetchTrendingHospitals(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.none &&
-                                          snapshot.hasData == null) {
-                                        return CircularProgressIndicator();
-                                      }
-                                      print(
-                                          'project snapshot data is: ${snapshot.data}');
-                                      if (snapshot.data == null) {
-                                        return Container(
-                                            child: Center(child: CircularProgressIndicator())
-                                        );
-                                      } else {
-                                        WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-                                        return ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          controller: _scrollController,
-                                          // reverse: true,
-                                          shrinkWrap: true,
-                                          itemBuilder:
-                                              (BuildContext ctxt, int index) {
-                                            return _buildHospitalsListItem(
-                                                snapshot.data[index], ctxt);
-                                          },
-                                          itemCount: snapshot.data.length,
-                                        );
-                                      }
-                                    })),
-                            Divider(
-                              color: Colors.black38,
-                            ),
-                            Container(
-                                margin: EdgeInsets.fromLTRB(
-                                    MediaQuery.of(context).size.width * 0.05,
-                                    0,
-                                    MediaQuery.of(context).size.width * 0.05,
-                                    0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      languageData[languageProvider
-                                          .langOPT]
-                                      [
-                                      'Nearby Hospitals'] ??
-                                          "Nearby Hospitals",
-                                      textAlign: TextAlign.left,
-                                      textScaleFactor: 1.7,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                )),
-                            Container(
-                              // height: 190.0,
-                                margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
-                                child: FutureBuilder<UserLocation>(
-                                    future: hosProvider.getCurrentLocation(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.none &&
-                                          snapshot.hasData == null) {
-                                        return CircularProgressIndicator();
-                                      }
-                                      return FutureBuilder<List<Hospitals>>(
-                                          future: hosProvider
-                                              .fetchNearByHospitals(snapshot.data),
+                                        ],
+                                      )),
+                                  Container(
+                                      height: 190.0,
+                                      margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
+                                      child: FutureBuilder<List<Hospitals>>(
+                                          future: hosProvider.fetchTrendingHospitals(),
                                           builder: (context, snapshot) {
                                             if (snapshot.connectionState ==
                                                 ConnectionState.none &&
@@ -327,21 +286,12 @@ class _HospitalPageState extends State<HospitalsPage> {
                                                   child: Center(child: CircularProgressIndicator())
                                               );
                                             } else {
-                                              return GridView.builder(
-                                                gridDelegate:
-                                                SliverGridDelegateWithMaxCrossAxisExtent(
-                                                    maxCrossAxisExtent: 160,
-                                                    childAspectRatio:
-                                                    (MediaQuery.of(context)
-                                                        .orientation ==
-                                                        Orientation.portrait)
-                                                        ? 2 / 3
-                                                        : 2 / 2.2,
-                                                    crossAxisSpacing: 0,
-                                                    mainAxisSpacing: 0),
+                                              WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+                                              return ListView.builder(
+                                                scrollDirection: Axis.horizontal,
+                                                controller: _scrollController,
+                                                // reverse: true,
                                                 shrinkWrap: true,
-                                                physics: NeverScrollableScrollPhysics(),
-                                                scrollDirection: Axis.vertical,
                                                 itemBuilder:
                                                     (BuildContext ctxt, int index) {
                                                   return _buildHospitalsListItem(
@@ -350,16 +300,94 @@ class _HospitalPageState extends State<HospitalsPage> {
                                                 itemCount: snapshot.data.length,
                                               );
                                             }
-                                          });
-                                    }))
+                                          })),
+                                  Divider(
+                                    color: Colors.black38,
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          MediaQuery.of(context).size.width * 0.05,
+                                          0,
+                                          MediaQuery.of(context).size.width * 0.05,
+                                          0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            languageData[languageProvider
+                                                .langOPT]
+                                            [
+                                            'Nearby Hospitals'] ??
+                                                "Nearby Hospitals",
+                                            textAlign: TextAlign.left,
+                                            textScaleFactor: 1.7,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      )),
+                                  Container(
+                                    // height: 190.0,
+                                      margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
+                                      child: FutureBuilder<UserLocation>(
+                                          future: hosProvider.getCurrentLocation(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.none &&
+                                                snapshot.hasData == null) {
+                                              return CircularProgressIndicator();
+                                            }
+                                            return FutureBuilder<List<Hospitals>>(
+                                                future: hosProvider
+                                                    .fetchNearByHospitals(snapshot.data),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.connectionState ==
+                                                      ConnectionState.none &&
+                                                      snapshot.hasData == null) {
+                                                    return CircularProgressIndicator();
+                                                  }
+                                                  print(
+                                                      'project snapshot data is: ${snapshot.data}');
+                                                  if (snapshot.data == null) {
+                                                    return Container(
+                                                        child: Center(child: CircularProgressIndicator())
+                                                    );
+                                                  } else {
+                                                    return GridView.builder(
+                                                      gridDelegate:
+                                                      SliverGridDelegateWithMaxCrossAxisExtent(
+                                                          maxCrossAxisExtent: 160,
+                                                          childAspectRatio:
+                                                          (MediaQuery.of(context)
+                                                              .orientation ==
+                                                              Orientation.portrait)
+                                                              ? 2 / 3
+                                                              : 2 / 2.2,
+                                                          crossAxisSpacing: 0,
+                                                          mainAxisSpacing: 0),
+                                                      shrinkWrap: true,
+                                                      physics: NeverScrollableScrollPhysics(),
+                                                      scrollDirection: Axis.vertical,
+                                                      itemBuilder:
+                                                          (BuildContext ctxt, int index) {
+                                                        return _buildHospitalsListItem(
+                                                            snapshot.data[index], ctxt);
+                                                      },
+                                                      itemCount: snapshot.data.length,
+                                                    );
+                                                  }
+                                                });
+                                          }))
+                                ],
+                              ),
+                            )
                           ],
-                        ),
-                      )
-                    ],
-                  )),
-            );
-          }
-        });
+                        )),
+                  );
+                }
+              })
+      ),
+    );
   }
 
   _buildHospitalsListItem(Hospitals hospital, BuildContext ctxt) {
@@ -437,7 +465,7 @@ class _HospitalPageState extends State<HospitalsPage> {
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  hospital.locationName,
+                  hospital.locationName??"",
                   maxLines: 1,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 )

@@ -11,10 +11,71 @@ import 'package:flutter/material.dart';
 class DrugProvider with ChangeNotifier {
   List<Drugs> drugs = [];
   static List<Drugs> allPharmacySelectedDrugs = [];
+  static List<Drugs> allPharmacySelectedDrugsFromDetail = [];
   static List<Drugs> allImporterSelectedDrugs = [];
+  static List<Drugs> allImporterSelectedDrugsFromDetail = [];
   List<Category> categories = [];
   List<Category> categoriesList = [];
   bool isLoading = false;
+
+
+  Future<List<Category>> getDrugsCategoryByImporterId(String Id) async {
+    FirebaseFirestore fire = FirebaseFirestore.instance;
+    isLoading = true;
+    categoriesList.clear();
+    print("pppppppppppppppppppppppp");
+    print("-----------------"+Id+"-----------------");
+    print("pppppppppppppppppppppppp");
+    var curr;
+    try {
+      var docs =
+      await fire.collection('selected_importer_drugs').where('importer_id', isEqualTo: Id).get();
+      // if (docs.docs.isNotEmpty) {
+      var data2 = docs.docs.toList();
+      // var data = docs.docs.first.data();
+      var servicesList =docs.docs?? [];
+      for (var i = 0; i < servicesList.length; i++) {
+        String servicesData = await servicesList[i]['drug_id'];
+        print("This is my id: ${servicesData}");
+        // var serviceType = document.docs.first.data()['category'];
+        // print("This is my Try: ${document.docs.first.data()['service_id']}");
+        // DocumentSnapshot variable = await Firestore.instance.collection('COLLECTION NAME').document('DOCUMENT ID').get();
+        final Category category = new Category(
+          servicesList[i]['CategoryName'],
+          servicesList[i]['CategoryImage'],
+          servicesList[i]['CategoryId'],
+        );
+        int temp = 0;
+        if(categoriesList.length==0){
+          categoriesList.add(category);
+        }else{
+          categoriesList.forEach((element) {
+            if(category.id==element.id)
+            {
+              temp++;
+            }
+          });
+          if(temp==0){
+            categoriesList.add(category);
+          }
+          print("Also here$i");
+        }
+        print("none here either");
+      }
+      categoriesList.forEach((element) {
+        print("*****************************");
+        print("Element Id: ${element.id}");
+        print("Element Name: ${element.name}");
+        print("Element Image: ${element.image}");
+        print("*****************************");
+      });
+      return categoriesList;
+    } catch (error) {
+      isLoading = false;
+      print("Problem . . . . . . :$error");
+      return categoriesList;
+    }
+  }
 
   // Future<List<Drugs>> getPharmacyById(String Id) async {
   //   isLoading = true;
@@ -306,24 +367,40 @@ class DrugProvider with ChangeNotifier {
         // var data = docs.docs.first.data();
         var servicesList =docs.docs?? [];
         for (var i = 0; i < servicesList.length; i++) {
-          String servicesData = await servicesList[i]['drug_id'];
-          String price = await servicesList[i]['price'];
-          String quantity = await servicesList[i]['quantity'];
-          bool trending = await servicesList[i]['trending'];
+          // String servicesData = await servicesList[i]['drug_id'];
+          // String price = await servicesList[i]['price'];
+          // String quantity = await servicesList[i]['quantity'];
+          // bool trending = await servicesList[i]['trending'];
+          String price = "";
+          String quantity = "";
+          bool trending = false;
           Pharmacies pharmacy = await getPharmacyById(await servicesList[i]['pharmacy_id'],);
             final Drugs drug = Drugs(
+                // itemId: servicesList[i].id,
+                // id: servicesList[i]['drug_id'],
+                // name: servicesList[i]['drug_name'],
+                // quantity: quantity,
+                // dosage: servicesList[i]['dosage'],
+                // madein: servicesList[i]['madein'],
+                // root: servicesList[i]['root'],
+                // image: servicesList[i]['image']??"",
+                // category: servicesList[i]['CategoryName']??"",
+                // category_image: servicesList[i]['CategoryImage']??"",
+                // category_id: servicesList[i]['CategoryId']??"",
+                // price: price ?? "0",
+                // searchType: SearchType.Drug,
                 itemId: servicesList[i].id,
                 id: servicesList[i]['drug_id'],
                 name: servicesList[i]['drug_name'],
                 quantity: quantity,
-                dosage: servicesList[i]['dosage'],
-                madein: servicesList[i]['madein'],
-                root: servicesList[i]['root'],
-                image: servicesList[i]['image']??"",
-                category: servicesList[i]['CategoryName']??"",
-                category_image: servicesList[i]['CategoryImage']??"",
-                category_id: servicesList[i]['CategoryId']??"",
-                price: price ?? "0",
+                dosage: "",
+                madein: "",
+                root: "",
+                image: "",
+                category: "",
+                category_image: "",
+                category_id: "",
+                price: "0",
                 searchType: SearchType.Drug,
                 hospitalsLabsDiagnostics: pharmacy,
                 pharmacies: pharmacy,
@@ -333,7 +410,7 @@ class DrugProvider with ChangeNotifier {
               drugs.add(drug);
             }else{
               drugs.forEach((element) {
-                if(drug.id==element.id)
+                if(drug.id==element.id && drug.pharmacies.Id==element.pharmacies.Id)
                 {
                   temp++;
                 }
@@ -348,6 +425,90 @@ class DrugProvider with ChangeNotifier {
         print("none here either");
       }
       allPharmacySelectedDrugs = drugs;
+      return drugs;
+    } catch (error) {
+      isLoading = false;
+      print("Problem . . . . . . :$error");
+      return drugs;
+    }
+  }
+
+  Future<List<Drugs>> getAllPharmacySelectedDrugsFromDetail() async {
+    FirebaseFirestore fire = FirebaseFirestore.instance;
+    isLoading = true;
+    drugs.clear();
+    var curr;
+    try {
+      var docs =
+      await fire.collection('selected_pharmacy_drugs').where("pharmacy_id", isNull: false).get();
+      if (docs.docs.isNotEmpty) {
+        var data2 = docs.docs.toList();
+        // var data = docs.docs.first.data();
+        var servicesList =docs.docs?? [];
+        for (var i = 0; i < servicesList.length; i++) {
+          // String servicesData = await servicesList[i]['drug_id'];
+          // String price = await servicesList[i]['price'];
+          // String quantity = await servicesList[i]['quantity'];
+          // bool trending = await servicesList[i]['trending'];
+          String price = "";
+          String quantity = "";
+          bool trending = false;
+          Pharmacies pharmacy = await getPharmacyById(await servicesList[i]['pharmacy_id'],);
+          final Drugs drug = Drugs(
+            // itemId: servicesList[i].id,
+            // id: servicesList[i]['drug_id'],
+            // name: servicesList[i]['drug_name'],
+            // quantity: quantity,
+            // dosage: servicesList[i]['dosage'],
+            // madein: servicesList[i]['madein'],
+            // root: servicesList[i]['root'],
+            // image: servicesList[i]['image']??"",
+            // category: servicesList[i]['CategoryName']??"",
+            // category_image: servicesList[i]['CategoryImage']??"",
+            // category_id: servicesList[i]['CategoryId']??"",
+            // price: price ?? "0",
+            // searchType: SearchType.Drug,
+              itemId: servicesList[i].id,
+              id: servicesList[i]['drug_id'],
+              name: servicesList[i]['drug_name'],
+              quantity: quantity,
+              dosage: "",
+              madein: "",
+              root: "",
+              image: "",
+              category: "",
+              category_image: "",
+              category_id: "",
+              price: "0",
+              searchType: SearchType.Drug,
+              hospitalsLabsDiagnostics: pharmacy,
+              pharmacies: pharmacy,
+              trending: trending);
+          int temp = 0;
+          if(drugs.length==0){
+            drugs.add(drug);
+          }else{
+            drugs.forEach((element) {
+              if(drug.id==element.id && drug.pharmacies.Id==element.pharmacies.Id)
+              {
+                temp++;
+              }
+            });
+            if(temp==0){
+              drugs.add(drug);
+            }
+          }
+          // return categoriesList;
+          print("Also here$i");
+        }
+        print("none here either");
+      }
+      allPharmacySelectedDrugsFromDetail = drugs;
+      allPharmacySelectedDrugsFromDetail.forEach((element) {
+        print("element.hospitalsLabsDiagnostics.Id");
+        print(element.hospitalsLabsDiagnostics.Id);
+        print("element.hospitalsLabsDiagnostics.Id");
+      });
       return drugs;
     } catch (error) {
       isLoading = false;
@@ -494,22 +655,22 @@ class DrugProvider with ChangeNotifier {
         var servicesList =docs.docs?? [];
         for (var i = 0; i < servicesList.length; i++) {
           String servicesData = await servicesList[i]['drug_id'];
-          String price = await servicesList[i]['price'];
-          String quantity = await servicesList[i]['quantity'];
-          bool trending = await servicesList[i]['trending'];
+          String price = "";
+          String quantity = "";
+          bool trending = false;
           Importers importer =  await getImporterById(servicesList[i]['importer_id'],);
             final Drugs drug = Drugs(
                 itemId: servicesList[i].id,
                 id: servicesList[i]['drug_id'],
                 name: servicesList[i]['drug_name'],
                 quantity: quantity,
-                dosage: servicesList[i]['dosage'],
-                madein: servicesList[i]['madein'],
-                root: servicesList[i]['root'],
-                image: servicesList[i]['image']??"",
-                category: servicesList[i]['CategoryName']??"",
-                category_image: servicesList[i]['CategoryImage']??"",
-                category_id: servicesList[i]['CategoryId']??"",
+                dosage: "",
+                madein: "",
+                root: "",
+                image: "",
+                category: "",
+                category_image: "",
+                category_id: "",
                 price: price ?? "0",
                 searchType: SearchType.Drug,
                 pharmacies:importer,
@@ -520,7 +681,7 @@ class DrugProvider with ChangeNotifier {
               drugs.add(drug);
             }else{
               drugs.forEach((element) {
-                if(drug.id==element.id)
+                if(drug.id==element.id && drug.pharmacies.Id==element.pharmacies.Id)
                 {
                   temp++;
                 }

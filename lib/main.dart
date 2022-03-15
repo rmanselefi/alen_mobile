@@ -1,5 +1,6 @@
 import 'package:alen/providers/EmergencyMS.dart';
 import 'package:alen/providers/HomeCare.dart';
+import 'package:alen/providers/SearchProvider.dart';
 import 'package:alen/providers/ads.dart';
 import 'package:alen/providers/auth.dart';
 import 'package:alen/providers/cart.dart';
@@ -15,7 +16,7 @@ import 'package:alen/providers/language.dart';
 import 'package:alen/providers/pharmacy.dart';
 import 'package:alen/ui/Cart/ImportCart.dart';
 import 'package:alen/ui/Cart/ImportCart.dart';
-import 'package:alen/ui/Forms/MultipleImageForPharmacyAndImporter.dart';
+import 'package:alen/ui/Forms/ImageForm.dart';
 import 'package:alen/ui/Forms/PhoneForm.dart';
 import 'package:alen/ui/Home/HomePage.dart';
 import 'package:alen/utils/AppColors.dart';
@@ -94,6 +95,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => EmergencyMSProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
         ChangeNotifierProvider(create: (_) => CompanyProvider()),
+        ChangeNotifierProvider(create: (_) => SearchProvider()),
       ],
       child: MaterialApp(
 

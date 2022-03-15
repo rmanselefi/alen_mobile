@@ -238,7 +238,7 @@ class _DetailForDrugState extends State<DetailForDrug> {
                                             Container(
                                               padding: EdgeInsets.only(right: 30, top: 10),
                                               child: Text(
-                                                'Madein',
+                                                'Brand',
                                                 textScaleFactor: 1.7,
                                                 textAlign: TextAlign.left,
                                                 overflow: TextOverflow.ellipsis,
@@ -299,7 +299,7 @@ class _DetailForDrugState extends State<DetailForDrug> {
                                           Container(
                                             padding: EdgeInsets.only(right: 30, top: 10),
                                             child: Text(
-                                              'Root',
+                                              'Route',
                                               textScaleFactor: 1.7,
                                               textAlign: TextAlign.left,
                                               overflow: TextOverflow.ellipsis,

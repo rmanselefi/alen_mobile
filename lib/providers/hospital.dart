@@ -84,6 +84,40 @@ class HospitalProvider with ChangeNotifier {
     }
   }
 
+
+  Future<Hospitals> fetchHospital(String id) async {
+    print("ididididididididi $id");
+    isLoading = true;
+    try {
+      var docs =
+      await FirebaseFirestore.instance.collection('hospital').doc(id).get();
+      if (docs.exists) {
+        var data = docs.data();
+        final Hospitals hos = Hospitals(
+            Id: docs.id,
+            name: data['name'],
+            phone: data['phone'],
+            image: data['image'],
+            locationName: data['location_name'],
+            latitude: data['location'].latitude,
+            longitude: data['location'].longitude,
+            description: data['description'],
+            services: data['services'],
+            officehours: data['officehours'],
+            email: data['email'],
+            images: data['images']);
+        return hos;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      isLoading = false;
+      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      return null;
+    }
+  }
+
+
   Future<List<HLDServiceTypes>> getAllSelectedHospServiceTypes() async {
     isLoading = true;
     hospServicestypes.clear();
@@ -124,7 +158,8 @@ class HospitalProvider with ChangeNotifier {
             hospServicestypes.add(category);
           }else{
             hospServicestypes.forEach((element) {
-              if(category.id==element.id)
+              if(category.id==element.id &&
+                  category.hospitalsLabsDiagnostics.Id==element.hospitalsLabsDiagnostics.Id)
               {
                 temp++;
               }

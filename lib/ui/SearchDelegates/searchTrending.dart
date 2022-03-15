@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 
 import '../../utils/DetailsPage.dart';
 
+
 class TrendingSearch extends SearchDelegate<HospitalsLabsDiagnostics> {
   static const myCustomColors = AppColors();
   HospitalsLabsDiagnostics result;

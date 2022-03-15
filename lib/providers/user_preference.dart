@@ -22,8 +22,8 @@ class UserPreferences {
       prefs.remove('token');
       prefs.remove('phone');
       prefs.remove('first_name');
-      prefs.remove('middleName');
-      prefs.remove('lastName');
+      prefs.remove('middle_name');
+      prefs.remove('last_name');
       prefs.remove('email');
       prefs.remove('image');
       prefs.remove('age');

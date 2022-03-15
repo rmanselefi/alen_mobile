@@ -8,6 +8,7 @@ import 'hospital.dart';
 
 class LaboratoryProvider with ChangeNotifier {
   List<Laboratories> laboratories = [];
+  List<Laboratories> trendinglaboratories = [];
   List<Laboratories> nearHospital = [];
   bool isLoading = false;
   UserLocation currentLocation;
@@ -15,6 +16,36 @@ class LaboratoryProvider with ChangeNotifier {
   List<HLDServiceTypes> labServiceTypes = [];
   static List<Laboratories> nearby=[];
   static List<Laboratories> trending=[];
+
+
+
+  Future<Laboratories> fetchLaboratory(String id) async {
+    isLoading = true;
+    nearHospital.clear();
+    try {
+      var docs = await FirebaseFirestore.instance.collection('laboratory').doc(id).get();
+      if (docs.exists) {
+          var data = docs.data();
+          final Laboratories hos = Laboratories(
+              Id: docs.id,
+              name: data['name'],
+              phone: data['phone'],
+              image: data['image'],
+              locationName: data['location_name'],
+              latitude: data['location'].latitude,
+              longitude: data['location'].longitude,
+              email: data['email'],
+              images: data['images'],
+              officehours: data['officehours'],
+              description: data['description']);
+          return hos;
+      }
+    } catch (error) {
+      isLoading = false;
+      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      return null;
+    }
+  }
 
 
   Future<List<HLDServiceTypes>> getLabServiceTypesByLabId(String Id, String hospitalId) async {
@@ -125,7 +156,8 @@ class LaboratoryProvider with ChangeNotifier {
             labServiceTypes.add(category);
           }else{
             labServiceTypes.forEach((element) {
-              if(category.id==element.id)
+              if(category.id==element.id &&
+                  category.hospitalsLabsDiagnostics.Id==element.hospitalsLabsDiagnostics.Id)
               {
                 temp++;
               }
@@ -257,7 +289,55 @@ class LaboratoryProvider with ChangeNotifier {
     }
   }
 
-
+  Future<List<Laboratories>> fetchTrendingHospitals() async {
+    isLoading = true;
+    trendinglaboratories.clear();
+    var curr;
+    try {
+      var docs =
+      await FirebaseFirestore.instance.collection('laboratory').where('trending',isEqualTo: true).get();
+      if (docs.docs.isNotEmpty) {
+        if (trendinglaboratories.length == 0) {
+          for (var i = 0; i < docs.docs.length; i++) {
+            var data = docs.docs[i].data();
+            final Laboratories lab = Laboratories(
+              type: Type.Lab,
+              name: data['name'],
+              image: data['image'],
+              images: data['images'],
+              latitude: data['location'].latitude,
+              longitude: data['location'].longitude,
+              officehours: data['officehours'],
+              phone: data['phone'],
+              locationName: data['location_name'],
+              email: data['email'],
+              description: data['description'],
+              Id: docs.docs[i].id,);
+            int temp = 0;
+            if(trendinglaboratories.length==0){
+              trendinglaboratories.add(lab);
+            }else{
+              trendinglaboratories.forEach((element) {
+                if(lab.Id==element.Id)
+                {
+                  temp++;
+                }
+              });
+              if(temp==0){
+                trendinglaboratories.add(lab);
+              }
+            }
+          }
+        }
+      }
+      trending= trendinglaboratories;
+      return trendinglaboratories;
+    } catch (error) {
+      isLoading = false;
+      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      return trendinglaboratories;
+    }
+  }
   Future<List<Laboratories>> fetchTrendingLaboratories() async {
     isLoading = true;
     laboratories.clear();
@@ -305,7 +385,7 @@ class LaboratoryProvider with ChangeNotifier {
     } catch (error) {
       isLoading = false;
       print("mjkhjjhbjhvjhvhjvjhgv $error");
-      return null;
+      return laboratories;
     }
   }
 
