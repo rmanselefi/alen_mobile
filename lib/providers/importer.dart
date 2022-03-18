@@ -29,6 +29,41 @@ class ImporterProvider with ChangeNotifier {
 
 
 
+
+  Future<Importers> fetchImporters(String id) async {
+    isLoading = true;
+    importers.clear();
+    nearImporter.clear();
+    var curr;
+    try {
+      var docs = await FirebaseFirestore.instance.collection('importers').
+      doc(id).
+      get();
+      if (docs.exists) {
+        if (importers.length == 0) {
+          var data = docs.data();
+          final Importers hos = Importers(
+              Id: docs.id,
+              name: data['name'],
+              phone: data['phone'],
+              locationName: data['location_name'],
+              image: data['image'],
+              latitude: data['location'].latitude,
+              longitude: data['location'].longitude,
+              email: data['email'],
+              images: data['images'],
+              officehours: data['officehours'],
+              description: data['description']);
+          return hos;
+        }
+      }
+    } catch (error) {
+      isLoading = false;
+      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      return null;
+    }
+  }
+
   Future<Importers> getImporterById(String Id) async {
     isLoading = true;
     var curr;

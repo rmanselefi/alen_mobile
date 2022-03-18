@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:alen/models/Users.dart';
 import 'package:path/path.dart';
 import 'package:alen/providers/user_preference.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,6 +45,33 @@ class AuthProvider with ChangeNotifier {
     return imageUrl;
   }
 
+  Future<Users> fetchUser(String id) async {
+    print("ididididididididi $id");
+    try {
+      var docs =
+      await FirebaseFirestore.instance.collection('users').doc(id).get();
+      if (docs.exists) {
+        var data = docs.data();
+        final Users user = Users(
+            id: docs.id,
+            firstName: data['first_name'],
+            lastName: data['last_name'],
+            middleName: data['middle_name'],
+            phone: data['phone'],
+            image: data['image'],
+            age: data['age'],
+            location: data['location'],
+            email: data['email'],
+            sex: data['sex']);
+        return user;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      return null;
+    }
+  }
 
   Future<dynamic> uploadFile(File file) async {
     String id = await UserPreferences().getId()??"";
@@ -126,9 +154,9 @@ class AuthProvider with ChangeNotifier {
         var prefs = await SharedPreferences.getInstance();
         prefs.setString('user_id', userId);
         prefs.setString('phone', userData['phone']??"");
-        prefs.setString('first_name', userData['firstName']??"");
-        prefs.setString('middleName', userData['middleName']??"");
-        prefs.setString('lastName', userData['lastName']??"");
+        prefs.setString('first_name', userData['first_name']??"");
+        prefs.setString('middle_name', userData['middle_name']??"");
+        prefs.setString('last_name', userData['last_name']??"");
         prefs.setString('email', userData['email']??"");
         prefs.setString('image', userData['image']??"");
         prefs.setString('age', userData['age']??"");
@@ -166,10 +194,47 @@ class AuthProvider with ChangeNotifier {
       prefs.setString('user_id', user['userid']);
       prefs.setString('phone', user['phone']);
       prefs.setString('first_name', user['firstName']);
-      prefs.setString('middleName', user['middleName']);
-      prefs.setString('lastName', user['lastName']);
+      prefs.setString('middle_name', user['middleName']);
+      prefs.setString('last_name', user['lastName']);
       prefs.setString('email', user['email']);
       prefs.setString('age', user['age']);
+
+      notifyListeners();
+    } catch (e) {
+      hasError = true;
+      notifyListeners();
+    }
+    return {'success': !hasError};
+  }
+
+  Future updateUser(Users user) async {
+    try {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.id)
+          .update({
+        'first_name': user.firstName,
+        'middle_name': user.middleName,
+        'last_name': user.lastName,
+        'sex': user.sex,
+        'email': user.email,
+        'age': user.age,
+        'location': user.location,
+      })
+          .then((value) => print("Detail Updated"))
+          .catchError((error) =>
+          print("Failed to update user: $error"));
+
+
+
+
+      hasError = false;
+      var prefs = await SharedPreferences.getInstance();
+      prefs.setString('first_name', user.firstName);
+      prefs.setString('middle_name', user.middleName);
+      prefs.setString('last_name', user.lastName);
+      prefs.setString('email', user.email);
+      prefs.setString('age', user.age);
 
       notifyListeners();
     } catch (e) {

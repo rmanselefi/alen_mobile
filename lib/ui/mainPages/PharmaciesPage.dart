@@ -1,10 +1,13 @@
+import 'package:alen/models/TrendingSearchable.dart';
 import 'package:alen/models/hospital.dart';
 import 'package:alen/models/user_location.dart';
+import 'package:alen/providers/SearchProvider.dart';
 import 'package:alen/providers/drug.dart';
 import 'package:alen/providers/language.dart';
 import 'package:alen/ui/Cart/PharmacyCart.dart';
 import 'package:alen/ui/Details/PharmacyDetail.dart';
 import 'package:alen/ui/SearchDelegates/searchTrending.dart';
+import 'package:alen/ui/SearchDelegates/searchTrending2.dart';
 import 'package:alen/ui/SeeAllPages/CategoryServices/SeeAllCategories.dart';
 import 'package:alen/ui/SeeAllPages/SecondPage/SeeAllPharmacies.dart';
 import 'package:alen/ui/Services/PharmacistsServices.dart';
@@ -14,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:alen/ui/Models/Trending.dart';
 import 'package:alen/ui/Pages/Pharmacy.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:alen/providers/pharmacy.dart';
 import 'package:alen/models/pharmacy.dart';
@@ -39,216 +43,174 @@ class PharmaciesPage extends StatelessWidget {
   }
 
 
+
   @override
   Widget build(BuildContext context) {
+    Future<void> SearchInitializer() async {
+
+      UserLocation location =
+      await Provider.of<SearchProvider>(context, listen: false)
+          .getCurrentLocation();
+
+      await Provider.of<SearchProvider>(context, listen: false)
+          .fetchAllPharmacies2(location);
+
+      await Provider.of<SearchProvider>(context, listen: false)
+          .getAllPharmacySelectedDrugs2();
+    }
+
+    if(SearchProvider.pharmacies2.isEmpty ){
+      SearchInitializer();
+    }
     var pharmacyProvider =
         Provider.of<PharmacyProvider>(context, listen: false);
-    Provider.of<DrugProvider>(context, listen: false)
-        .getAllPharmacySelectedDrugs();
-    return FutureBuilder<dynamic>(
-        future: SharedPreferences.getInstance(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.none &&
-              snapshot.hasData == null) {
-            return CircularProgressIndicator();
-          }
-          print('project snapshot data is: ${snapshot.data}');
-          if (snapshot.data == null) {
-            return Container(
-                child: Center(child: CircularProgressIndicator()));
-          } else {
-            var _myLanguage = snapshot.data.getString("lang");
-            var languageProvider = Provider.of<LanguageProvider>(context, listen: true);
-            languageProvider.langOPT = _myLanguage;
-            return Scaffold(
-              appBar: AppBar(
-                elevation: 2,
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () => Navigator.pop(context, false),
-                ),
-                title: Text(languageData[languageProvider
-                    .langOPT]
-                [
-                'Pharmacies'] ??
-                    "Pharmacies", textAlign: TextAlign.center),
-                actions: [
-                  IconButton(
-                    padding: EdgeInsets.only(right: 15),
-                    onPressed: (){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PharmacyCart()
-                          )
-                      );
-                    },
-                    icon: Icon(
-                        Icons.shopping_cart
+
+    if(DrugProvider.allPharmacySelectedDrugsFromDetail.isEmpty ){
+      Provider.of<DrugProvider>(context, listen: false)
+          .getAllPharmacySelectedDrugsFromDetail();
+    }
+    Future<dynamic> handleExitApp() async{
+      Navigator.pop(context, false);
+    }
+    return WillPopScope(
+      onWillPop:() async => handleExitApp(),
+      child: LoaderOverlay(
+          overlayOpacity: 0.8,
+          child: FutureBuilder<dynamic>(
+              future: SharedPreferences.getInstance(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.none &&
+                    snapshot.hasData == null) {
+                  return CircularProgressIndicator();
+                }
+                print('project snapshot data is: ${snapshot.data}');
+                if (snapshot.data == null) {
+                  return Container(
+                      child: Center(child: CircularProgressIndicator()));
+                } else {
+                  var _myLanguage = snapshot.data.getString("lang");
+                  var languageProvider = Provider.of<LanguageProvider>(context, listen: true);
+                  languageProvider.langOPT = _myLanguage;
+                  return Scaffold(
+                    appBar: AppBar(
+                      elevation: 2,
+                      leading: IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () => Navigator.pop(context, false),
+                      ),
+                      title: Text(languageData[languageProvider
+                          .langOPT]
+                      [
+                      'Pharmacies'] ??
+                          "Pharmacies", textAlign: TextAlign.center),
+                      actions: [
+                        IconButton(
+                          padding: EdgeInsets.only(right: 15),
+                          onPressed: (){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PharmacyCart()
+                                )
+                            );
+                          },
+                          icon: Icon(
+                              Icons.shopping_cart
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
-              body: SingleChildScrollView(
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            GestureDetector(
-                                onTap: () {
-                                  List<HospitalsLabsDiagnostics> hld = [];
-                                  hld += PharmacyProvider.nearby;
-                                  hld += DrugProvider.allPharmacySelectedDrugs;
-                                  showSearch<HospitalsLabsDiagnostics>(
-                                      context: context,
-                                      delegate: TrendingSearch(trendings: hld, searchFor: "Search Pharmacies"));
-                                },
-                                child: Container(
-                                    margin: EdgeInsets.fromLTRB(0, 60, 0, 50),
-                                    child: Center(
-                                        child: Container(
-                                          // padding: EdgeInsets.all(40.0),
-                                            width:
-                                            MediaQuery.of(context).size.width * 0.90,
-                                            child: Theme(
-                                                data: ThemeData(
-                                                  hintColor: Colors.white,
-                                                ),
-                                                child: Card(
-                                                    elevation: 4,
-                                                    shape: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.all(
-                                                          Radius.circular(50.0)),
-                                                      borderSide: BorderSide(
-                                                          color: myCustomColors
-                                                              .loginBackgroud,
-                                                          width: 2),
-                                                    ),
-                                                    child: SizedBox(
-                                                      height: 50,
-                                                      child: ListTile(
-                                                        leading: Icon(
-                                                          Icons.search,
-                                                          color: myCustomColors
-                                                              .loginBackgroud,
-                                                        ),
-                                                        title: Text(
-                                                            languageData[languageProvider
-                                                                .langOPT]
-                                                            [
-                                                            'Search'] ??
-                                                                "Search",
-                                                          style: TextStyle(
-                                                            color: myCustomColors
-                                                                .loginBackgroud,
-                                                          ),
-                                                        ),
+                    body: SingleChildScrollView(
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  GestureDetector(
+                                      onTap: () {
+                                        List<TrendingSearchable> hld = [];
+                                        hld += SearchProvider.pharmacies2;
+                                        hld += SearchProvider.pharmacyDrugs2;
+                                        showSearch<TrendingSearchable>(
+                                            context: context,
+                                            delegate: TrendingSearch2(trendings: hld, searchFor: "Search Pharmacies"));
+                                      },
+                                      child: Container(
+                                          margin: EdgeInsets.fromLTRB(0, 60, 0, 50),
+                                          child: Center(
+                                              child: Container(
+                                                // padding: EdgeInsets.all(40.0),
+                                                  width:
+                                                  MediaQuery.of(context).size.width * 0.90,
+                                                  child: Theme(
+                                                      data: ThemeData(
+                                                        hintColor: Colors.white,
                                                       ),
-                                                    ))))))),
-                            Divider(
-                              color: Colors.black38,
-                            ),
-                            Container(
-                                margin: EdgeInsets.fromLTRB(
-                                    MediaQuery.of(context).size.width * 0.05,
-                                    0,
-                                    MediaQuery.of(context).size.width * 0.05,
-                                    0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      languageData[languageProvider
-                                          .langOPT]
-                                      [
-                                      'Top Pharmacies'] ??
-                                          "Top Pharmacies",
-                                      textAlign: TextAlign.left,
-                                      textScaleFactor: 1.7,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
-                                    ),
+                                                      child: Card(
+                                                          elevation: 4,
+                                                          shape: OutlineInputBorder(
+                                                            borderRadius: BorderRadius.all(
+                                                                Radius.circular(50.0)),
+                                                            borderSide: BorderSide(
+                                                                color: myCustomColors
+                                                                    .loginBackgroud,
+                                                                width: 2),
+                                                          ),
+                                                          child: SizedBox(
+                                                            height: 50,
+                                                            child: ListTile(
+                                                              leading: Icon(
+                                                                Icons.search,
+                                                                color: myCustomColors
+                                                                    .loginBackgroud,
+                                                              ),
+                                                              title: Text(
+                                                                languageData[languageProvider
+                                                                    .langOPT]
+                                                                [
+                                                                'Search'] ??
+                                                                    "Search",
+                                                                style: TextStyle(
+                                                                  color: myCustomColors
+                                                                      .loginBackgroud,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ))))))),
+                                  Divider(
+                                    color: Colors.black38,
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          MediaQuery.of(context).size.width * 0.05,
+                                          0,
+                                          MediaQuery.of(context).size.width * 0.05,
+                                          0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            languageData[languageProvider
+                                                .langOPT]
+                                            [
+                                            'Top Pharmacies'] ??
+                                                "Top Pharmacies",
+                                            textAlign: TextAlign.left,
+                                            textScaleFactor: 1.7,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(fontWeight: FontWeight.bold),
+                                          ),
 
-                                  ],
-                                )),
-                            Container(
-                                height: 190.0,
-                                margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
-                                child: FutureBuilder<List<Pharmacies>>(
-                                    future: pharmacyProvider.fetchTrendingPharmacies() ,
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.none &&
-                                          snapshot.hasData == null) {
-                                        return CircularProgressIndicator();
-                                      }
-                                      print(
-                                          'project snapshot data is: ${snapshot.data}');
-                                      if (snapshot.data == null) {
-                                        return Container(
-                                            child: Center(
-                                                child:
-                                                CircularProgressIndicator()));
-                                      } else {
-                                        WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-                                        return ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          controller: _scrollController,
-                                          // reverse: true,
-                                          shrinkWrap: true,
-                                          itemBuilder:
-                                              (BuildContext ctxt, int index) {
-                                            return _buildPharmaciesListItem(
-                                                snapshot.data[index], ctxt);
-                                          },
-                                          itemCount: snapshot.data.length,
-                                        );
-                                      }
-                                    })),
-                            Divider(
-                              color: Colors.black38,
-                            ),
-                            Container(
-                                margin: EdgeInsets.fromLTRB(
-                                    MediaQuery.of(context).size.width * 0.05,
-                                    0,
-                                    MediaQuery.of(context).size.width * 0.05,
-                                    0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      languageData[languageProvider
-                                          .langOPT]
-                                      [
-                                      'Nearby Pharmacies'] ??
-                                          "Nearby Pharmacies",
-                                      textAlign: TextAlign.left,
-                                      textScaleFactor: 1.7,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-
-                                  ],
-                                )),
-                            Container(
-                              // height: 190.0,
-                                margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
-                                child: FutureBuilder<UserLocation>(
-                                    future: pharmacyProvider.getCurrentLocation(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.none &&
-                                          snapshot.hasData == null) {
-                                        return CircularProgressIndicator();
-                                      }
-                                      return FutureBuilder<List<Pharmacies>>(
-                                          future: pharmacyProvider
-                                              .fetchNearByPharmacies(snapshot.data),
+                                        ],
+                                      )),
+                                  Container(
+                                      height: 190.0,
+                                      margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
+                                      child: FutureBuilder<List<Pharmacies>>(
+                                          future: pharmacyProvider.fetchTrendingPharmacies() ,
                                           builder: (context, snapshot) {
                                             if (snapshot.connectionState ==
                                                 ConnectionState.none &&
@@ -263,21 +225,12 @@ class PharmaciesPage extends StatelessWidget {
                                                       child:
                                                       CircularProgressIndicator()));
                                             } else {
-                                              return GridView.builder(
-                                                gridDelegate:
-                                                SliverGridDelegateWithMaxCrossAxisExtent(
-                                                    maxCrossAxisExtent: 160,
-                                                    childAspectRatio:
-                                                    (MediaQuery.of(context)
-                                                        .orientation ==
-                                                        Orientation.portrait)
-                                                        ? 2 / 3
-                                                        : 2 / 2.2,
-                                                    crossAxisSpacing: 0,
-                                                    mainAxisSpacing: 0),
+                                              WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+                                              return ListView.builder(
+                                                scrollDirection: Axis.horizontal,
+                                                controller: _scrollController,
+                                                // reverse: true,
                                                 shrinkWrap: true,
-                                                physics: NeverScrollableScrollPhysics(),
-                                                scrollDirection: Axis.vertical,
                                                 itemBuilder:
                                                     (BuildContext ctxt, int index) {
                                                   return _buildPharmaciesListItem(
@@ -286,16 +239,96 @@ class PharmaciesPage extends StatelessWidget {
                                                 itemCount: snapshot.data.length,
                                               );
                                             }
-                                          });
-                                    })),
+                                          })),
+                                  Divider(
+                                    color: Colors.black38,
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          MediaQuery.of(context).size.width * 0.05,
+                                          0,
+                                          MediaQuery.of(context).size.width * 0.05,
+                                          0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            languageData[languageProvider
+                                                .langOPT]
+                                            [
+                                            'Nearby Pharmacies'] ??
+                                                "Nearby Pharmacies",
+                                            textAlign: TextAlign.left,
+                                            textScaleFactor: 1.7,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(fontWeight: FontWeight.bold),
+                                          ),
+
+                                        ],
+                                      )),
+                                  Container(
+                                    // height: 190.0,
+                                      margin: EdgeInsets.fromLTRB(0, 30, 0, 30),
+                                      child: FutureBuilder<UserLocation>(
+                                          future: pharmacyProvider.getCurrentLocation(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.none &&
+                                                snapshot.hasData == null) {
+                                              return CircularProgressIndicator();
+                                            }
+                                            return FutureBuilder<List<Pharmacies>>(
+                                                future: pharmacyProvider
+                                                    .fetchNearByPharmacies(snapshot.data),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.connectionState ==
+                                                      ConnectionState.none &&
+                                                      snapshot.hasData == null) {
+                                                    return CircularProgressIndicator();
+                                                  }
+                                                  print(
+                                                      'project snapshot data is: ${snapshot.data}');
+                                                  if (snapshot.data == null) {
+                                                    return Container(
+                                                        child: Center(
+                                                            child:
+                                                            CircularProgressIndicator()));
+                                                  } else {
+                                                    return GridView.builder(
+                                                      gridDelegate:
+                                                      SliverGridDelegateWithMaxCrossAxisExtent(
+                                                          maxCrossAxisExtent: 160,
+                                                          childAspectRatio:
+                                                          (MediaQuery.of(context)
+                                                              .orientation ==
+                                                              Orientation.portrait)
+                                                              ? 2 / 3
+                                                              : 2 / 2.2,
+                                                          crossAxisSpacing: 0,
+                                                          mainAxisSpacing: 0),
+                                                      shrinkWrap: true,
+                                                      physics: NeverScrollableScrollPhysics(),
+                                                      scrollDirection: Axis.vertical,
+                                                      itemBuilder:
+                                                          (BuildContext ctxt, int index) {
+                                                        return _buildPharmaciesListItem(
+                                                            snapshot.data[index], ctxt);
+                                                      },
+                                                      itemCount: snapshot.data.length,
+                                                    );
+                                                  }
+                                                });
+                                          })),
+                                ],
+                              ),
+                            )
                           ],
-                        ),
-                      )
-                    ],
-                  )),
-            );
-          }
-        });
+                        )),
+                  );
+                }
+              })
+      ),
+    );
   }
 
   _buildPharmaciesListItem(var pharmacy, BuildContext ctxt) {
@@ -345,8 +378,8 @@ class PharmaciesPage extends StatelessWidget {
                     child: SizedBox(
                       height: 120,
                       width: 120,
-                      child: pharmacy.image != null
-                          ? Image.network(pharmacy.image,
+                      child: pharmacy.images != null && pharmacy.images != []
+                          ? Image.network(pharmacy.images.first,
                           width: 120, height: 120, fit: BoxFit.fill,
                           errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
                             return Image.asset("assets/images/hos1.jpg",

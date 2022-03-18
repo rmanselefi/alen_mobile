@@ -18,6 +18,38 @@ class HomeCareProvider with ChangeNotifier {
   static List<HomeCare> trending=[];
 
 
+  Future<HomeCare> fetchHomeCare(String id) async {
+    print("ididididididididi $id");
+    isLoading = true;
+    try {
+      var docs =
+      await FirebaseFirestore.instance.collection('home_care').doc(id).get();
+      if (docs.exists) {
+        var data = docs.data();
+        final HomeCare hos = HomeCare(
+            Id: docs.id,
+            name: data['name'],
+            phone: data['phone'],
+            image: data['image'],
+            locationName: data['location_name'],
+            latitude: data['location'].latitude,
+            longitude: data['location'].longitude,
+            description: data['description'],
+            officehours: data['officehours'],
+            email: data['email'],
+            images: data['images']);
+        return hos;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      isLoading = false;
+      print("mjkhjjhbjhvjhvhjvjhgv $error");
+      return null;
+    }
+  }
+
+
   Future<List<HLDServiceTypes>> getDiagnosticsServiceTypesByDiagnosticsId(String Id, String hospitalId) async {
     isLoading = true;
     labServiceTypes.clear();

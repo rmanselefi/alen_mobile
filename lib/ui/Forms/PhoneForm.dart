@@ -97,35 +97,25 @@ class _SignUpState extends State<SignUp> {
 
     return WillPopScope(
       onWillPop:() async => handleExitApp(),
-      child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: new ThemeData(
-              fontFamily: 'roboto',
-              appBarTheme: AppBarTheme(
-                  color: AppColors().loginBackgroud
-              ),
-              // scaffoldBackgroundColor: const Color(0xFF2929C7)),
-              scaffoldBackgroundColor: AppColors().mainBackground),
-          home: LoaderOverlay(
-            overlayOpacity: 0.8,
-            child: FutureBuilder<dynamic>(
-          future: SharedPreferences.getInstance(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.none &&
-                snapshot.hasData == null) {
-              return CircularProgressIndicator();
-            }
-            print('project snapshot data is: ${snapshot.data}');
-            if (snapshot.data == null) {
-              return Container(
-                  child: Center(child: CircularProgressIndicator()));
-            } else {
-              var _myLanguage = snapshot.data.getString("lang");
-              var languageProvider = Provider.of<LanguageProvider>(context, listen: true);
-              languageProvider.langOPT = _myLanguage;
-              return Scaffold(
-                body: DoubleBackToCloseWidget(
-                  child: SingleChildScrollView(
+      child: LoaderOverlay(
+        overlayOpacity: 0.8,
+        child: FutureBuilder<dynamic>(
+            future: SharedPreferences.getInstance(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.none &&
+                  snapshot.hasData == null) {
+                return CircularProgressIndicator();
+              }
+              print('project snapshot data is: ${snapshot.data}');
+              if (snapshot.data == null) {
+                return Container(
+                    child: Center(child: CircularProgressIndicator()));
+              } else {
+                var _myLanguage = snapshot.data.getString("lang");
+                var languageProvider = Provider.of<LanguageProvider>(context, listen: true);
+                languageProvider.langOPT = _myLanguage;
+                return Scaffold(
+                  body: SingleChildScrollView(
                       child: Stack(
                         children: [
                           Container(
@@ -318,11 +308,9 @@ class _SignUpState extends State<SignUp> {
                               ))
                         ],
                       )),
-                ),
-              );
-            }
-          }),
-          )
+                );
+              }
+            }),
       ),
     );
   }
